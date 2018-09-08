@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import java.util.List;
 
 
 /**
@@ -63,8 +66,17 @@ public class ArtistTab extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_artist_tab, container, false);
+
+        MainActivity activity = (MainActivity)getActivity();
+
+        List artists = Artist.getItems(activity);
+        ListView artistList = (ListView)rootView.findViewById(R.id.listArtist);
+        ListArtistAdapter adapter = new ListArtistAdapter(activity,artists);
+        artistList.setAdapter(adapter);
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_artist_tab, container, false);
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
