@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">MusicPro</string>
     <string name="title_section1" />
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
