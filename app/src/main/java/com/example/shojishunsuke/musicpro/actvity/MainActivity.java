@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements TrackTabFragment.
         AlbumTabFragment.OnFragmentInteractionListener {
 
     enum FragType {fAlbum}
+    private ListView trackList;
 
     private FragType fTop;
     private Album focusedAlbum;

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,7 @@ public class ListTrackAdapter extends ArrayAdapter<Track> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         final Track item = getItem(position);
         final ViewHolder holder;
@@ -65,45 +66,70 @@ public class ListTrackAdapter extends ArrayAdapter<Track> {
             public void onClick(View v) {
 
 
-                try {
-                    mediaPlayer.setDataSource(item.path);
-                    mediaPlayer.prepare();
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-//
-
                 if (mediaPlayer.isPlaying()) {
-                    mediaPlayer.pause();
+
+
+                    mediaPlayer.stop();
+                    mediaPlayer.reset();
+
+                    Toast.makeText(mContext, "STOP", Toast.LENGTH_SHORT).show();
+
+                    holder.trackTextView.setTextColor(Color.BLACK);
 
                 } else {
+                    try {
+                        mediaPlayer.setDataSource(item.path);
+                        mediaPlayer.prepare();
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                     mediaPlayer.start();
                     Toast.makeText(mContext, "PLAY", Toast.LENGTH_SHORT).show();
                     holder.trackTextView.setTextColor(Color.BLUE);
                 }
 
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        Log.d("debug","end of audio");
+                        mediaPlayer.stop();
+                        mediaPlayer.reset();
+
+                        holder.trackTextView.setTextColor(Color.BLACK);
+                        Toast.makeText(mContext,"End",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+
+
 
             }
         });
 
-        convertView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-
-
-                mediaPlayer.stop();
-                mediaPlayer.reset();
-
-                Toast.makeText(mContext, "STOP", Toast.LENGTH_SHORT).show();
-                holder.trackTextView.setTextColor(Color.BLACK);
-
-
-                return true;
-
-
-            }
-        });
+//        convertView.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View v) {
+//
+//                if (mediaPlayer != null) {
+//
+//
+//                    mediaPlayer.stop();
+//                    mediaPlayer.reset();
+//
+//                    Toast.makeText(mContext, "STOP", Toast.LENGTH_SHORT).show();
+//                    holder.trackTextView.setTextColor(Color.BLACK);
+//
+//                }
+//
+//
+//                return true;
+//
+//
+//            }
+//        });
 
         return convertView;
     }

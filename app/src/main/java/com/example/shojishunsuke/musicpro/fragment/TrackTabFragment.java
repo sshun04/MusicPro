@@ -77,7 +77,6 @@ public class TrackTabFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_track_tab, container, false);
-
         MainActivity activity = (MainActivity)getActivity();
 
         List tracks = Track.getItems(activity);
@@ -88,6 +87,7 @@ public class TrackTabFragment extends Fragment {
         // Inflate the layout for this fragment
         return view;
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
