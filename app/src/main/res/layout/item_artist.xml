@@ -12,7 +12,7 @@
         <TextView
             android:id="@+id/artist"
             android:text="ArtistName"
-            android:textSize="18dp"
+            android:textSize="15dp"
             android:textStyle="bold"
             android:textColor="@android:color/black"
             android:layout_width="match_parent"
@@ -21,7 +21,7 @@
         <TextView
             android:id="@+id/albums"
             android:text="info"
-            android:textSize="14dp"
+            android:textSize="12dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
@@ -29,7 +29,7 @@
         <TextView
             android:id="@+id/tracks"
             android:text="info"
-            android:textSize="14dp"
+            android:textSize="12dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>

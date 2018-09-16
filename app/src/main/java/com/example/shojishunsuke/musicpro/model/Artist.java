@@ -1,20 +1,22 @@
-package com.example.shojishunsuke.musicpro;
+package com.example.shojishunsuke.musicpro.model;
 
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Artist {
+public class Artist implements Serializable {
 
     public long id;
     public String artist;
     public String artistKey;
     public int albums;
     public int tracks;
+    public long albumId;
 
     public static final String[] FIELD_PROJECTION = {
             MediaStore.Audio.Media._ID,
@@ -22,6 +24,7 @@ public class Artist {
             MediaStore.Audio.Media.ARTIST_KEY,
             MediaStore.Audio.Artists.NUMBER_OF_ALBUMS,
             MediaStore.Audio.Artists.NUMBER_OF_TRACKS,
+
     };
 
     public Artist(Cursor cursor) {
@@ -31,7 +34,7 @@ public class Artist {
         artistKey = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Artists.ARTIST_KEY));
         albums = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Artists.NUMBER_OF_ALBUMS));
         tracks = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Artists.NUMBER_OF_TRACKS));
-
+        albumId   = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
     }
 
     public static List getItems(Context activity) {

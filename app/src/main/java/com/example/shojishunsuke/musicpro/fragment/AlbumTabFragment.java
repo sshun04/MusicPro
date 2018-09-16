@@ -1,14 +1,18 @@
-package com.example.shojishunsuke.musicpro;
+package com.example.shojishunsuke.musicpro.fragment;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import com.example.shojishunsuke.musicpro.model.Album;
+import com.example.shojishunsuke.musicpro.adapter.ListAlbumAdapter;
+import com.example.shojishunsuke.musicpro.R;
+import com.example.shojishunsuke.musicpro.actvity.MainActivity;
 
 import java.util.List;
 
@@ -16,14 +20,12 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link TrackTab.OnFragmentInteractionListener} interface
+ * {@link AlbumTabFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link TrackTab#newInstance} factory method to
+ * Use the {@link AlbumTabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TrackTab extends Fragment {
-
-
+public class AlbumTabFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -35,7 +37,7 @@ public class TrackTab extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public TrackTab() {
+    public AlbumTabFragment() {
         // Required empty public constructor
     }
 
@@ -45,11 +47,11 @@ public class TrackTab extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment TrackTab.
+     * @return A new instance of fragment AlbumTabFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TrackTab newInstance(String param1, String param2) {
-        TrackTab fragment = new TrackTab();
+    public static AlbumTabFragment newInstance(String param1, String param2) {
+        AlbumTabFragment fragment = new AlbumTabFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -60,29 +62,29 @@ public class TrackTab extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_track_tab, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_album_tab, container, false);
 
         MainActivity activity = (MainActivity)getActivity();
 
-        List tracks = Track.getItems(activity);
-        ListView trackList = (ListView)view.findViewById(R.id.listTrack);
-        ListTrackAdapter trackAdapter = new ListTrackAdapter(activity,tracks);
-        trackList.setAdapter(trackAdapter);
+        List albums = Album.getItems(activity);
+        ListView albumlist = (ListView)rootView.findViewById(R.id.listAlbum);
+        ListAlbumAdapter adapter = new ListAlbumAdapter(activity,albums);
+        albumlist.setAdapter(adapter);
+
+//        albumlist.setOnItemClickListener(activity.AlbumClickListener);
+//        albumlist.setOnItemLongClickListener(activity.AlbumLongClickListener);
 
         // Inflate the layout for this fragment
-        return view;
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -123,8 +125,4 @@ public class TrackTab extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
-
 }
-
-

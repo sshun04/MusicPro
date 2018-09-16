@@ -1,4 +1,4 @@
-package com.example.shojishunsuke.musicpro;
+package com.example.shojishunsuke.musicpro.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,24 +10,30 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.shojishunsuke.musicpro.actvity.AlbumDetailActivity;
+import com.example.shojishunsuke.musicpro.model.Album;
+import com.example.shojishunsuke.musicpro.ImageCache;
+import com.example.shojishunsuke.musicpro.ImageGetTask;
+import com.example.shojishunsuke.musicpro.R;
+
 import java.util.List;
 
 public class ListAlbumAdapter extends ArrayAdapter<Album> {
 
+    Context context;
     LayoutInflater mInflater;
-    static Context Mcontext;
 
     public ListAlbumAdapter(Context context, List<Album> item) {
         super(context, 0, item);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        Mcontext = context;
+        this.context = context;
 
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        Album item = getItem(position);
+        final Album item = getItem(position);
         ViewHolder holder;
 
         if (convertView == null) {
@@ -49,11 +55,11 @@ public class ListAlbumAdapter extends ArrayAdapter<Album> {
         holder.artworkImageView.setImageResource(R.drawable.backsub);
 
         if (path == null) {
-            path = String.valueOf(R.drawable.musicicon);
+            path = String.valueOf(R.drawable.record);
             Bitmap bitmap = ImageCache.getImage(path);
 
             if (bitmap == null) {
-                bitmap = BitmapFactory.decodeResource(Mcontext.getResources(), R.drawable.back);
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.record);
                 ImageCache.setImage(path, bitmap);
             }
         }
@@ -61,6 +67,15 @@ public class ListAlbumAdapter extends ArrayAdapter<Album> {
         holder.artworkImageView.setTag(path);
         ImageGetTask task = new ImageGetTask(holder.artworkImageView);
         task.execute(path);
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlbumDetailActivity.start(context,item);
+
+            }
+        });
 
         return convertView;
 

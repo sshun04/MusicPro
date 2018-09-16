@@ -3,13 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AlbumTab">
+    tools:context=".fragment.AlbumTabFragment">
 
      TODO: Update blank fragment layout
     <ListView
         android:id="@+id/listAlbum"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        >
 
 
     </ListView>

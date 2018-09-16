@@ -18,7 +18,8 @@
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginLeft="5dp">
 
             <TextView
                 android:id="@+id/title"
@@ -27,7 +28,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="17dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="25dp" />
 
 
             <TextView
@@ -35,13 +36,13 @@
                 android:textSize="14dp"
                 android:text="artist"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="20dp" />
             <TextView
                 android:id="@+id/tracks"
                 android:textSize="14dp"
                 android:text="tracks"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="22dp" />
         </LinearLayout>
 
 

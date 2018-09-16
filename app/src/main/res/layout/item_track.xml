@@ -1,45 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp">
+
+    <!--<ImageView-->
+        <!--android:id="@+id/artWork"-->
+        <!--android:layout_width="72dp"-->
+        <!--android:layout_height="72dp" />-->
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginLeft="8dp"
+        android:layout_gravity="center"
+        >
 
-        <View
-            android:layout_width="5dp"
-            android:layout_height="5dp"></View>
+
 
         <TextView
             android:id="@+id/title"
             android:text="TrackTitle"
             android:textStyle="bold"
             android:textColor="@android:color/black"
-            android:textSize="20dp"
+            android:textSize="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="2dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp">
 
             <TextView
                 android:id="@+id/artist"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:layout_weight="1"
                 android:text="artist"
-                android:textSize="17dp" />
+                android:textSize="14dp" />
 
             <TextView
                 android:id="@+id/duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0:00"
-                android:textSize="20dp"/>
+                android:textSize="13dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginLeft="15dp"/>
 
         </LinearLayout>
     </LinearLayout>
