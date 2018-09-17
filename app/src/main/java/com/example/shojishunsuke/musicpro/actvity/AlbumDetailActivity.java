@@ -23,6 +23,7 @@ import java.util.List;
 public class AlbumDetailActivity extends AppCompatActivity {
 
     private static final String KEY_ALBUM = "kyc_album";
+    Context context;
 
     public static void start(Context context, Album album) {
         Intent intent = new Intent(context, AlbumDetailActivity.class);

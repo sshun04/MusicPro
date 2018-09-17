@@ -7,10 +7,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Track {
+public class Track implements Serializable {
 
     public long id;
     public long albumId;
@@ -29,7 +30,6 @@ public class Track {
     public static final String[] COLUMNS = {
 
             MediaStore.Audio.Media._ID,
-//            MediaStore.Audio.Albums._ID,
             MediaStore.Audio.Media.DATA,
             MediaStore.Audio.Media.TITLE,
             MediaStore.Audio.Media.ALBUM,
@@ -38,8 +38,7 @@ public class Track {
             MediaStore.Audio.Media.ARTIST_ID,
             MediaStore.Audio.Media.DURATION,
             MediaStore.Audio.Media.TRACK,
-//            MediaStore.Audio.Albums.ALBUM_ART,
-//            MediaStore.Audio.Albums.ALBUM_KEY,
+//
 
     };
 
@@ -54,11 +53,12 @@ public class Track {
         artistId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
         duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
         trackNo = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.TRACK));
-//        trackart  = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
         uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);
-//        albumKey = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_KEY));
-//        mid = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Albums._ID));
 //
+
+    }
+
+    public Track() {
 
     }
 

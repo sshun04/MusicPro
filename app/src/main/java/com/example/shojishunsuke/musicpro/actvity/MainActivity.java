@@ -22,6 +22,7 @@ import com.example.shojishunsuke.musicpro.R;
 import com.example.shojishunsuke.musicpro.model.Track;
 import com.example.shojishunsuke.musicpro.fragment.TrackTabFragment;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements TrackTabFragment.OnFragmentInteractionListener, ArtistTabFragment.OnFragmentInteractionListener,
@@ -82,16 +83,7 @@ public class MainActivity extends AppCompatActivity implements TrackTabFragment.
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        List<Track> tracks = Track.getItems(this);
-        ListView trackList = (ListView) findViewById(R.id.listTrack);
-        ListTrackAdapter trackAdapter = new ListTrackAdapter(this, tracks);
-        trackList.setAdapter(trackAdapter);
-        return true;
 
-
-    }
 
 
     @Override
