@@ -34,17 +34,18 @@ public class ListTrackAdapter extends ArrayAdapter<Track>{
     LayoutInflater mInflater;
     Context mContext;
     private MediaPlayer mediaPlayer;
-   TrackService service;
-   Service mservice;
+    TrackService service;
+
 
     public ListTrackAdapter(Context context, List item) {
         super(context, 0, item);
-
 
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mContext = context;
 
     }
+
+
 
 
 
@@ -83,11 +84,14 @@ public class ListTrackAdapter extends ArrayAdapter<Track>{
             @Override
             public void onClick(View v) {
 
+//                TODO SERVICE
+//
 
+                TrackService service = new TrackService();
                 Intent intent = new Intent(service.getApplication(), TrackService.class);
                 intent.putExtra("REQUEST_CODE",1);
-
-
+//
+//
                 service.startForegroundService(intent);
 
 
@@ -128,7 +132,7 @@ public class ListTrackAdapter extends ArrayAdapter<Track>{
 //                        Toast.makeText(mContext,"End",Toast.LENGTH_SHORT).show();
 //                    }
 //                });
-//
+
 
 
 
@@ -140,6 +144,8 @@ public class ListTrackAdapter extends ArrayAdapter<Track>{
 
         return convertView;
     }
+
+
 
     static class ViewHolder {
 

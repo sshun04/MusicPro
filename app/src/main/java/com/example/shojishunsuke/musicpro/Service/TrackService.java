@@ -34,16 +34,17 @@ public class TrackService extends Service{
     Track track;
 
 
-    public TrackService(Context context,Track item){
-        this.context = context;
-        this.track = new Track();
-
-    }
+//    public TrackService(Context context,Track item){
+//        this.context = context;
+//        this.track = new Track();
+//
+//    }
 
 
     @Override
     public void onCreate() {
         super.onCreate();
+
 
 
         Log.d("debug","nCreate()");
@@ -92,15 +93,11 @@ public class TrackService extends Service{
 
             audioStart();
 
-
-
-
-
-
         }
 
 
-        return super.onStartCommand(intent, flags, startId);
+//        return super.onStartCommand(intent, flags, startId);
+     return START_NOT_STICKY;
 
 
     }
@@ -109,9 +106,6 @@ public class TrackService extends Service{
 
 
         counter++;
-
-
-
 
         if (mediaPlayer.isPlaying()) {
 
@@ -148,6 +142,13 @@ public class TrackService extends Service{
             }
         });
 
+
+
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
     }
     @NonNull
     @Override
