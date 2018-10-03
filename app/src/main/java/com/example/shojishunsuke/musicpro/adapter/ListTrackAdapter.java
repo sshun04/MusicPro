@@ -23,6 +23,7 @@ import com.example.shojishunsuke.musicpro.R;
 import com.example.shojishunsuke.musicpro.Service.TrackService;
 import com.example.shojishunsuke.musicpro.actvity.AlbumDetailActivity;
 import com.example.shojishunsuke.musicpro.actvity.MainActivity;
+import com.example.shojishunsuke.musicpro.actvity.TrackDetailActivity;
 import com.example.shojishunsuke.musicpro.model.Track;
 
 import java.io.IOException;
@@ -31,17 +32,16 @@ import java.util.List;
 
 public class ListTrackAdapter extends ArrayAdapter<Track>{
 
-    LayoutInflater mInflater;
-    Context mContext;
-    private MediaPlayer mediaPlayer;
-    TrackService service;
+    private LayoutInflater mInflater;
+    Context context;
+
 
 
     public ListTrackAdapter(Context context, List item) {
         super(context, 0, item);
 
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mContext = context;
+        this.context = context;
 
     }
 
@@ -62,7 +62,7 @@ public class ListTrackAdapter extends ArrayAdapter<Track>{
             holder.trackTextView = (TextView) convertView.findViewById(R.id.title);
             holder.artistTextView = (TextView) convertView.findViewById(R.id.artist);
             holder.durationTextView = (TextView) convertView.findViewById(R.id.duration);
-//            holder.trackartImageView= (ImageView)convertView.findViewById(R.id.artWork);
+
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -75,7 +75,6 @@ public class ListTrackAdapter extends ArrayAdapter<Track>{
         holder.durationTextView.setText(String.format("%d:%02d", dm, ds));
 
 
-        final MediaPlayer mediaPlayer = new MediaPlayer();
 //
 
 
@@ -84,68 +83,15 @@ public class ListTrackAdapter extends ArrayAdapter<Track>{
             @Override
             public void onClick(View v) {
 
-//                TODO SERVICE
-//
-
-                TrackService service = new TrackService();
-                Intent intent = new Intent(service.getApplication(), TrackService.class);
-                intent.putExtra("REQUEST_CODE",1);
-//
-//
-                service.startForegroundService(intent);
-
-
-
-
-//        if (mediaPlayer.isPlaying()) {
-//
-//
-//                    mediaPlayer.stop();
-//                    mediaPlayer.reset();
-//
-//                    Toast.makeText(mContext, "STOP", Toast.LENGTH_SHORT).show();
-//
-//                    holder.trackTextView.setTextColor(Color.BLACK);
-//
-//                } else {
-//                    try {
-//                        mediaPlayer.setDataSource(item.path);
-//                        mediaPlayer.prepare();
-//
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                    mediaPlayer.start();
-//                    Toast.makeText(mContext, "PLAY", Toast.LENGTH_SHORT).show();
-//                    holder.trackTextView.setTextColor(Color.BLUE);
-//                }
-//
-//                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//                    @Override
-//                    public void onCompletion(MediaPlayer mp) {
-//                        Log.d("debug","end of audio");
-//                        mediaPlayer.stop();
-//                        mediaPlayer.reset();
-//
-//                        holder.trackTextView.setTextColor(Color.BLACK);
-//                        Toast.makeText(mContext,"End",Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-
-
-
+                TrackDetailActivity.start(context,item);
 
 
             }
         });
 
-//
 
         return convertView;
     }
-
-
 
     static class ViewHolder {
 

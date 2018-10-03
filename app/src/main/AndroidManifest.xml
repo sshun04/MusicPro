@@ -5,8 +5,7 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INSTANT_APP_FOREGROUND_SERVICE"
-        tools:ignore="ProtectedPermissions" />
+    
 
     <application
         android:allowBackup="true"
@@ -15,18 +14,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".actvity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".actvity.AlbumDetailActivity" />
-        <activity android:name=".actvity.ArtistDetailActivity">
+        <activity android:name=".actvity.ArtistDetailActivity"></activity>
 
-        </activity>
-        <service android:name=".Service.TrackService"/>
+        <service android:name=".Service.TrackService" />
+
+        <activity android:name=".actvity.TrackDetailActivity"></activity>
+
     </application>
 
 </manifest>

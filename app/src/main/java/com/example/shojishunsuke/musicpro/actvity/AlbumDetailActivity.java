@@ -79,4 +79,5 @@ public class AlbumDetailActivity extends AppCompatActivity {
         ListTrackAdapter adapter = new ListTrackAdapter(this, tracks);
         trackList.setAdapter(adapter);
     }
+
 }

@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -21,35 +22,36 @@ import com.example.shojishunsuke.musicpro.R;
 import com.example.shojishunsuke.musicpro.adapter.ListTrackAdapter;
 import com.example.shojishunsuke.musicpro.model.Track;
 
+import org.json.JSONException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TrackService extends Service{
+    private static String EXTRA_SONG_URI = "song_uri";
 
-    private MediaPlayer mediaPlayer ;
-    private int counter = 0;
+    public static void start(Context context, Uri uri) {
+        Intent intent = createIntent(context);
+        intent.putExtra(EXTRA_SONG_URI, uri);
+        context.startService(intent);
+    }
+
+    private static Intent createIntent(Context context) {
+        return new Intent(context, TrackService.class);
+    }
+
     public Context context;
     public String id;
-    Track track;
-
-
-//    public TrackService(Context context,Track item){
-//        this.context = context;
-//        this.track = new Track();
-//
-//    }
+    public Track track;
+    public String path;
+    final MediaPlayer mediaPlayer = new MediaPlayer();
 
 
     @Override
     public void onCreate() {
         super.onCreate();
-
-
-
-        Log.d("debug","nCreate()");
-
-        final MediaPlayer mediaPlayer = new MediaPlayer();
+        Log.d("debug","onCreate()");
 
     }
 
@@ -58,54 +60,20 @@ public class TrackService extends Service{
     public int onStartCommand(Intent intent, int flags, int startId) {
 
 
-        Log.d("debug","onStartCommand");
+       intent.getParcelableExtra(EXTRA_SONG_URI);
 
-        int requestCode = intent.getIntExtra("REQUEST_CODE",0);
-        Context context = getApplicationContext();
-        String channelId = "default";
-        String title = context.getString(R.string.app_name);
-
-        PendingIntent pendingIntent=
-                PendingIntent.getActivity(context,requestCode,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationManager notificationManager =
-                (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        NotificationChannel channel = new NotificationChannel(
-                channelId,title,NotificationManager.IMPORTANCE_DEFAULT
-        );
-
-        if (notificationManager == null){
-            notificationManager.createNotificationChannel(channel);
-
-            Notification notification = new Notification.Builder(context,channelId)
-                    .setContentTitle(title)
-                    .setSmallIcon(R.drawable.back)
-                    .setContentText("MusicPro")
-                    .setAutoCancel(true)
-                    .setContentIntent(pendingIntent)
-                    .setWhen(System.currentTimeMillis())
-                    .build();
+       audioStart();
 
 
-            startForeground(1,notification);
 
 
-            audioStart();
 
-        }
-
-
-//        return super.onStartCommand(intent, flags, startId);
-     return START_NOT_STICKY;
-
-
+        return START_STICKY;
     }
 
     private void audioStart() {
 
 
-        counter++;
 
         if (mediaPlayer.isPlaying()) {
 
@@ -117,7 +85,12 @@ public class TrackService extends Service{
 //          holder.trackTextView.setTextColor(Color.BLACK);
 
         } else {
+
+//
             try {
+
+
+                path = track.path;
                 mediaPlayer.setDataSource(track.path);
                 mediaPlayer.prepare();
 
@@ -149,7 +122,11 @@ public class TrackService extends Service{
     @Override
     public void onDestroy(){
         super.onDestroy();
+
+        mediaPlayer.stop();
+
     }
+
     @NonNull
     @Override
     public IBinder onBind(Intent intent){

@@ -4,8 +4,11 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.ParseException;
 import android.net.Uri;
 import android.provider.MediaStore;
+
+import org.json.JSONException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,12 +23,9 @@ public class Track implements Serializable {
     public String title;
     public String album;
     public String artist;
-    public Uri uri;
+    public transient Uri uri;
     public long duration;
     public int trackNo;
-//    public String trackart;
-//    public String albumKey;
-//    public long mid;
 
     public static final String[] COLUMNS = {
 
@@ -58,9 +58,6 @@ public class Track implements Serializable {
 
     }
 
-    public Track() {
-
-    }
 
     public static List getItems(Context activity) {
         List tracks = new ArrayList();
@@ -108,4 +105,5 @@ public class Track implements Serializable {
 
 
     }
+
 }
