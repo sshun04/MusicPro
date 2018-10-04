@@ -48,6 +48,8 @@ public class AlbumDetailActivity extends AppCompatActivity {
         album_artist.setText(album.artist);
         album_tracks.setText(String.valueOf(album.tracks) + "tracks");
 
+//        アルバムの画像をセットする。
+
         String path = album.albumArt;
         album_art.setImageResource(R.drawable.backsub);
 

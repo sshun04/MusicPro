@@ -33,6 +33,7 @@ import java.util.List;
 public class ListTrackAdapter extends ArrayAdapter<Track>{
 
     private LayoutInflater mInflater;
+    private boolean s =true;
     Context context;
 
 
@@ -83,7 +84,19 @@ public class ListTrackAdapter extends ArrayAdapter<Track>{
             @Override
             public void onClick(View v) {
 
+
+
                 TrackDetailActivity.start(context,item);
+
+                if (s==false){
+                    holder.trackTextView.setTextColor(Color.BLACK);
+                    s= true;
+                }else {
+
+                    holder.trackTextView.setTextColor(Color.BLUE);
+                    s = false;
+
+                }
 
 
             }

@@ -19,6 +19,7 @@ public class Track implements Serializable {
     public long id;
     public long albumId;
     public long artistId;
+//    public String albumArt;
     public String path;
     public String title;
     public String album;
@@ -38,6 +39,7 @@ public class Track implements Serializable {
             MediaStore.Audio.Media.ARTIST_ID,
             MediaStore.Audio.Media.DURATION,
             MediaStore.Audio.Media.TRACK,
+//            MediaStore.Audio.Albums.ALBUM_ART
 //
 
     };
@@ -53,6 +55,7 @@ public class Track implements Serializable {
         artistId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
         duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
         trackNo = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.TRACK));
+//        albumArt = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
         uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);
 //
 

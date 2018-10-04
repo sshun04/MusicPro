@@ -29,11 +29,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TrackService extends Service{
-    private static String EXTRA_SONG_URI = "song_uri";
+    private static String EXTRA_SONG_PATH = "song_path";
+//    private static String EXTRA_SONG_URI = "song_uri";
 
-    public static void start(Context context, Uri uri) {
+    public static void start(Context context, String path) {
         Intent intent = createIntent(context);
-        intent.putExtra(EXTRA_SONG_URI, uri);
+        intent.putExtra(EXTRA_SONG_PATH ,path);
+//        intent.putExtra(EXTRA_SONG_URI,uri);
         context.startService(intent);
     }
 
@@ -45,6 +47,7 @@ public class TrackService extends Service{
     public String id;
     public Track track;
     public String path;
+
     final MediaPlayer mediaPlayer = new MediaPlayer();
 
 
@@ -53,6 +56,8 @@ public class TrackService extends Service{
         super.onCreate();
         Log.d("debug","onCreate()");
 
+
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -60,16 +65,14 @@ public class TrackService extends Service{
     public int onStartCommand(Intent intent, int flags, int startId) {
 
 
-       intent.getParcelableExtra(EXTRA_SONG_URI);
+       path = intent.getStringExtra(EXTRA_SONG_PATH);
 
-       audioStart();
-
-
-
+      audioStart();
 
 
         return START_STICKY;
     }
+
 
     private void audioStart() {
 
@@ -81,17 +84,14 @@ public class TrackService extends Service{
             mediaPlayer.stop();
             mediaPlayer.reset();
 
-            Toast.makeText(context, "STOP", Toast.LENGTH_SHORT).show();
-//          holder.trackTextView.setTextColor(Color.BLACK);
+
 
         } else {
 
 //
             try {
 
-
-                path = track.path;
-                mediaPlayer.setDataSource(track.path);
+                mediaPlayer.setDataSource(path);
                 mediaPlayer.prepare();
 
             } catch (IOException e) {
@@ -99,8 +99,7 @@ public class TrackService extends Service{
             }
 
             mediaPlayer.start();
-            Toast.makeText(context, "PLAY", Toast.LENGTH_SHORT).show();
-//            holder.trackTextView.setTextColor(Color.BLUE);
+
         }
 
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -110,8 +109,7 @@ public class TrackService extends Service{
                 mediaPlayer.stop();
                 mediaPlayer.reset();
 
-//                holder.trackTextView.setTextColor(Color.BLACK);
-                Toast.makeText(context,"End",Toast.LENGTH_SHORT).show();
+
             }
         });
 

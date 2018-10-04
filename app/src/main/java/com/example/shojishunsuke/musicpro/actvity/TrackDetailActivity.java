@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.shojishunsuke.musicpro.ImageGetTask;
 import com.example.shojishunsuke.musicpro.R;
 import com.example.shojishunsuke.musicpro.Service.TrackService;
 import com.example.shojishunsuke.musicpro.model.Album;
@@ -30,10 +31,11 @@ import java.net.URI;
 public class TrackDetailActivity extends AppCompatActivity {
 
     public static final String KEY_TRACK = "kyc_track";
-    Context context;
+    private Context context;
     private Track track;
     private Uri uri;
     private String path;
+
 
     public static void start(Context context, Track track) {
 
@@ -51,14 +53,15 @@ public class TrackDetailActivity extends AppCompatActivity {
 
         final Intent intent = getIntent();
         track = (Track) intent.getSerializableExtra(KEY_TRACK);
-        uri = track.uri;
+//        uri = track.uri;
+        path = track.path;
 
-
-        TextView titleTextView = (TextView) findViewById(R.id.title);
-        TextView artistTextView = (TextView) findViewById(R.id.artist);
+        TextView nameTextView     = (TextView)findViewById(R.id.namebar);
+        TextView titleTextView    = (TextView) findViewById(R.id.title);
+        TextView artistTextView   = (TextView) findViewById(R.id.artist);
         TextView positionTextView = (TextView) findViewById(R.id.textView_position);
         TextView durationTextView = (TextView) findViewById(R.id.textView_duration);
-        ImageView artImageView = (ImageView) findViewById(R.id.trackart);
+        ImageView artImageView    = (ImageView) findViewById(R.id.trackart);
         FloatingActionButton prevButton = (FloatingActionButton) findViewById(R.id.button_prev);
         FloatingActionButton playButton = (FloatingActionButton) findViewById(R.id.button_play);
         final FloatingActionButton nextButton = (FloatingActionButton) findViewById(R.id.button_next);
@@ -66,12 +69,16 @@ public class TrackDetailActivity extends AppCompatActivity {
 
         titleTextView.setText(track.title);
         artistTextView.setText(track.artist);
+        nameTextView.setText(track.title);
+
+
+        artImageView.setImageResource(R.drawable.record);
+
 
         long dm = track.duration / 60000;
         long ds = (track.duration - (dm * 60000)) / 1000;
         durationTextView.setText(String.format("%d:%02d", dm, ds));
 
-        artImageView.setImageResource(R.drawable.musicicon);
         playButton.setImageResource(R.drawable.play);
         prevButton.setImageResource(R.drawable.skipprev);
         nextButton.setImageResource(R.drawable.skipnext);
@@ -82,7 +89,9 @@ public class TrackDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                TrackService.start(TrackDetailActivity.this,uri);
+
+
+                TrackService.start(TrackDetailActivity.this,path);
 
 
             }
@@ -90,6 +99,7 @@ public class TrackDetailActivity extends AppCompatActivity {
 
 
     }
+
 
 
 }

@@ -1,10 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".actvity.TrackDetailActivity">
+    tools:context=".actvity.TrackDetailActivity"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="40dp"
+        android:id="@+id/toolbar"
+        android:background="@color/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        >
+
+    <TextView
+        android:id="@+id/namebar"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="MusicPro"
+        android:gravity="center"
+        android:textSize="16sp" />
+    </android.support.v7.widget.Toolbar>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -15,14 +36,15 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+
             <ImageView
                 android:id="@+id/trackart"
                 android:layout_width="310dp"
                 android:layout_height="310dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginLeft="35dp"
                 android:layout_marginRight="35dp"
-                android:layout_marginBottom="30dp"/>
+                android:layout_marginBottom="15dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -89,14 +111,16 @@
                     <android.support.design.widget.FloatingActionButton
                         android:id="@+id/button_prev"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                         />
 
                     <android.support.design.widget.FloatingActionButton
                         android:id="@+id/button_play"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_marginLeft="30dp"
-                        android:layout_marginRight="30dp" />
+                        android:layout_marginRight="30dp"
+                        app:backgroundTint="@color/colorAccent" />
 
                     <android.support.design.widget.FloatingActionButton
                         android:id="@+id/button_next"
@@ -114,4 +138,4 @@
 
 
 
-</RelativeLayout>
+</LinearLayout>
