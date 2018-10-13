@@ -1,5 +1,6 @@
 package com.example.shojishunsuke.musicpro.actvity;
 
+import android.content.Context;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
@@ -27,6 +28,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements TrackTabFragment.OnFragmentInteractionListener, ArtistTabFragment.OnFragmentInteractionListener,
         AlbumTabFragment.OnFragmentInteractionListener {
+    Context mContext;
 
     enum FragType {fAlbum}
     private ListView trackList;
@@ -34,7 +36,8 @@ public class MainActivity extends AppCompatActivity implements TrackTabFragment.
     private FragType fTop;
     private Album focusedAlbum;
 
-    public void focusedAlbum(Album item) {
+    public void focusedAlbum(Album item, Context context) {
+        this.mContext = context;
         if (item == null) {
             focusedAlbum = item;
         }
@@ -60,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements TrackTabFragment.
         final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
 
-        ;
 
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

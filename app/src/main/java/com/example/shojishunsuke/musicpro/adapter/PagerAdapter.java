@@ -45,4 +45,12 @@ public class PagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return mNoOfTabs;
     }
+
+    @Override public CharSequence getPageTitle(int position){
+        switch (position){
+            case 0 :return "TRACKS";
+            case 1: return "ARTIST";
+            default:return null;
+        }
+    }
 }

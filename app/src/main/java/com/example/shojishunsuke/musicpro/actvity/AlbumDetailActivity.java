@@ -39,11 +39,14 @@ public class AlbumDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Album album = (Album) intent.getSerializableExtra(KEY_ALBUM);
 
+
+        TextView album_big_title = (TextView)findViewById(R.id.titlename);
         TextView album_title = (TextView) findViewById(R.id.title);
         TextView album_artist = (TextView) findViewById(R.id.artist);
         TextView album_tracks = (TextView) findViewById(R.id.tracks);
         ImageView album_art = (ImageView) findViewById(R.id.albumart);
 
+        album_big_title.setText(album.album);
         album_title.setText(album.album);
         album_artist.setText(album.artist);
         album_tracks.setText(String.valueOf(album.tracks) + "tracks");

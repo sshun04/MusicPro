@@ -28,16 +28,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrackService extends Service{
+public class TrackService extends Service {
     private static String EXTRA_SONG_PATH = "song_path";
 //    private static String EXTRA_SONG_URI = "song_uri";
 
     public static void start(Context context, String path) {
         Intent intent = createIntent(context);
-        intent.putExtra(EXTRA_SONG_PATH ,path);
+        intent.putExtra(EXTRA_SONG_PATH, path);
 //        intent.putExtra(EXTRA_SONG_URI,uri);
         context.startService(intent);
     }
+
 
     private static Intent createIntent(Context context) {
         return new Intent(context, TrackService.class);
@@ -47,6 +48,7 @@ public class TrackService extends Service{
     public String id;
     public Track track;
     public String path;
+    private boolean flag = true;
 
     final MediaPlayer mediaPlayer = new MediaPlayer();
 
@@ -54,8 +56,7 @@ public class TrackService extends Service{
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d("debug","onCreate()");
-
+        Log.d("debug", "onCreate()");
 
 
     }
@@ -64,70 +65,88 @@ public class TrackService extends Service{
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+//        他のトラックがタッチされたらそっちが再生されるようにしたい
 
-       path = intent.getStringExtra(EXTRA_SONG_PATH);
+        path = intent.getStringExtra(EXTRA_SONG_PATH);
 
-      audioStart();
+        mediaPlayer.setLooping(true);
+
+//
+        if (flag) {
+            setAudio();
+            flag = false;
+        }
+
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+
+        }else {
+            mediaPlayer.start();
+        }
 
 
         return START_STICKY;
     }
 
 
-    private void audioStart() {
-
-
-
-        if (mediaPlayer.isPlaying()) {
-
-
-            mediaPlayer.stop();
-            mediaPlayer.reset();
-
-
-
-        } else {
-
+//    private void audioStart() {
+////
+////
 //
-            try {
+//
+//        mediaPlayer.start();
+//
+//
+////
+//        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//            @Override
+//            public void onCompletion(MediaPlayer mp) {
+//                Log.d("debug", "end of audio");
+//                mediaPlayer.stop();
+//
+//                stopSelf();
+//
+//
+//            }
+//        });
+//
+//
+//    }
 
-                mediaPlayer.setDataSource(path);
-                mediaPlayer.prepare();
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    private void setAudio() {
 
-            mediaPlayer.start();
+        try {
+//
+            mediaPlayer.setDataSource(path);
+            mediaPlayer.prepare();
 
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                Log.d("debug","end of audio");
-                mediaPlayer.stop();
-                mediaPlayer.reset();
-
-
-            }
-        });
-
-
 
     }
 
+
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
+
         super.onDestroy();
 
-        mediaPlayer.stop();
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        }
+
+        stopSelf();
 
     }
 
     @NonNull
     @Override
-    public IBinder onBind(Intent intent){
+    public IBinder onBind(Intent intent) {
         return null;
     }
+
+
 }

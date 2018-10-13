@@ -10,7 +10,7 @@
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:gravity="center"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:id="@+id/toolbar"
         android:background="@color/colorPrimary"
         android:minHeight="?attr/actionBarSize"
@@ -24,7 +24,8 @@
         android:layout_height="match_parent"
         android:text="MusicPro"
         android:gravity="center"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:textStyle="bold"/>
     </android.support.v7.widget.Toolbar>
 
     <FrameLayout
@@ -39,12 +40,9 @@
 
             <ImageView
                 android:id="@+id/trackart"
-                android:layout_width="310dp"
-                android:layout_height="310dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginLeft="35dp"
-                android:layout_marginRight="35dp"
-                android:layout_marginBottom="15dp"/>
+                android:layout_width="match_parent"
+                android:layout_height="315dp"
+                android:scaleType="centerCrop"></ImageView>
 
             <LinearLayout
                 android:layout_width="match_parent"
