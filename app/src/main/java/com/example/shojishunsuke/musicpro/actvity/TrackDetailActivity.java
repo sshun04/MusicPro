@@ -135,7 +135,7 @@ public class TrackDetailActivity extends AppCompatActivity {
 
                     TrackService.start(TrackDetailActivity.this, path);
 
-                    playButton.setImageResource(R.drawable.play);
+                    playButton.setImageResource(R.drawable.playarrow);
 
                     check = false;
                     flag = false;

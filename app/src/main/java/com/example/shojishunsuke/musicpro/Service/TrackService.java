@@ -30,12 +30,10 @@ import java.util.List;
 
 public class TrackService extends Service {
     private static String EXTRA_SONG_PATH = "song_path";
-//    private static String EXTRA_SONG_URI = "song_uri";
 
     public static void start(Context context, String path) {
         Intent intent = createIntent(context);
         intent.putExtra(EXTRA_SONG_PATH, path);
-//        intent.putExtra(EXTRA_SONG_URI,uri);
         context.startService(intent);
     }
 
@@ -89,35 +87,13 @@ public class TrackService extends Service {
     }
 
 
-//    private void audioStart() {
-////
-////
-//
-//
-//        mediaPlayer.start();
-//
-//
-////
-//        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//            @Override
-//            public void onCompletion(MediaPlayer mp) {
-//                Log.d("debug", "end of audio");
-//                mediaPlayer.stop();
-//
-//                stopSelf();
-//
-//
-//            }
-//        });
-//
-//
-//    }
+
 
 
     private void setAudio() {
 
         try {
-//
+
             mediaPlayer.setDataSource(path);
             mediaPlayer.prepare();
 

@@ -55,14 +55,16 @@
                 android:textSize="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Tracks"/>
+                android:text="Tracks"
+                android:layout_margin="1dp"/>
 
             <TextView
                 android:id="@+id/albums"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="15dp"
-                android:text="Albums"/>
+                android:text="Albums"
+                android:layout_margin="1dp"/>
 
 
         </LinearLayout>
