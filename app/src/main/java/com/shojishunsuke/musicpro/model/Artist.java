@@ -1,4 +1,4 @@
-package com.example.shojishunsuke.musicpro.model;
+package com.shojishunsuke.musicpro.model;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -34,7 +34,7 @@ public class Artist implements Serializable {
         artistKey = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Artists.ARTIST_KEY));
         albums = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Artists.NUMBER_OF_ALBUMS));
         tracks = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Artists.NUMBER_OF_TRACKS));
-        albumId   = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
+        albumId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
     }
 
     public static List getItems(Context activity) {

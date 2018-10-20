@@ -1,14 +1,11 @@
-package com.example.shojishunsuke.musicpro.model;
+package com.shojishunsuke.musicpro.model;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
-import android.net.ParseException;
 import android.net.Uri;
 import android.provider.MediaStore;
-
-import org.json.JSONException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,7 +16,7 @@ public class Track implements Serializable {
     public long id;
     public long albumId;
     public long artistId;
-//    public String albumArt;
+    //    public String albumArt;
     public String path;
     public String title;
     public String album;

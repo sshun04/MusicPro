@@ -1,40 +1,25 @@
-package com.example.shojishunsuke.musicpro.adapter;
+package com.shojishunsuke.musicpro.adapter;
 
-import android.app.Activity;
-import android.app.Service;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.shojishunsuke.musicpro.R;
-import com.example.shojishunsuke.musicpro.Service.TrackService;
-import com.example.shojishunsuke.musicpro.actvity.AlbumDetailActivity;
-import com.example.shojishunsuke.musicpro.actvity.MainActivity;
-import com.example.shojishunsuke.musicpro.actvity.TrackDetailActivity;
-import com.example.shojishunsuke.musicpro.model.Track;
 
-import java.io.IOException;
-import java.io.Serializable;
+import com.shojishunsuke.musicpro.R;
+import com.shojishunsuke.musicpro.actvity.TrackDetailActivity;
+import com.shojishunsuke.musicpro.model.Track;
+
 import java.util.List;
 
-public class ListTrackAdapter extends ArrayAdapter<Track>{
+public class ListTrackAdapter extends ArrayAdapter<Track> {
 
     private LayoutInflater mInflater;
     Context context;
-
 
 
     public ListTrackAdapter(Context context, List item) {
@@ -44,9 +29,6 @@ public class ListTrackAdapter extends ArrayAdapter<Track>{
         this.context = context;
 
     }
-
-
-
 
 
     @Override
@@ -84,9 +66,7 @@ public class ListTrackAdapter extends ArrayAdapter<Track>{
             public void onClick(View v) {
 
 
-
-                TrackDetailActivity.start(context,item);
-
+                TrackDetailActivity.start(context, item);
 
 
             }

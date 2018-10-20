@@ -1,20 +1,23 @@
-package com.example.shojishunsuke.musicpro.actvity;
+package com.shojishunsuke.musicpro.actvity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.shojishunsuke.musicpro.ImageGetTask;
-import com.example.shojishunsuke.musicpro.R;
-import com.example.shojishunsuke.musicpro.adapter.ListTrackAdapter;
-import com.example.shojishunsuke.musicpro.model.Album;
-import com.example.shojishunsuke.musicpro.model.Track;
+import com.shojishunsuke.musicpro.ImageGetTask;
+import com.shojishunsuke.musicpro.R;
+import com.shojishunsuke.musicpro.adapter.ListTrackAdapter;
+import com.shojishunsuke.musicpro.model.Album;
+import com.shojishunsuke.musicpro.model.Track;
 
 import java.util.List;
 
@@ -39,14 +42,21 @@ public class AlbumDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Album album = (Album) intent.getSerializableExtra(KEY_ALBUM);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setTitle(album.album);
 
-        TextView album_big_title = (TextView)findViewById(R.id.titlename);
+//        TextView album_big_title = (TextView) findViewById(R.id.titlename);
         TextView album_title = (TextView) findViewById(R.id.title);
         TextView album_artist = (TextView) findViewById(R.id.artist);
         TextView album_tracks = (TextView) findViewById(R.id.tracks);
         ImageView album_art = (ImageView) findViewById(R.id.albumart);
 
-        album_big_title.setText(album.album);
+//        album_big_title.setText(album.album);
         album_title.setText(album.album);
         album_artist.setText(album.artist);
         album_tracks.setText(String.valueOf(album.tracks) + "tracks");
@@ -62,10 +72,9 @@ public class AlbumDetailActivity extends AppCompatActivity {
             task.execute(path);
         }
 
-       findViewById(R.id.album_info).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.album_info).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
 
 
             }
@@ -85,4 +94,13 @@ public class AlbumDetailActivity extends AppCompatActivity {
         trackList.setAdapter(adapter);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return false;
+    }
 }

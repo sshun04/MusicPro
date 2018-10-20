@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.shojishunsuke.musicpro">
+    package="com.shojishunsuke.musicpro">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -14,19 +13,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".actvity.MainActivity">
+        <activity android:name="com.shojishunsuke.musicpro.actvity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".actvity.AlbumDetailActivity" />
-        <activity android:name=".actvity.ArtistDetailActivity"></activity>
+        <activity android:name="com.shojishunsuke.musicpro.actvity.AlbumDetailActivity" />
+        <activity android:name="com.shojishunsuke.musicpro.actvity.ArtistDetailActivity" />
 
-        <service android:name=".Service.TrackService" />
+        <service android:name="com.shojishunsuke.musicpro.Service.TrackService" />
 
-        <activity android:name=".actvity.TrackDetailActivity"></activity>
+        <activity android:name="com.shojishunsuke.musicpro.actvity.TrackDetailActivity" />
 
     </application>
 

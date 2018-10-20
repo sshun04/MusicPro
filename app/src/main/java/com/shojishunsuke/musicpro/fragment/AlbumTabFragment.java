@@ -1,4 +1,4 @@
-package com.example.shojishunsuke.musicpro.fragment;
+package com.shojishunsuke.musicpro.fragment;
 
 import android.content.Context;
 import android.net.Uri;
@@ -9,10 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.example.shojishunsuke.musicpro.adapter.ListTrackAdapter;
-import com.example.shojishunsuke.musicpro.R;
-import com.example.shojishunsuke.musicpro.model.Track;
-import com.example.shojishunsuke.musicpro.actvity.MainActivity;
+import com.shojishunsuke.musicpro.R;
+import com.shojishunsuke.musicpro.actvity.MainActivity;
+import com.shojishunsuke.musicpro.adapter.ListAlbumAdapter;
+import com.shojishunsuke.musicpro.model.Album;
 
 import java.util.List;
 
@@ -20,14 +20,12 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link TrackTabFragment.OnFragmentInteractionListener} interface
+ * {@link AlbumTabFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link TrackTabFragment#newInstance} factory method to
+ * Use the {@link AlbumTabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TrackTabFragment extends Fragment {
-
-
+public class AlbumTabFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -39,7 +37,7 @@ public class TrackTabFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public TrackTabFragment() {
+    public AlbumTabFragment() {
         // Required empty public constructor
     }
 
@@ -49,11 +47,11 @@ public class TrackTabFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment TrackTabFragment.
+     * @return A new instance of fragment AlbumTabFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TrackTabFragment newInstance(String param1, String param2) {
-        TrackTabFragment fragment = new TrackTabFragment();
+    public static AlbumTabFragment newInstance(String param1, String param2) {
+        AlbumTabFragment fragment = new AlbumTabFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -64,30 +62,30 @@ public class TrackTabFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_track_tab, container, false);
-        MainActivity activity = (MainActivity)getActivity();
+        View rootView = inflater.inflate(R.layout.fragment_album_tab, container, false);
 
-        List tracks = Track.getItems(activity);
-        ListView trackList = (ListView)view.findViewById(R.id.listTrack);
-        ListTrackAdapter trackAdapter = new ListTrackAdapter(activity,tracks);
-        trackList.setAdapter(trackAdapter);
+        MainActivity activity = (MainActivity) getActivity();
+
+        List albums = Album.getItems(activity);
+        ListView albumlist = (ListView) rootView.findViewById(R.id.listAlbum);
+        ListAlbumAdapter adapter = new ListAlbumAdapter(activity, albums);
+        albumlist.setAdapter(adapter);
+
+//        albumlist.setOnItemClickListener(activity.AlbumClickListener);
+//        albumlist.setOnItemLongClickListener(activity.AlbumLongClickListener);
 
         // Inflate the layout for this fragment
-        return view;
+        return rootView;
     }
-
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -127,8 +125,4 @@ public class TrackTabFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
-
 }
-
-

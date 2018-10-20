@@ -1,4 +1,4 @@
-package com.example.shojishunsuke.musicpro.model;
+package com.shojishunsuke.musicpro.model;
 
 import android.content.ContentResolver;
 import android.content.Context;

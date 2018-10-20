@@ -1,4 +1,4 @@
-package com.example.shojishunsuke.musicpro.fragment;
+package com.shojishunsuke.musicpro.fragment;
 
 import android.content.Context;
 import android.net.Uri;
@@ -9,10 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.example.shojishunsuke.musicpro.model.Artist;
-import com.example.shojishunsuke.musicpro.adapter.ListArtistAdapter;
-import com.example.shojishunsuke.musicpro.R;
-import com.example.shojishunsuke.musicpro.actvity.MainActivity;
+import com.shojishunsuke.musicpro.R;
+import com.shojishunsuke.musicpro.actvity.MainActivity;
+import com.shojishunsuke.musicpro.adapter.ListTrackAdapter;
+import com.shojishunsuke.musicpro.model.Track;
 
 import java.util.List;
 
@@ -20,12 +20,14 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ArtistTabFragment.OnFragmentInteractionListener} interface
+ * {@link TrackTabFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ArtistTabFragment#newInstance} factory method to
+ * Use the {@link TrackTabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ArtistTabFragment extends Fragment {
+public class TrackTabFragment extends Fragment {
+
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -37,7 +39,7 @@ public class ArtistTabFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public ArtistTabFragment() {
+    public TrackTabFragment() {
         // Required empty public constructor
     }
 
@@ -47,11 +49,11 @@ public class ArtistTabFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ArtistTabFragment.
+     * @return A new instance of fragment TrackTabFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ArtistTabFragment newInstance(String param1, String param2) {
-        ArtistTabFragment fragment = new ArtistTabFragment();
+    public static TrackTabFragment newInstance(String param1, String param2) {
+        TrackTabFragment fragment = new TrackTabFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -62,27 +64,30 @@ public class ArtistTabFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_artist_tab, container, false);
+        View view = inflater.inflate(R.layout.fragment_track_tab, container, false);
+        MainActivity activity = (MainActivity) getActivity();
 
-        MainActivity activity = (MainActivity)getActivity();
-
-        List artists = Artist.getItems(activity);
-        ListView artistList = (ListView)rootView.findViewById(R.id.listArtist);
-        ListArtistAdapter adapter = new ListArtistAdapter(activity,artists);
-        artistList.setAdapter(adapter);
+        List tracks = Track.getItems(activity);
+        ListView trackList = (ListView) view.findViewById(R.id.listTrack);
+        ListTrackAdapter trackAdapter = new ListTrackAdapter(activity, tracks);
+        trackList.setAdapter(trackAdapter);
 
         // Inflate the layout for this fragment
-        return rootView;
+        return view;
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -122,4 +127,8 @@ public class ArtistTabFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+
 }
+
+

@@ -1,4 +1,4 @@
-package com.example.shojishunsuke.musicpro;
+package com.shojishunsuke.musicpro;
 
 import android.graphics.Bitmap;
 

@@ -1,12 +1,12 @@
-package com.example.shojishunsuke.musicpro.adapter;
+package com.shojishunsuke.musicpro.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.example.shojishunsuke.musicpro.fragment.AlbumTabFragment;
-import com.example.shojishunsuke.musicpro.fragment.ArtistTabFragment;
-import com.example.shojishunsuke.musicpro.fragment.TrackTabFragment;
+import com.shojishunsuke.musicpro.fragment.AlbumTabFragment;
+import com.shojishunsuke.musicpro.fragment.ArtistTabFragment;
+import com.shojishunsuke.musicpro.fragment.TrackTabFragment;
 
 public class PagerAdapter extends FragmentPagerAdapter {
 
@@ -48,8 +48,9 @@ public class PagerAdapter extends FragmentPagerAdapter {
 
     @Override public CharSequence getPageTitle(int position){
         switch (position){
-            case 0 :return "TRACKS";
+            case 0 :return "TRACK";
             case 1: return "ARTIST";
+            case 2 : return "ALBUM";
             default:return null;
         }
     }

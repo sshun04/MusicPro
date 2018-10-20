@@ -1,34 +1,25 @@
-package com.example.shojishunsuke.musicpro.actvity;
+package com.shojishunsuke.musicpro.actvity;
 
 import android.app.ActivityManager;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Parcelable;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.shojishunsuke.musicpro.ImageGetTask;
-import com.example.shojishunsuke.musicpro.R;
-import com.example.shojishunsuke.musicpro.Service.TrackService;
-import com.example.shojishunsuke.musicpro.model.Album;
-import com.example.shojishunsuke.musicpro.model.Track;
+import com.shojishunsuke.musicpro.R;
+import com.shojishunsuke.musicpro.Service.TrackService;
+import com.shojishunsuke.musicpro.model.Track;
 
-import java.io.IOException;
-import java.net.URI;
 import java.util.List;
 
 public class TrackDetailActivity extends AppCompatActivity {
@@ -60,16 +51,24 @@ public class TrackDetailActivity extends AppCompatActivity {
 
         track = (Track) intent.getSerializableExtra(KEY_TRACK);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setTitle(track.title);
+
 //        uri = track.uri;
         path = track.path;
 
-        TextView nameTextView     = (TextView)findViewById(R.id.namebar);
-        TextView titleTextView    = (TextView) findViewById(R.id.title);
-        TextView artistTextView   = (TextView) findViewById(R.id.artist);
+//        TextView nameTextView = (TextView) findViewById(R.id.namebar);
+        TextView titleTextView = (TextView) findViewById(R.id.title);
+        TextView artistTextView = (TextView) findViewById(R.id.artist);
         TextView positionTextView = (TextView) findViewById(R.id.textView_position);
         TextView durationTextView = (TextView) findViewById(R.id.textView_duration);
-        ImageView artImageView    = (ImageView) findViewById(R.id.trackart);
-        SeekBar seekBar           = (SeekBar)findViewById(R.id.seekBar);
+        ImageView artImageView = (ImageView) findViewById(R.id.trackart);
+        SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar);
         FloatingActionButton prevButton = (FloatingActionButton) findViewById(R.id.button_prev);
         final FloatingActionButton playButton = (FloatingActionButton) findViewById(R.id.button_play);
         FloatingActionButton nextButton = (FloatingActionButton) findViewById(R.id.button_next);
@@ -77,7 +76,7 @@ public class TrackDetailActivity extends AppCompatActivity {
 
         titleTextView.setText(track.title);
         artistTextView.setText(track.artist);
-        nameTextView.setText(track.title);
+//        nameTextView.setText(track.title);
 
 
         long dm = track.duration / 60000;
@@ -88,11 +87,7 @@ public class TrackDetailActivity extends AppCompatActivity {
         prevButton.setImageResource(R.drawable.skipprev);
         nextButton.setImageResource(R.drawable.skipnext);
 
-        artImageView.setImageResource(R.drawable.green);
-
-
-
-
+        artImageView.setImageResource(R.drawable.seaback);
 
 //       画面遷移と同時に曲が始まるようにしてみる。
 
@@ -102,9 +97,9 @@ public class TrackDetailActivity extends AppCompatActivity {
 
 //       リストから曲を選ぶと同時に曲の再生、画面遷移が行われる
 
-        if (check){
+        if (check) {
 
-            stopService(new Intent(TrackDetailActivity.this,TrackService.class));
+            stopService(new Intent(TrackDetailActivity.this, TrackService.class));
 
             TrackService.start(TrackDetailActivity.this, path);
 
@@ -113,7 +108,7 @@ public class TrackDetailActivity extends AppCompatActivity {
             playButton.setImageResource(R.drawable.pause);
 
 
-        }else {
+        } else {
 
 
             TrackService.start(TrackDetailActivity.this, path);
@@ -121,7 +116,6 @@ public class TrackDetailActivity extends AppCompatActivity {
             flag = true;
 
         }
-
 
 
 //　　　　UIでは曲の一時停止、再生を行う
@@ -140,7 +134,7 @@ public class TrackDetailActivity extends AppCompatActivity {
                     check = false;
                     flag = false;
 
-                }else {
+                } else {
 
                     TrackService.start(TrackDetailActivity.this, path);
 
@@ -154,24 +148,30 @@ public class TrackDetailActivity extends AppCompatActivity {
         });
 
 
-
-
     }
 
-    private void checkService(){
+    public void checkService() {
 
-        ActivityManager am =(ActivityManager)this.getSystemService(ACTIVITY_SERVICE);
-        List<ActivityManager.RunningServiceInfo> listSeriviceInfo =am.getRunningServices(Integer.MAX_VALUE);
+        ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> listSeriviceInfo = am.getRunningServices(Integer.MAX_VALUE);
 
 
-        for (ActivityManager.RunningServiceInfo curr : listSeriviceInfo){
-            if (curr.service.getClassName().equals(TrackService.class.getName())){
+        for (ActivityManager.RunningServiceInfo curr : listSeriviceInfo) {
+            if (curr.service.getClassName().equals(TrackService.class.getName())) {
                 check = true;
                 break;
             }
         }
     }
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return false;
+    }
 
 
 }

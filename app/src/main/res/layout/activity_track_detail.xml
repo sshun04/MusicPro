@@ -1,31 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".actvity.TrackDetailActivity"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
-        android:gravity="center"
-        android:layout_height="50dp"
         android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:background="@color/colorPrimary"
+        android:gravity="center"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        >
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-    <TextView
-        android:id="@+id/namebar"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:text="MusicPro"
-        android:gravity="center"
-        android:textSize="16sp"
-        android:textStyle="bold"/>
+
     </android.support.v7.widget.Toolbar>
 
     <FrameLayout
@@ -77,40 +67,38 @@
                 </LinearLayout>
 
                 <TextView
-                    android:layout_marginTop="5dp"
                     android:id="@+id/title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:text="TextView"
                     android:textSize="17sp"
-                    android:textStyle="bold"
-                    android:layout_weight="1"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/artist"
-                    android:textSize="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="artist"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_weight="1"/>
+                    android:text="artist"
+                    android:textSize="15dp" />
 
                 <LinearLayout
-                    android:layout_weight="1"
-                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:orientation="horizontal"
-                   >
+                    android:orientation="horizontal">
 
                     <android.support.design.widget.FloatingActionButton
                         android:id="@+id/button_prev"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                         />
+                        android:layout_height="wrap_content" />
 
                     <android.support.design.widget.FloatingActionButton
                         android:id="@+id/button_play"
@@ -133,7 +121,6 @@
         </LinearLayout>
 
     </FrameLayout>
-
 
 
 </LinearLayout>

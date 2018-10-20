@@ -1,4 +1,4 @@
-package com.example.shojishunsuke.musicpro.adapter;
+package com.shojishunsuke.musicpro.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,11 +10,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.shojishunsuke.musicpro.actvity.AlbumDetailActivity;
-import com.example.shojishunsuke.musicpro.model.Album;
-import com.example.shojishunsuke.musicpro.ImageCache;
-import com.example.shojishunsuke.musicpro.ImageGetTask;
-import com.example.shojishunsuke.musicpro.R;
+import com.shojishunsuke.musicpro.R;
+import com.shojishunsuke.musicpro.ImageCache;
+import com.shojishunsuke.musicpro.ImageGetTask;
+import com.shojishunsuke.musicpro.actvity.AlbumDetailActivity;
+import com.shojishunsuke.musicpro.model.Album;
 
 import java.util.List;
 
@@ -74,7 +74,7 @@ public class ListAlbumAdapter extends ArrayAdapter<Album> {
             @Override
             public void onClick(View v) {
 
-                AlbumDetailActivity.start(context,item);
+                AlbumDetailActivity.start(context, item);
 
             }
         });
@@ -82,6 +82,8 @@ public class ListAlbumAdapter extends ArrayAdapter<Album> {
         return convertView;
 
     }
+
+
 
     static class ViewHolder {
         TextView albumTextView;

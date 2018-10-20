@@ -1,32 +1,18 @@
-package com.example.shojishunsuke.musicpro.Service;
+package com.shojishunsuke.musicpro.Service;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
-import com.example.shojishunsuke.musicpro.R;
-import com.example.shojishunsuke.musicpro.adapter.ListTrackAdapter;
-import com.example.shojishunsuke.musicpro.model.Track;
-
-import org.json.JSONException;
+import com.shojishunsuke.musicpro.model.Track;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TrackService extends Service {
     private static String EXTRA_SONG_PATH = "song_path";
@@ -78,16 +64,13 @@ public class TrackService extends Service {
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
 
-        }else {
+        } else {
             mediaPlayer.start();
         }
 
 
         return START_STICKY;
     }
-
-
-
 
 
     private void setAudio() {
