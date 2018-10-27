@@ -13,19 +13,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.shojishunsuke.musicpro.actvity.MainActivity">
+        <activity
+            android:name="com.shojishunsuke.musicpro.actvity.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.shojishunsuke.musicpro.actvity.AlbumDetailActivity" />
-        <activity android:name="com.shojishunsuke.musicpro.actvity.ArtistDetailActivity" />
+        <activity
+            android:name="com.shojishunsuke.musicpro.actvity.AlbumDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shojishunsuke.musicpro.actvity.ArtistDetailActivity"
+            android:screenOrientation="portrait" />
 
         <service android:name="com.shojishunsuke.musicpro.Service.TrackService" />
 
-        <activity android:name="com.shojishunsuke.musicpro.actvity.TrackDetailActivity" />
+        <activity
+            android:name="com.shojishunsuke.musicpro.actvity.TrackDetailActivity"
+            android:screenOrientation="portrait" />
 
     </application>
 

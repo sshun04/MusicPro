@@ -5,19 +5,15 @@
     android:layout_height="wrap_content"
     android:layout_margin="5dp">
 
-    <!--<ImageView-->
-        <!--android:id="@+id/artWork"-->
-        <!--android:layout_width="72dp"-->
-        <!--android:layout_height="72dp" />-->
-
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="64dp"
         android:orientation="vertical"
         android:layout_marginLeft="8dp"
         android:layout_gravity="center"
+        android:gravity="center_vertical"
         >
 
 

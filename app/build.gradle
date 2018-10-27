@@ -4,7 +4,8 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.shojishunsuke.musicpro"
-        minSdkVersion 15
+        minSdkVersion 23
+//        TODO
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -30,4 +31,5 @@ dependencies {
     //noinspection GradleCompatible
     implementation 'com.android.support:support-v13:21.0.+'
     implementation 'com.android.support:design:27.1.1'
+
 }

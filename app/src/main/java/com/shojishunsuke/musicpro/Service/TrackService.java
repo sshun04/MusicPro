@@ -3,13 +3,16 @@ package com.shojishunsuke.musicpro.Service;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
 
+import com.shojishunsuke.musicpro.actvity.TrackDetailActivity;
 import com.shojishunsuke.musicpro.model.Track;
 
 import java.io.IOException;
@@ -30,16 +33,19 @@ public class TrackService extends Service {
 
     public Context context;
     public String id;
-    public Track track;
     public String path;
     private boolean flag = true;
 
-    final MediaPlayer mediaPlayer = new MediaPlayer();
+    AudioManager audioManager;
 
+
+    final MediaPlayer mediaPlayer = new MediaPlayer();
 
     @Override
     public void onCreate() {
         super.onCreate();
+        audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+
         Log.d("debug", "onCreate()");
 
 
@@ -55,17 +61,21 @@ public class TrackService extends Service {
 
         mediaPlayer.setLooping(true);
 
-//
         if (flag) {
             setAudio();
+
+
             flag = false;
         }
 
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
+            audioManager.abandonAudioFocus(afChangeListener);
 
         } else {
+            audioManager.requestAudioFocus(afChangeListener,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN);
             mediaPlayer.start();
+
         }
 
 
@@ -97,15 +107,51 @@ public class TrackService extends Service {
             mediaPlayer.release();
         }
 
+        audioManager.abandonAudioFocus(afChangeListener);
+
         stopSelf();
 
     }
+
+
+
+
+
 
     @NonNull
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
+
+    AudioManager.OnAudioFocusChangeListener afChangeListener = new AudioManager.OnAudioFocusChangeListener() {
+        @Override
+        public void onAudioFocusChange(int focusChange) {
+
+            switch (focusChange){
+                case AudioManager.AUDIOFOCUS_LOSS:
+
+                    mediaPlayer.pause();
+                    break;
+
+                case  AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+
+                    mediaPlayer.pause();
+                    break;
+
+                case  AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+
+                    break;
+
+                case AudioManager.AUDIOFOCUS_GAIN:
+
+                    mediaPlayer.start();
+            }
+
+        }
+    };
+
+
 
 
 }

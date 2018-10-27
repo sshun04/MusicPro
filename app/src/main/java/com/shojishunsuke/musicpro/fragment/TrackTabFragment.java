@@ -84,6 +84,8 @@ public class TrackTabFragment extends Fragment {
         ListTrackAdapter trackAdapter = new ListTrackAdapter(activity, tracks);
         trackList.setAdapter(trackAdapter);
 
+
+
         // Inflate the layout for this fragment
         return view;
     }

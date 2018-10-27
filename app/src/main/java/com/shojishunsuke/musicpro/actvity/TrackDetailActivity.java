@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.shojishunsuke.musicpro.ImageGetTask;
 import com.shojishunsuke.musicpro.R;
 import com.shojishunsuke.musicpro.Service.TrackService;
 import com.shojishunsuke.musicpro.model.Track;
@@ -29,6 +30,7 @@ public class TrackDetailActivity extends AppCompatActivity {
     private Track track;
     private Uri uri;
     private String path;
+    private String artPath;
     private boolean flag = false;
     private boolean check = false;
 
@@ -59,10 +61,9 @@ public class TrackDetailActivity extends AppCompatActivity {
         actionBar.setHomeButtonEnabled(true);
         actionBar.setTitle(track.title);
 
-//        uri = track.uri;
         path = track.path;
 
-//        TextView nameTextView = (TextView) findViewById(R.id.namebar);
+//
         TextView titleTextView = (TextView) findViewById(R.id.title);
         TextView artistTextView = (TextView) findViewById(R.id.artist);
         TextView positionTextView = (TextView) findViewById(R.id.textView_position);
@@ -76,7 +77,7 @@ public class TrackDetailActivity extends AppCompatActivity {
 
         titleTextView.setText(track.title);
         artistTextView.setText(track.artist);
-//        nameTextView.setText(track.title);
+//
 
 
         long dm = track.duration / 60000;
@@ -87,7 +88,14 @@ public class TrackDetailActivity extends AppCompatActivity {
         prevButton.setImageResource(R.drawable.skipprev);
         nextButton.setImageResource(R.drawable.skipnext);
 
+//        artPath = track.albumArt;
         artImageView.setImageResource(R.drawable.seaback);
+
+//        if (artPath != null){
+//            artImageView.setTag(artPath);
+//            ImageGetTask task = new ImageGetTask(artImageView);
+//            task.execute(artPath);
+//        }
 
 //       画面遷移と同時に曲が始まるようにしてみる。
 
