@@ -20,8 +20,8 @@ import java.util.List;
 
 public class ListAlbumAdapter extends ArrayAdapter<Album> {
 
-    Context context;
-    LayoutInflater mInflater;
+    private Context context;
+    private LayoutInflater mInflater;
 
     public ListAlbumAdapter(Context context, List<Album> item) {
         super(context, 0, item);
