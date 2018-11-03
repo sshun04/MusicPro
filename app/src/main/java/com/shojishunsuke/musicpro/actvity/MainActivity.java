@@ -3,6 +3,7 @@ package com.shojishunsuke.musicpro.actvity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements TrackTabFragment.
     Context mContext;
 
     enum FragType {fAlbum}
+    private FloatingActionButton playButton;
 
     private ListView trackList;
 
@@ -58,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements TrackTabFragment.
         setContentView(R.layout.activity_main);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tablayout);
-        final FloatingActionButton playButton = (FloatingActionButton) findViewById(R.id.mainPlay);
+        playButton = (FloatingActionButton) findViewById(R.id.mainPlay);
         FloatingActionButton stopButton = (FloatingActionButton) findViewById(R.id.mainStop);
 
         tabLayout.addTab(tabLayout.newTab().setText("Tracks"));
@@ -144,6 +146,22 @@ public class MainActivity extends AppCompatActivity implements TrackTabFragment.
         });
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        AudioManager audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+        if (audioManager != null) {
+            if (audioManager.isMusicActive()) {
+                playButton.setImageResource(R.drawable.pause);
+            } else {
+                playButton.setImageResource(R.drawable.playarrow);
+            }
+        } else {
+            playButton.setImageResource(R.drawable.playarrow);
+        }
     }
 
     public void audioCheck() {
