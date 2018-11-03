@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isStartService = false;
     private boolean isAudioPause = false;
+
     private FloatingActionButton playButton;
 
     private final static String[] READ_EXTERNAL_STORAGE = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
@@ -108,6 +109,22 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        AudioManager audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+        if (audioManager != null) {
+            if (audioManager.isMusicActive()) {
+                playButton.setImageResource(R.drawable.pause);
+            } else {
+                playButton.setImageResource(R.drawable.playarrow);
+            }
+        } else {
+            playButton.setImageResource(R.drawable.playarrow);
+        }
     }
 
     @Override
