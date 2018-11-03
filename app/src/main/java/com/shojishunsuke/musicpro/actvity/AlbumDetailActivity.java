@@ -3,6 +3,7 @@ package com.shojishunsuke.musicpro.actvity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +23,7 @@ import com.shojishunsuke.musicpro.Service.TrackService;
 import com.shojishunsuke.musicpro.adapter.ListTrackAdapter;
 import com.shojishunsuke.musicpro.model.Album;
 import com.shojishunsuke.musicpro.model.Track;
+import com.shojishunsuke.musicpro.utils.CheckServiceUtils;
 
 import java.util.List;
 
@@ -29,8 +31,10 @@ import java.util.List;
 public class AlbumDetailActivity extends AppCompatActivity {
 
     private static final String KEY_ALBUM = "kyc_album";
-    public boolean isStartService = false;
-    public boolean isAudioPause = false;
+    private boolean isStartService = false;
+    private boolean isAudioPause = false;
+
+    private FloatingActionButton playButton;
 
     public static void start(Context context, Album album) {
         Intent intent = new Intent(context, AlbumDetailActivity.class);
@@ -60,7 +64,7 @@ public class AlbumDetailActivity extends AppCompatActivity {
         TextView album_tracks = (TextView) findViewById(R.id.tracks);
         ImageView album_art = (ImageView) findViewById(R.id.albumart);
 
-        final FloatingActionButton playButton = (FloatingActionButton) findViewById(R.id.mainPlay);
+        playButton = (FloatingActionButton) findViewById(R.id.mainPlay);
 
 
         album_title.setText(album.album);
@@ -100,7 +104,10 @@ public class AlbumDetailActivity extends AppCompatActivity {
         ListTrackAdapter adapter = new ListTrackAdapter(this, tracks);
         trackList.setAdapter(adapter);
 
-        audioCheck();
+        ActivityManager activityManager = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
+        if (activityManager != null) {
+            isStartService = CheckServiceUtils.checkAudioService(activityManager);
+        }
 
         if (isStartService) {
             playButton.setImageResource(R.drawable.pause);
@@ -113,7 +120,10 @@ public class AlbumDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                audioCheck();
+                ActivityManager activityManager = (ActivityManager) AlbumDetailActivity.this.getSystemService(ACTIVITY_SERVICE);
+                if (activityManager != null) {
+                    isStartService = CheckServiceUtils.checkAudioService(activityManager);
+                }
 
                 if (isAudioPause && isStartService) {
 
@@ -135,6 +145,23 @@ public class AlbumDetailActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        AudioManager audioManager = (AudioManager) this.getSystemService(AUDIO_SERVICE);
+        if (audioManager != null) {
+            if (audioManager.isMusicActive()) {
+                playButton.setImageResource(R.drawable.pause);
+
+            } else {
+                playButton.setImageResource(R.drawable.playarrow);
+            }
+        } else {
+            playButton.setImageResource(R.drawable.playarrow);
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -144,16 +171,5 @@ public class AlbumDetailActivity extends AppCompatActivity {
         return false;
     }
 
-    public void audioCheck() {
-        ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
-        List<ActivityManager.RunningServiceInfo> listSeriviceInfo = am.getRunningServices(Integer.MAX_VALUE);
 
-
-        for (ActivityManager.RunningServiceInfo curr : listSeriviceInfo) {
-            if (curr.service.getClassName().equals(TrackService.class.getName())) {
-                isStartService = true;
-                break;
-            }
-        }
-    }
 }
