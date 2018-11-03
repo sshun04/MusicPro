@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.shojishunsuke.musicpro.ImageGetTask;
 import com.shojishunsuke.musicpro.R;
 import com.shojishunsuke.musicpro.Service.TrackService;
 import com.shojishunsuke.musicpro.model.Track;
@@ -25,14 +24,14 @@ import java.util.List;
 
 public class TrackDetailActivity extends AppCompatActivity {
 
-    public static final String KEY_TRACK = "kyc_track";
+    private static final String KEY_TRACK = "kyc_track";
     private Context context;
     private Track track;
     private Uri uri;
-    private String path;
+    private String trackPath;
     private String artPath;
     private boolean flag = false;
-    private boolean check = false;
+    private boolean isStartService = false;
 
 
     public static void start(Context context, Track track) {
@@ -61,9 +60,9 @@ public class TrackDetailActivity extends AppCompatActivity {
         actionBar.setHomeButtonEnabled(true);
         actionBar.setTitle(track.title);
 
-        path = track.path;
+        trackPath = track.path;
 
-//
+
         TextView titleTextView = (TextView) findViewById(R.id.title);
         TextView artistTextView = (TextView) findViewById(R.id.artist);
         TextView positionTextView = (TextView) findViewById(R.id.textView_position);
@@ -77,7 +76,7 @@ public class TrackDetailActivity extends AppCompatActivity {
 
         titleTextView.setText(track.title);
         artistTextView.setText(track.artist);
-//
+
 
 
         long dm = track.duration / 60000;
@@ -88,28 +87,17 @@ public class TrackDetailActivity extends AppCompatActivity {
         prevButton.setImageResource(R.drawable.skipprev);
         nextButton.setImageResource(R.drawable.skipnext);
 
-//        artPath = track.albumArt;
         artImageView.setImageResource(R.drawable.seaback);
 
-//        if (artPath != null){
-//            artImageView.setTag(artPath);
-//            ImageGetTask task = new ImageGetTask(artImageView);
-//            task.execute(artPath);
-//        }
-
-//       画面遷移と同時に曲が始まるようにしてみる。
-
-//       Serviceの状態確認
 
         checkService();
 
-//       リストから曲を選ぶと同時に曲の再生、画面遷移が行われる
 
-        if (check) {
+        if (isStartService) {
 
             stopService(new Intent(TrackDetailActivity.this, TrackService.class));
 
-            TrackService.start(TrackDetailActivity.this, path);
+            TrackService.start(TrackDetailActivity.this, trackPath);
 
             flag = true;
 
@@ -119,7 +107,7 @@ public class TrackDetailActivity extends AppCompatActivity {
         } else {
 
 
-            TrackService.start(TrackDetailActivity.this, path);
+            TrackService.start(TrackDetailActivity.this, trackPath);
 
             flag = true;
 
@@ -135,16 +123,16 @@ public class TrackDetailActivity extends AppCompatActivity {
                 if (flag) {
 
 
-                    TrackService.start(TrackDetailActivity.this, path);
+                    TrackService.start(TrackDetailActivity.this, trackPath);
 
                     playButton.setImageResource(R.drawable.playarrow);
 
-                    check = false;
+                    isStartService = false;
                     flag = false;
 
                 } else {
 
-                    TrackService.start(TrackDetailActivity.this, path);
+                    TrackService.start(TrackDetailActivity.this, trackPath);
 
                     playButton.setImageResource(R.drawable.pause);
 
@@ -166,11 +154,12 @@ public class TrackDetailActivity extends AppCompatActivity {
 
         for (ActivityManager.RunningServiceInfo curr : listSeriviceInfo) {
             if (curr.service.getClassName().equals(TrackService.class.getName())) {
-                check = true;
+                isStartService = true;
                 break;
             }
         }
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

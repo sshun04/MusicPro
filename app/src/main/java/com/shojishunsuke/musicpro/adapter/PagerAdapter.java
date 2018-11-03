@@ -18,26 +18,18 @@ public class PagerAdapter extends FragmentPagerAdapter {
 
     }
 
-
     @Override
     public Fragment getItem(int position) {
         switch (position) {
 
             case 0:
-
-                TrackTabFragment trackTabFragment = new TrackTabFragment();
-                return trackTabFragment;
-
+                return TrackTabFragment.newInstance();
             case 1:
-               ArtistTabFragment artistTabFragment = new ArtistTabFragment();
-                return artistTabFragment;
-
+                return ArtistTabFragment.newInstance();
             case 2:
-                AlbumTabFragment albumTabFragment = new AlbumTabFragment();
-                 return albumTabFragment;
-
-          default:
-              return null;
+                return AlbumTabFragment.newInstance();
+            default:
+                return null;
         }
     }
 
@@ -46,12 +38,17 @@ public class PagerAdapter extends FragmentPagerAdapter {
         return mNoOfTabs;
     }
 
-    @Override public CharSequence getPageTitle(int position){
-        switch (position){
-            case 0 :return "TRACK";
-            case 1: return "ARTIST";
-            case 2 : return "ALBUM";
-            default:return null;
+    @Override
+    public CharSequence getPageTitle(int position) {
+        switch (position) {
+            case 0:
+                return "TRACK";
+            case 1:
+                return "ARTIST";
+            case 2:
+                return "ALBUM";
+            default:
+                return null;
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.shojishunsuke.musicpro;
+package com.shojishunsuke.musicpro.utils;
 
 import android.content.Context;
 import android.content.pm.PackageManager;

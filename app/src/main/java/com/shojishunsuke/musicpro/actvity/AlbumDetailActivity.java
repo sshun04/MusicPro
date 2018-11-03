@@ -1,9 +1,11 @@
 package com.shojishunsuke.musicpro.actvity;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,21 +14,23 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shojishunsuke.musicpro.ImageGetTask;
 import com.shojishunsuke.musicpro.R;
+import com.shojishunsuke.musicpro.Service.TrackService;
 import com.shojishunsuke.musicpro.adapter.ListTrackAdapter;
 import com.shojishunsuke.musicpro.model.Album;
 import com.shojishunsuke.musicpro.model.Track;
 
 import java.util.List;
 
-//import static com.example.shojishunsuke.musicpro.AlbumMenu.album_item;
 
 public class AlbumDetailActivity extends AppCompatActivity {
 
     private static final String KEY_ALBUM = "kyc_album";
-    Context context;
+    public boolean isStartService = false;
+    public boolean isAudioPause = false;
 
     public static void start(Context context, Album album) {
         Intent intent = new Intent(context, AlbumDetailActivity.class);
@@ -50,16 +54,19 @@ public class AlbumDetailActivity extends AppCompatActivity {
         actionBar.setHomeButtonEnabled(true);
         actionBar.setTitle(album.album);
 
-//
+
         TextView album_title = (TextView) findViewById(R.id.title);
         TextView album_artist = (TextView) findViewById(R.id.artist);
         TextView album_tracks = (TextView) findViewById(R.id.tracks);
         ImageView album_art = (ImageView) findViewById(R.id.albumart);
 
-//
+        final FloatingActionButton playButton = (FloatingActionButton) findViewById(R.id.mainPlay);
+
+
         album_title.setText(album.album);
         album_artist.setText(album.artist);
         album_tracks.setText(String.valueOf(album.tracks) + "tracks");
+
 
 //        アルバムの画像をセットする。
 
@@ -92,6 +99,39 @@ public class AlbumDetailActivity extends AppCompatActivity {
         ListView trackList = (ListView) findViewById(R.id.list);
         ListTrackAdapter adapter = new ListTrackAdapter(this, tracks);
         trackList.setAdapter(adapter);
+
+        audioCheck();
+
+        if (isStartService) {
+            playButton.setImageResource(R.drawable.pause);
+        } else {
+            playButton.setImageResource(R.drawable.playarrow);
+        }
+
+
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                audioCheck();
+
+                if (isAudioPause && isStartService) {
+
+                    playButton.setImageResource(R.drawable.pause);
+                    startService(new Intent(AlbumDetailActivity.this, TrackService.class));
+                    isAudioPause = false;
+
+
+                } else if (isStartService) {
+                    playButton.setImageResource(R.drawable.playarrow);
+                    startService(new Intent(AlbumDetailActivity.this, TrackService.class));
+                    isAudioPause = true;
+                } else {
+                    isAudioPause = false;
+                    Toast.makeText(AlbumDetailActivity.this, "Choose Track", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -102,5 +142,18 @@ public class AlbumDetailActivity extends AppCompatActivity {
                 return true;
         }
         return false;
+    }
+
+    public void audioCheck() {
+        ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> listSeriviceInfo = am.getRunningServices(Integer.MAX_VALUE);
+
+
+        for (ActivityManager.RunningServiceInfo curr : listSeriviceInfo) {
+            if (curr.service.getClassName().equals(TrackService.class.getName())) {
+                isStartService = true;
+                break;
+            }
+        }
     }
 }

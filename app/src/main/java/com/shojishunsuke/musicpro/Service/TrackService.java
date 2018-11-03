@@ -9,11 +9,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
-import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
-
-import com.shojishunsuke.musicpro.actvity.TrackDetailActivity;
-import com.shojishunsuke.musicpro.model.Track;
 
 import java.io.IOException;
 
@@ -26,14 +22,13 @@ public class TrackService extends Service {
         context.startService(intent);
     }
 
-
     private static Intent createIntent(Context context) {
         return new Intent(context, TrackService.class);
     }
 
-    public Context context;
-    public String id;
-    public String path;
+    private Context context;
+    private String id;
+    private String path;
     private boolean flag = true;
 
     AudioManager audioManager;
@@ -44,7 +39,7 @@ public class TrackService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         Log.d("debug", "onCreate()");
 
@@ -73,7 +68,7 @@ public class TrackService extends Service {
             audioManager.abandonAudioFocus(afChangeListener);
 
         } else {
-            audioManager.requestAudioFocus(afChangeListener,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN);
+            audioManager.requestAudioFocus(afChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
             mediaPlayer.start();
 
         }
@@ -114,10 +109,6 @@ public class TrackService extends Service {
     }
 
 
-
-
-
-
     @NonNull
     @Override
     public IBinder onBind(Intent intent) {
@@ -128,18 +119,18 @@ public class TrackService extends Service {
         @Override
         public void onAudioFocusChange(int focusChange) {
 
-            switch (focusChange){
+            switch (focusChange) {
                 case AudioManager.AUDIOFOCUS_LOSS:
 
                     mediaPlayer.pause();
                     break;
 
-                case  AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
 
                     mediaPlayer.pause();
                     break;
 
-                case  AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
 
                     break;
 
@@ -150,8 +141,6 @@ public class TrackService extends Service {
 
         }
     };
-
-
 
 
 }

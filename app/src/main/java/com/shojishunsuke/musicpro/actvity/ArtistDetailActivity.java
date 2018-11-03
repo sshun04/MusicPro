@@ -45,11 +45,9 @@ public class ArtistDetailActivity extends AppCompatActivity {
         actionBar.setHomeButtonEnabled(true);
         actionBar.setTitle(artist.artist);
 
-//        TextView artistName = (TextView) findViewById(R.id.artist);
         TextView numberOfTracks = (TextView) findViewById(R.id.tracks);
         TextView numberOfAlbums = (TextView) findViewById(R.id.albums);
 
-//        artistName.setText(artist.artist);
         numberOfTracks.setText(String.valueOf(artist.tracks) + "tracks");
         numberOfAlbums.setText(String.valueOf(artist.albums) + "albums");
 
@@ -66,6 +64,7 @@ public class ArtistDetailActivity extends AppCompatActivity {
         ListTrackAdapter adapter = new ListTrackAdapter(this, tracks);
         listView.setAdapter(adapter);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
