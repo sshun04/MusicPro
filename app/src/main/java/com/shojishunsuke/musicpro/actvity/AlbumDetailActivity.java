@@ -63,6 +63,8 @@ public class AlbumDetailActivity extends AppCompatActivity {
         TextView album_artist = (TextView) findViewById(R.id.artist);
         TextView album_tracks = (TextView) findViewById(R.id.tracks);
         ImageView album_art = (ImageView) findViewById(R.id.albumart);
+        ImageView devide_view_top = (ImageView) findViewById(R.id.devider1);
+        ImageView devide_view_bottom = (ImageView) findViewById(R.id.devider2);
 
         playButton = (FloatingActionButton) findViewById(R.id.mainPlay);
 

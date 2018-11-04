@@ -71,13 +71,25 @@
             </LinearLayout>
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/devider1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorPrimary"/>
+
         <TextView
             android:id="@+id/tracktitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
+            android:layout_margin="2dp"
             android:gravity="center"
             android:text="tracks" />
+
+        <ImageView
+            android:id="@+id/devider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorPrimary"/>
 
         <ListView
             android:id="@+id/list"
@@ -114,7 +126,6 @@
 
 
         </android.support.constraint.ConstraintLayout>
-
 
 
     </LinearLayout>
