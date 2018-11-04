@@ -26,15 +26,13 @@ public class TrackService extends Service {
         return new Intent(context, TrackService.class);
     }
 
-    private Context context;
-    private String id;
-    private String path;
-    private boolean flag = true;
+    private String trackPath;
+    private boolean isAudioSet = false;
 
-    AudioManager audioManager;
+    private AudioManager audioManager;
 
 
-    final MediaPlayer mediaPlayer = new MediaPlayer();
+    private final MediaPlayer mediaPlayer = new MediaPlayer();
 
     @Override
     public void onCreate() {
@@ -52,15 +50,15 @@ public class TrackService extends Service {
 
 //        他のトラックがタッチされたらそっちが再生されるようにしたい
 
-        path = intent.getStringExtra(EXTRA_SONG_PATH);
+        trackPath = intent.getStringExtra(EXTRA_SONG_PATH);
 
         mediaPlayer.setLooping(true);
 
-        if (flag) {
+        if (!isAudioSet) {
             setAudio();
 
 
-            flag = false;
+            isAudioSet = true;
         }
 
         if (mediaPlayer.isPlaying()) {
@@ -82,7 +80,7 @@ public class TrackService extends Service {
 
         try {
 
-            mediaPlayer.setDataSource(path);
+            mediaPlayer.setDataSource(trackPath);
             mediaPlayer.prepare();
 
         } catch (IOException e) {
@@ -137,6 +135,7 @@ public class TrackService extends Service {
                 case AudioManager.AUDIOFOCUS_GAIN:
 
                     mediaPlayer.start();
+                    break;
             }
 
         }
