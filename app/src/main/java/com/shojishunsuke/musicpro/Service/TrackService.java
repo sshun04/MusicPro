@@ -129,7 +129,8 @@ public class TrackService extends Service {
                     break;
 
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-
+//         通知音などがなった時の処理
+//        　一時的にボリュームを下げて再生し続けるコードを書く
                     break;
 
                 case AudioManager.AUDIOFOCUS_GAIN:
