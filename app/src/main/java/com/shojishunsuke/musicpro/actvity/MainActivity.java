@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
 
     private boolean isStartService = false;
-    private boolean isAudioPause = false;
 
     private FloatingActionButton playButton;
 
@@ -92,19 +91,20 @@ public class MainActivity extends AppCompatActivity {
                     isStartService = CheckServiceUtils.checkAudioService(activityManager);
                 }
 
-                if (isAudioPause && isStartService) {
+                AudioManager audioManager = (AudioManager)MainActivity.this.getSystemService(Context.AUDIO_SERVICE);
 
-                    playButton.setImageResource(R.drawable.pause);
+                if (audioManager.isMusicActive()&& isStartService) {
+
+                    playButton.setImageResource(R.drawable.playarrow);
                     startService(new Intent(MainActivity.this, TrackService.class));
-                    isAudioPause = false;
 
 
                 } else if (isStartService) {
-                    playButton.setImageResource(R.drawable.playarrow);
+                    playButton.setImageResource(R.drawable.pause);
                     startService(new Intent(MainActivity.this, TrackService.class));
-                    isAudioPause = true;
+
                 } else {
-                    isAudioPause = false;
+
                     Toast.makeText(MainActivity.this, "Choose Track", Toast.LENGTH_SHORT).show();
                 }
             }

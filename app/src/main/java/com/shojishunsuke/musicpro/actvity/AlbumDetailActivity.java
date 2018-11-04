@@ -32,7 +32,6 @@ public class AlbumDetailActivity extends AppCompatActivity {
 
     private static final String KEY_ALBUM = "kyc_album";
     private boolean isStartService = false;
-    private boolean isAudioPause = false;
 
     private FloatingActionButton playButton;
 
@@ -125,19 +124,21 @@ public class AlbumDetailActivity extends AppCompatActivity {
                     isStartService = CheckServiceUtils.checkAudioService(activityManager);
                 }
 
-                if (isAudioPause && isStartService) {
+                AudioManager audioManager = (AudioManager)AlbumDetailActivity.this.getSystemService(AUDIO_SERVICE);
 
-                    playButton.setImageResource(R.drawable.pause);
+                if (audioManager.isMusicActive() && isStartService) {
+
+                    playButton.setImageResource(R.drawable.playarrow);
                     startService(new Intent(AlbumDetailActivity.this, TrackService.class));
-                    isAudioPause = false;
+
 
 
                 } else if (isStartService) {
-                    playButton.setImageResource(R.drawable.playarrow);
+                    playButton.setImageResource(R.drawable.pause);
                     startService(new Intent(AlbumDetailActivity.this, TrackService.class));
-                    isAudioPause = true;
+
                 } else {
-                    isAudioPause = false;
+
                     Toast.makeText(AlbumDetailActivity.this, "Choose Track", Toast.LENGTH_SHORT).show();
                 }
             }
