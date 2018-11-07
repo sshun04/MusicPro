@@ -57,7 +57,6 @@ public class TrackService extends Service {
         if (!isAudioSet) {
             setAudio();
 
-
             isAudioSet = true;
         }
 
@@ -93,16 +92,14 @@ public class TrackService extends Service {
     @Override
     public void onDestroy() {
 
-        super.onDestroy();
-
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-        }
+        mediaPlayer.stop();
+        mediaPlayer.release();
 
         audioManager.abandonAudioFocus(afChangeListener);
 
         stopSelf();
+
+        super.onDestroy();
 
     }
 
