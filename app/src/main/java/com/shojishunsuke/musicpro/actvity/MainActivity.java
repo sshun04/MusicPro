@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
         playButton = (FloatingActionButton) findViewById(R.id.mainPlay);
 
         tabLayout.addTab(tabLayout.newTab().setText("Tracks"));
-        tabLayout.addTab(tabLayout.newTab().setText("Artist"));
         tabLayout.addTab(tabLayout.newTab().setText("Album"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
