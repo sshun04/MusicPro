@@ -18,24 +18,22 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <FrameLayout
+
+    <ImageView
+        android:id="@+id/trackart"
         android:layout_width="match_parent"
-        android:layout_height="330dp">
-
-
-        <ImageView
-            android:id="@+id/trackart"
-            android:layout_width="match_parent"
-            android:layout_height="315dp"
-            android:scaleType="centerCrop"></ImageView>
-
-    </FrameLayout>
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:layout_weight="5"
+        android:layout_margin="12dp"
+        ></ImageView>
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_margin="8dp"
+        android:layout_weight="3"
         android:orientation="vertical">
 
         <LinearLayout
@@ -55,8 +53,7 @@
                 android:id="@+id/seekBar"
                 android:layout_width="270dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                />
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/textView_duration"
@@ -69,25 +66,27 @@
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:gravity="center"
             android:text="TextView"
-            android:textSize="17sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/artist"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:layout_marginTop="8dp"
             android:gravity="center"
             android:text="artist"
-            android:textSize="15dp" />
+            android:textSize="16dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="0dp"
+            android:layout_weight="2"
             android:layout_marginTop="10dp"
             android:gravity="center"
             android:orientation="horizontal">
@@ -96,7 +95,7 @@
                 android:id="@+id/button_prev"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/button_play"
@@ -110,7 +109,7 @@
                 android:id="@+id/button_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
         </LinearLayout>
 
