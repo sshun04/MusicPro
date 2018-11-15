@@ -26,6 +26,8 @@ public class PagerAdapter extends FragmentPagerAdapter {
                 return TrackTabFragment.newInstance();
             case 1:
                 return AlbumTabFragment.newInstance();
+            case 2:
+                return ArtistTabFragment.newInstance();
             default:
                 return null;
         }
@@ -43,6 +45,8 @@ public class PagerAdapter extends FragmentPagerAdapter {
                 return "TRACK";
             case 1:
                 return "ALBUM";
+            case 2:
+                return "ARTIST";
             default:
                 return null;
         }
