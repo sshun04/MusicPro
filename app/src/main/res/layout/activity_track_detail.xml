@@ -10,24 +10,19 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/colorPrimary"
+        android:elevation="4dp"
         android:gravity="center"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-
-    </android.support.v7.widget.Toolbar>
-
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <ImageView
         android:id="@+id/trackart"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:scaleType="centerCrop"
-        android:layout_weight="5"
         android:layout_margin="12dp"
-        ></ImageView>
-
+        android:layout_weight="5"
+        android:scaleType="centerCrop" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -77,8 +72,8 @@
             android:id="@+id/artist"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
             android:layout_marginTop="8dp"
+            android:layout_weight="1"
             android:gravity="center"
             android:text="artist"
             android:textSize="16dp" />
@@ -86,8 +81,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2"
             android:layout_marginTop="10dp"
+            android:layout_weight="2"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -114,7 +109,6 @@
         </LinearLayout>
 
     </LinearLayout>
-
 
 </LinearLayout>
 
