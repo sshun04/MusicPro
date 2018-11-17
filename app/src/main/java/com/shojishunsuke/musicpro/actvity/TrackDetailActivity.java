@@ -87,7 +87,7 @@ public class TrackDetailActivity extends AppCompatActivity {
         prevButton.setImageResource(R.drawable.skipprev);
         nextButton.setImageResource(R.drawable.skipnext);
 
-        artImageView.setImageResource(R.drawable.seaback);
+        artImageView.setImageResource(R.drawable.track_icon);
 
 
         checkService();

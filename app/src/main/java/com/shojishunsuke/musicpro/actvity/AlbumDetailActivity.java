@@ -76,7 +76,7 @@ public class AlbumDetailActivity extends AppCompatActivity {
 //        アルバムの画像をセットする。
 
         String path = album.albumArt;
-        album_art.setImageResource(R.drawable.backsub);
+        album_art.setImageResource(R.drawable.album_blue_brack);
 
         if (path != null) {
             album_art.setTag(path);

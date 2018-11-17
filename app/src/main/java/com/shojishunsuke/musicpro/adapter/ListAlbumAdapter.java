@@ -54,14 +54,14 @@ public class ListAlbumAdapter extends ArrayAdapter<Album> {
         holder.tracksTextView.setText(String.valueOf(item.tracks) + "tracks");
 
         String path = item.albumArt;
-        holder.artworkImageView.setImageResource(R.drawable.backsub);
+        holder.artworkImageView.setImageResource(R.drawable.album_blue_brack);
 
         if (path == null) {
-            path = String.valueOf(R.drawable.record);
+            path = String.valueOf(R.drawable.album_blue_brack);
             Bitmap bitmap = ImageCache.getImage(path);
 
             if (bitmap == null) {
-                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.record);
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.album_blue_brack);
                 ImageCache.setImage(path, bitmap);
             }
         }
