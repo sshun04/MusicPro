@@ -1,5 +1,7 @@
 package com.shojishunsuke.musicpro.Service;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -9,16 +11,27 @@ import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+//import android.support.v4.media.app.NotificationCompat;
+import android.support.v4.media.app.NotificationCompat;
 import android.util.Log;
+
+import com.shojishunsuke.musicpro.R;
+import com.shojishunsuke.musicpro.actvity.AlbumDetailActivity;
+import com.shojishunsuke.musicpro.actvity.MainActivity;
+import com.shojishunsuke.musicpro.actvity.TrackDetailActivity;
+
+import static com.shojishunsuke.musicpro.App.CHANNEL_ID;
 
 import java.io.IOException;
 
 public class TrackService extends Service {
     private static String EXTRA_SONG_PATH = "song_path";
+    private static String EXTRA_SONG_TITLE = "song_title";
 
-    public static void start(Context context, String path) {
+    public static void start(Context context, String path,String title) {
         Intent intent = createIntent(context);
         intent.putExtra(EXTRA_SONG_PATH, path);
+        intent.putExtra(EXTRA_SONG_TITLE,title);
         context.startService(intent);
     }
 
@@ -27,6 +40,8 @@ public class TrackService extends Service {
     }
 
     private String trackPath;
+    private String trackTitle;
+
     private boolean isAudioSet = false;
 
     private AudioManager audioManager;
@@ -51,6 +66,7 @@ public class TrackService extends Service {
 //        他のトラックがタッチされたらそっちが再生されるようにしたい
 
         trackPath = intent.getStringExtra(EXTRA_SONG_PATH);
+        trackTitle = intent.getStringExtra(EXTRA_SONG_TITLE);
 
         mediaPlayer.setLooping(true);
 
@@ -70,6 +86,7 @@ public class TrackService extends Service {
 
         }
 
+        createNotification();
 
         return START_STICKY;
     }
@@ -137,6 +154,22 @@ public class TrackService extends Service {
 
         }
     };
+
+    public void createNotification() {
+
+        Intent notificationIntent = new Intent(this,MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,0,notificationIntent,0);
+
+        android.support.v4.app.NotificationCompat.Builder builder = new android.support.v4.app.NotificationCompat.Builder(this,CHANNEL_ID)
+                .setContentTitle(trackTitle)
+                .setContentText("YES")
+                .setSmallIcon(R.drawable.track_icon)
+                .setContentIntent(pendingIntent);
+
+        startForeground(1,builder.build());
+
+
+    }
 
 
 }

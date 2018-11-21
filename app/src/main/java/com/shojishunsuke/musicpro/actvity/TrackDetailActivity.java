@@ -20,6 +20,7 @@ import com.shojishunsuke.musicpro.R;
 import com.shojishunsuke.musicpro.Service.TrackService;
 import com.shojishunsuke.musicpro.model.Track;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TrackDetailActivity extends AppCompatActivity {
@@ -29,6 +30,7 @@ public class TrackDetailActivity extends AppCompatActivity {
     private Track track;
     private Uri uri;
     private String trackPath;
+    private String trackTitle;
     private String artPath;
     private boolean flag = false;
     private boolean isStartService = false;
@@ -52,15 +54,19 @@ public class TrackDetailActivity extends AppCompatActivity {
 
         track = (Track) intent.getSerializableExtra(KEY_TRACK);
 
+        trackPath = track.path;
+        trackTitle = track.title;
+
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setHomeButtonEnabled(true);
-        actionBar.setTitle(track.title);
+        actionBar.setTitle(trackTitle);
 
-        trackPath = track.path;
+
 
 
         TextView titleTextView = (TextView) findViewById(R.id.title);
@@ -74,7 +80,7 @@ public class TrackDetailActivity extends AppCompatActivity {
         FloatingActionButton nextButton = (FloatingActionButton) findViewById(R.id.button_next);
 
 
-        titleTextView.setText(track.title);
+        titleTextView.setText(trackTitle);
         artistTextView.setText(track.artist);
 
 
@@ -97,7 +103,7 @@ public class TrackDetailActivity extends AppCompatActivity {
 
             stopService(new Intent(TrackDetailActivity.this, TrackService.class));
 
-            TrackService.start(TrackDetailActivity.this, trackPath);
+            TrackService.start(TrackDetailActivity.this, trackPath,trackTitle);
 
             flag = true;
 
@@ -107,7 +113,7 @@ public class TrackDetailActivity extends AppCompatActivity {
         } else {
 
 
-            TrackService.start(TrackDetailActivity.this, trackPath);
+            TrackService.start(TrackDetailActivity.this, trackPath,trackTitle);
 
             flag = true;
 
@@ -123,7 +129,7 @@ public class TrackDetailActivity extends AppCompatActivity {
                 if (flag) {
 
 
-                    TrackService.start(TrackDetailActivity.this, trackPath);
+                    TrackService.start(TrackDetailActivity.this, trackPath,trackTitle);
 
                     playButton.setImageResource(R.drawable.playarrow);
 
@@ -132,7 +138,7 @@ public class TrackDetailActivity extends AppCompatActivity {
 
                 } else {
 
-                    TrackService.start(TrackDetailActivity.this, trackPath);
+                    TrackService.start(TrackDetailActivity.this, trackPath,trackTitle);
 
                     playButton.setImageResource(R.drawable.pause);
 
