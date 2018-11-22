@@ -13,6 +13,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 //import android.support.v4.media.app.NotificationCompat;
 import android.support.v4.media.app.NotificationCompat;
+import android.support.v4.media.session.MediaButtonReceiver;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 
 import com.shojishunsuke.musicpro.R;
@@ -62,8 +64,6 @@ public class TrackService extends Service {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
-//        他のトラックがタッチされたらそっちが再生されるようにしたい
 
         trackPath = intent.getStringExtra(EXTRA_SONG_PATH);
         trackTitle = intent.getStringExtra(EXTRA_SONG_TITLE);
@@ -166,7 +166,21 @@ public class TrackService extends Service {
                 .setSmallIcon(R.drawable.track_icon)
                 .setContentIntent(pendingIntent);
 
+        if (audioManager.isMusicActive()){
+            builder.addAction(new android.support.v4.app.NotificationCompat.Action(R.drawable.pause,"pause",
+                    MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PAUSE))
+            );
+        }else {
+            builder.addAction(new android.support.v4.app.NotificationCompat.Action(R.drawable.playarrow,"play",
+                    MediaButtonReceiver.buildMediaButtonPendingIntent(this,PlaybackStateCompat.ACTION_PLAY))
+            );
+        }
+
         startForeground(1,builder.build());
+
+        if (!audioManager.isMusicActive()){
+            stopForeground(false);
+        }
 
 
     }
