@@ -29,11 +29,13 @@ import java.io.IOException;
 public class TrackService extends Service {
     private static String EXTRA_SONG_PATH = "song_path";
     private static String EXTRA_SONG_TITLE = "song_title";
+    private static String EXTRA_SONG_ARTIST = "song_artist";
 
-    public static void start(Context context, String path,String title) {
+    public static void start(Context context, String path,String title,String artist) {
         Intent intent = createIntent(context);
         intent.putExtra(EXTRA_SONG_PATH, path);
         intent.putExtra(EXTRA_SONG_TITLE,title);
+        intent.putExtra(EXTRA_SONG_ARTIST,artist);
         context.startService(intent);
     }
 
@@ -43,6 +45,7 @@ public class TrackService extends Service {
 
     private String trackPath;
     private String trackTitle;
+    private String trackArtist;
 
     private boolean isAudioSet = false;
 
@@ -67,6 +70,8 @@ public class TrackService extends Service {
 
         trackPath = intent.getStringExtra(EXTRA_SONG_PATH);
         trackTitle = intent.getStringExtra(EXTRA_SONG_TITLE);
+        trackArtist = intent.getStringExtra(EXTRA_SONG_ARTIST);
+
 
         mediaPlayer.setLooping(true);
 
@@ -162,11 +167,11 @@ public class TrackService extends Service {
 
         android.support.v4.app.NotificationCompat.Builder builder = new android.support.v4.app.NotificationCompat.Builder(this,CHANNEL_ID)
                 .setContentTitle(trackTitle)
-                .setContentText("YES")
+                .setContentText(trackArtist)
                 .setSmallIcon(R.drawable.track_icon)
                 .setContentIntent(pendingIntent);
 
-        if (audioManager.isMusicActive()){
+        if (mediaPlayer.isPlaying()){
             builder.addAction(new android.support.v4.app.NotificationCompat.Action(R.drawable.pause,"pause",
                     MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PAUSE))
             );
@@ -178,12 +183,13 @@ public class TrackService extends Service {
 
         startForeground(1,builder.build());
 
-        if (!audioManager.isMusicActive()){
-            stopForeground(false);
-        }
+        if (!mediaPlayer.isPlaying()){
+
+        stopForeground(false);}
 
 
     }
+
 
 
 }

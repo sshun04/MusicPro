@@ -31,7 +31,7 @@ public class TrackDetailActivity extends AppCompatActivity {
     private Uri uri;
     private String trackPath;
     private String trackTitle;
-    private String artPath;
+    private String trackArtist;
     private boolean flag = false;
     private boolean isStartService = false;
 
@@ -56,6 +56,7 @@ public class TrackDetailActivity extends AppCompatActivity {
 
         trackPath = track.path;
         trackTitle = track.title;
+        trackArtist = track.artist;
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -103,7 +104,7 @@ public class TrackDetailActivity extends AppCompatActivity {
 
             stopService(new Intent(TrackDetailActivity.this, TrackService.class));
 
-            TrackService.start(TrackDetailActivity.this, trackPath,trackTitle);
+            TrackService.start(TrackDetailActivity.this, trackPath,trackTitle,trackArtist);
 
             flag = true;
 
@@ -113,7 +114,7 @@ public class TrackDetailActivity extends AppCompatActivity {
         } else {
 
 
-            TrackService.start(TrackDetailActivity.this, trackPath,trackTitle);
+            TrackService.start(TrackDetailActivity.this, trackPath,trackTitle,trackArtist);
 
             flag = true;
 
@@ -129,7 +130,7 @@ public class TrackDetailActivity extends AppCompatActivity {
                 if (flag) {
 
 
-                    TrackService.start(TrackDetailActivity.this, trackPath,trackTitle);
+                    TrackService.start(TrackDetailActivity.this, trackPath,trackTitle,trackArtist);
 
                     playButton.setImageResource(R.drawable.playarrow);
 
@@ -138,7 +139,7 @@ public class TrackDetailActivity extends AppCompatActivity {
 
                 } else {
 
-                    TrackService.start(TrackDetailActivity.this, trackPath,trackTitle);
+                    TrackService.start(TrackDetailActivity.this, trackPath,trackTitle,trackArtist);
 
                     playButton.setImageResource(R.drawable.pause);
 

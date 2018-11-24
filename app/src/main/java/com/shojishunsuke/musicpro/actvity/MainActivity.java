@@ -124,6 +124,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             playButton.setImageResource(R.drawable.playarrow);
         }
+
+
     }
 
     @Override
