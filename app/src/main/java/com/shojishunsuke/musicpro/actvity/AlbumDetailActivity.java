@@ -126,13 +126,12 @@ public class AlbumDetailActivity extends AppCompatActivity {
                     isStartService = CheckServiceUtils.checkAudioService(activityManager);
                 }
 
-                AudioManager audioManager = (AudioManager)AlbumDetailActivity.this.getSystemService(AUDIO_SERVICE);
+                AudioManager audioManager = (AudioManager) AlbumDetailActivity.this.getSystemService(AUDIO_SERVICE);
 
                 if (audioManager.isMusicActive() && isStartService) {
 
                     playButton.setImageResource(R.drawable.playarrow);
                     startService(new Intent(AlbumDetailActivity.this, TrackService.class));
-
 
 
                 } else if (isStartService) {

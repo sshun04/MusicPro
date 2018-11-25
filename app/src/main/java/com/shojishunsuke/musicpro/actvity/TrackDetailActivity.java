@@ -3,7 +3,6 @@ package com.shojishunsuke.musicpro.actvity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -25,11 +24,8 @@ import java.util.List;
 public class TrackDetailActivity extends AppCompatActivity {
 
     private static final String KEY_TRACK = "kyc_track";
-    private Context context;
     private Track track;
-    private Uri uri;
     private String trackPath;
-    private String artPath;
     private boolean flag = false;
     private boolean isStartService = false;
 
@@ -76,7 +72,6 @@ public class TrackDetailActivity extends AppCompatActivity {
 
         titleTextView.setText(track.title);
         artistTextView.setText(track.artist);
-
 
 
         long dm = track.duration / 60000;

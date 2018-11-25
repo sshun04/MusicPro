@@ -10,9 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.shojishunsuke.musicpro.R;
 import com.shojishunsuke.musicpro.ImageCache;
 import com.shojishunsuke.musicpro.ImageGetTask;
+import com.shojishunsuke.musicpro.R;
 import com.shojishunsuke.musicpro.actvity.AlbumDetailActivity;
 import com.shojishunsuke.musicpro.model.Album;
 
@@ -82,7 +82,6 @@ public class ListAlbumAdapter extends ArrayAdapter<Album> {
         return convertView;
 
     }
-
 
 
     static class ViewHolder {

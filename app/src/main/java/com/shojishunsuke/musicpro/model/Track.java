@@ -16,7 +16,6 @@ public class Track implements Serializable {
     public long id;
     public long albumId;
     public long artistId;
-//        public String albumArt;
     public String path;
     public String title;
     public String album;
@@ -36,8 +35,7 @@ public class Track implements Serializable {
             MediaStore.Audio.Media.ARTIST_ID,
             MediaStore.Audio.Media.DURATION,
             MediaStore.Audio.Media.TRACK,
-//            MediaStore.Audio.Albums.ALBUM_ART
-//
+
 
     };
 

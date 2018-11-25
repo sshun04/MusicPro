@@ -90,9 +90,9 @@ public class MainActivity extends AppCompatActivity {
                     isStartService = CheckServiceUtils.checkAudioService(activityManager);
                 }
 
-                AudioManager audioManager = (AudioManager)MainActivity.this.getSystemService(Context.AUDIO_SERVICE);
+                AudioManager audioManager = (AudioManager) MainActivity.this.getSystemService(Context.AUDIO_SERVICE);
 
-                if (audioManager.isMusicActive()&& isStartService) {
+                if (audioManager.isMusicActive() && isStartService) {
 
                     playButton.setImageResource(R.drawable.playarrow);
                     startService(new Intent(MainActivity.this, TrackService.class));

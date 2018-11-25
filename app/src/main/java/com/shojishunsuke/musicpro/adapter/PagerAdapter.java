@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.shojishunsuke.musicpro.fragment.AlbumTabFragment;
-import com.shojishunsuke.musicpro.fragment.ArtistTabFragment;
 import com.shojishunsuke.musicpro.fragment.TrackTabFragment;
 
 public class PagerAdapter extends FragmentPagerAdapter {
