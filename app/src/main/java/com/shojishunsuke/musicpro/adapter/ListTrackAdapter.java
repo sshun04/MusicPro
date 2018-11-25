@@ -19,6 +19,9 @@ import java.util.List;
 public class ListTrackAdapter extends ArrayAdapter<Track> {
 
     private LayoutInflater mInflater;
+    private String trackPath;
+    private String artistName;
+    private String trackTitle;
     Context context;
 
 
@@ -36,6 +39,11 @@ public class ListTrackAdapter extends ArrayAdapter<Track> {
 
         final Track item = getItem(position);
         final ViewHolder holder;
+
+        trackPath = item.path;
+        trackTitle = item.title;
+        artistName = item.artist;
+
 
         if (convertView == null) {
 

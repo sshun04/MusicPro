@@ -93,6 +93,7 @@ public class TrackService extends Service {
 
         createNotification();
 
+
         return START_STICKY;
     }
 
@@ -162,7 +163,7 @@ public class TrackService extends Service {
 
     public void createNotification() {
 
-        Intent notificationIntent = new Intent(this,MainActivity.class);
+        Intent notificationIntent = new Intent(this,TrackDetailActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,notificationIntent,0);
 
         android.support.v4.app.NotificationCompat.Builder builder = new android.support.v4.app.NotificationCompat.Builder(this,CHANNEL_ID)

@@ -20,27 +20,26 @@ import com.shojishunsuke.musicpro.R;
 import com.shojishunsuke.musicpro.Service.TrackService;
 import com.shojishunsuke.musicpro.model.Track;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TrackDetailActivity extends AppCompatActivity {
 
     private static final String KEY_TRACK = "kyc_track";
-    private Context context;
     private Track track;
-    private Uri uri;
     private String trackPath;
     private String trackTitle;
     private String trackArtist;
     private boolean flag = false;
     private boolean isStartService = false;
+    private Intent intent;
+    private Uri songUri;
 
 
     public static void start(Context context, Track track) {
-
         Intent intent = new Intent(context, TrackDetailActivity.class);
         intent.putExtra(KEY_TRACK, track);
         context.startActivity(intent);
+
 
     }
 
@@ -49,14 +48,22 @@ public class TrackDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_detail);
 
+        if (savedInstanceState ==null){
 
-        final Intent intent = getIntent();
+
+        intent = getIntent();
+
 
         track = (Track) intent.getSerializableExtra(KEY_TRACK);
 
         trackPath = track.path;
         trackTitle = track.title;
         trackArtist = track.artist;
+        songUri =track.uri;
+        }
+
+
+
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -66,8 +73,6 @@ public class TrackDetailActivity extends AppCompatActivity {
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setHomeButtonEnabled(true);
         actionBar.setTitle(trackTitle);
-
-
 
 
         TextView titleTextView = (TextView) findViewById(R.id.title);
@@ -82,13 +87,12 @@ public class TrackDetailActivity extends AppCompatActivity {
 
 
         titleTextView.setText(trackTitle);
-        artistTextView.setText(track.artist);
+        artistTextView.setText(trackArtist);
 
 
-
-        long dm = track.duration / 60000;
-        long ds = (track.duration - (dm * 60000)) / 1000;
-        durationTextView.setText(String.format("%d:%02d", dm, ds));
+//        long dm = track.duration / 60000;
+//        long ds = (track.duration - (dm * 60000)) / 1000;
+//        durationTextView.setText(String.format("%d:%02d", dm, ds));
 
         playButton.setImageResource(R.drawable.pause);
         prevButton.setImageResource(R.drawable.skipprev);
@@ -100,21 +104,21 @@ public class TrackDetailActivity extends AppCompatActivity {
         checkService();
 
 
-        if (isStartService) {
+        if (isStartService && savedInstanceState ==null) {
 
             stopService(new Intent(TrackDetailActivity.this, TrackService.class));
 
-            TrackService.start(TrackDetailActivity.this, trackPath,trackTitle,trackArtist);
+            TrackService.start(TrackDetailActivity.this, trackPath, trackTitle, trackArtist);
 
             flag = true;
 
             playButton.setImageResource(R.drawable.pause);
 
 
-        } else {
+        } else if (savedInstanceState == null){
 
 
-            TrackService.start(TrackDetailActivity.this, trackPath,trackTitle,trackArtist);
+            TrackService.start(TrackDetailActivity.this, trackPath, trackTitle, trackArtist);
 
             flag = true;
 
@@ -130,7 +134,7 @@ public class TrackDetailActivity extends AppCompatActivity {
                 if (flag) {
 
 
-                    TrackService.start(TrackDetailActivity.this, trackPath,trackTitle,trackArtist);
+                    TrackService.start(TrackDetailActivity.this, trackPath, trackTitle, trackArtist);
 
                     playButton.setImageResource(R.drawable.playarrow);
 
@@ -139,7 +143,7 @@ public class TrackDetailActivity extends AppCompatActivity {
 
                 } else {
 
-                    TrackService.start(TrackDetailActivity.this, trackPath,trackTitle,trackArtist);
+                    TrackService.start(TrackDetailActivity.this, trackPath, trackTitle, trackArtist);
 
                     playButton.setImageResource(R.drawable.pause);
 
@@ -149,6 +153,29 @@ public class TrackDetailActivity extends AppCompatActivity {
 
             }
         });
+
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+        savedInstanceState.putString("extra_song_path", trackPath);
+        savedInstanceState.putString("extra_song_title", trackTitle);
+        savedInstanceState.putString("extra_song_artist", trackArtist);
+        savedInstanceState.putParcelable("extra_song_uri",songUri);
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        trackPath = savedInstanceState.getString("extra_song_path");
+        trackTitle = savedInstanceState.getString("extra_song_title");
+        trackArtist = savedInstanceState.getString("extra_song_artist");
+        songUri  = savedInstanceState.getParcelable("extra_song_uri");
 
 
     }
