@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.shojishunsuke.musicpro.R;
+import com.shojishunsuke.musicpro.actvity.MediaSessionPlayActivity;
 import com.shojishunsuke.musicpro.actvity.TrackDetailActivity;
 import com.shojishunsuke.musicpro.model.Track;
 
@@ -62,7 +63,9 @@ public class ListTrackAdapter extends ArrayAdapter<Track> {
             public void onClick(View v) {
 
 
-                TrackDetailActivity.start(context, item);
+//                TrackDetailActivity.start(context, item);
+
+               MediaSessionPlayActivity.start(context);
 
 
             }

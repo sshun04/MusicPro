@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.shojishunsuke.musicpro.actvity.MainActivity"
+            android:name=".actvity.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,18 +21,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name="com.shojishunsuke.musicpro.actvity.MediaSessionPlayActivity"/>
+
+        <service android:name="com.shojishunsuke.musicpro.Service.MediaSessionService" />
         <activity
-            android:name="com.shojishunsuke.musicpro.actvity.AlbumDetailActivity"
+            android:name=".actvity.AlbumDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.shojishunsuke.musicpro.actvity.ArtistDetailActivity"
+            android:name=".actvity.ArtistDetailActivity"
             android:screenOrientation="portrait" />
 
-        <service android:name="com.shojishunsuke.musicpro.Service.TrackService" />
+        <service android:name=".Service.TrackService" />
+
 
         <activity
-            android:name="com.shojishunsuke.musicpro.actvity.TrackDetailActivity"
+            android:name=".actvity.TrackDetailActivity"
             android:screenOrientation="portrait" />
+
 
     </application>
 
