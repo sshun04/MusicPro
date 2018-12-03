@@ -52,7 +52,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
     public static void start(Context context){
         Intent intent = new Intent(context,MediaSessionService.class);
-        context.startActivity(intent);
+        context.startService(intent);
     }
 
 
@@ -153,7 +153,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
             com.google.android.exoplayer2.upstream.DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getApplicationContext(),
                     Util.getUserAgent(getApplicationContext(),"MusicPro"));
-            MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse(R.raw.badthings+MusicLibrary.getMusicFileNames(mediaId)));
+            MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse("file:///android_asset/"+MusicLibrary.getMusicFileNames(mediaId)));
 
             for (MediaSessionCompat.QueueItem item : queueItems){
                 if (item.getDescription().getMediaId().equals(mediaId)){

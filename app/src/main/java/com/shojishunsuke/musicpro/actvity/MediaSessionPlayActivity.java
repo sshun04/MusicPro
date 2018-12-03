@@ -96,7 +96,11 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
 
         MediaSessionService.start(this);
 
+
         mediaBrowser = new MediaBrowserCompat(this,new ComponentName(this,MediaSessionService.class),connectionCallback,null);
+
+
+        mediaBrowser.connect();
 
     }
 

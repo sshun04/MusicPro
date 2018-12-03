@@ -24,25 +24,25 @@ public class MusicLibrary {
 
     static {
         createMetaDateCompat(
-                "bad_things",
+                "badthings",
                 "bad things",
                 "Camila Cabello",
                 "Havana",
                 "pops",
                 103,
                 TimeUnit.SECONDS,
-                "bad_things.mp3",
+                "badthings.ogg",
                 R.drawable.back,
                 "album_jazz_blues");
         createMetaDateCompat(
-                "The_Coldest_Shoulder",
-                "The Coldest Shoulder",
-                "The 126ers",
+                "I_know_what_you ",
+                "I know what you did last summer",
+                "Shawn Mendez & Camila Cabello",
                 "Youtube Audio Library Rock 2",
                 "Rock",
                 160,
                 TimeUnit.SECONDS,
-                "the_coldest_shoulder.mp3",
+                "iknow.ogg",
                 R.drawable.back,
                 "album_youtube_audio_library_rock_2");
     }
