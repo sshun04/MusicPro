@@ -18,13 +18,20 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"/>
+        android:layout_weight="2"
+        android:text="textView"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="18dp"/>
 
     <TextView
         android:id="@+id/artistName"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:text="artist"/>
     
     <SeekBar
         android:id="@+id/seekBar"

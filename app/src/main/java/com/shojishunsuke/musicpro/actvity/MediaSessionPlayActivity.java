@@ -143,6 +143,7 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
         public void onMetadataChanged(MediaMetadataCompat metadata) {
 
             textView_title.setText(metadata.getDescription().getTitle());
+//            textView_artist.setText(metadata.getDescription().getSubtitle());
             artImageView.setImageBitmap(metadata.getDescription().getIconBitmap());
             textView_duration.setText(Long2TimeString(metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION)));
             seekBar.setMax((int) metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION));

@@ -29,7 +29,7 @@ public class MusicLibrary {
                 "Camila Cabello",
                 "Havana",
                 "pops",
-                103,
+                278,
                 TimeUnit.SECONDS,
                 "badthings.ogg",
                 R.drawable.back,
@@ -40,7 +40,7 @@ public class MusicLibrary {
                 "Shawn Mendez & Camila Cabello",
                 "Youtube Audio Library Rock 2",
                 "Rock",
-                160,
+                227,
                 TimeUnit.SECONDS,
                 "iknow.ogg",
                 R.drawable.back,
@@ -126,7 +126,7 @@ public class MusicLibrary {
                         .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, album)
                         .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, artist)
                         .putLong(MediaMetadataCompat.METADATA_KEY_DURATION,
-                                TimeUnit.MICROSECONDS.convert(duration, durationUnit))
+                                TimeUnit.MILLISECONDS.convert(duration, durationUnit))
                         .putString(MediaMetadataCompat.METADATA_KEY_GENRE, genre)
                         .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI,
                                 getAlbumArtUri(albumArtResName))
