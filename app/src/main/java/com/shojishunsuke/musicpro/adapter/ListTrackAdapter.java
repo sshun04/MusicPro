@@ -35,6 +35,7 @@ public class ListTrackAdapter extends ArrayAdapter<Track> {
         final Track item = getItem(position);
         final ViewHolder holder;
 
+
         if (convertView == null) {
 
             convertView = mInflater.inflate(R.layout.item_track, null);

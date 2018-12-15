@@ -3,6 +3,7 @@ package com.shojishunsuke.musicpro.actvity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -11,7 +12,6 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -38,8 +38,10 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
     ImageView artImageView;
     SeekBar seekBar;
 
-    public static void start(Context context){
-        Intent intent = new Intent(context,MediaSessionPlayActivity.class);
+    MediaMetadataCompat metadataCompat;
+
+    public static void start(Context context) {
+        Intent intent = new Intent(context, MediaSessionPlayActivity.class);
         context.startActivity(intent);
     }
 
@@ -48,15 +50,15 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media_session_play);
 
-        textView_title = (TextView)findViewById(R.id.title);
-        textView_artist = (TextView)findViewById(R.id.artist);
-        textView_position = (TextView)findViewById(R.id.duration_left);
-        textView_duration = (TextView)findViewById(R.id.duration_right);
-        button_plev = (FloatingActionButton)findViewById(R.id.button_prev);
-        button_next = (FloatingActionButton)findViewById(R.id.button_next);
-        playButton = (FloatingActionButton)findViewById(R.id.button_play);
-        artImageView = (ImageView)findViewById(R.id.trackart);
-        seekBar = (SeekBar)findViewById(R.id.seekBar);
+        textView_title = (TextView) findViewById(R.id.title);
+        textView_artist = (TextView) findViewById(R.id.artist);
+        textView_position = (TextView) findViewById(R.id.duration_left);
+        textView_duration = (TextView) findViewById(R.id.duration_right);
+        button_plev = (FloatingActionButton) findViewById(R.id.button_prev);
+        button_next = (FloatingActionButton) findViewById(R.id.button_next);
+        playButton = (FloatingActionButton) findViewById(R.id.button_play);
+        artImageView = (ImageView) findViewById(R.id.trackart);
+        seekBar = (SeekBar) findViewById(R.id.seekBar);
 
         button_plev.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,34 +99,34 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
         MediaSessionService.start(this);
 
 
-        mediaBrowser = new MediaBrowserCompat(this,new ComponentName(this,MediaSessionService.class),connectionCallback,null);
+        mediaBrowser = new MediaBrowserCompat(this, new ComponentName(this, MediaSessionService.class), connectionCallback, null);
 
 
         mediaBrowser.connect();
 
     }
 
-    private MediaBrowserCompat.ConnectionCallback connectionCallback = new MediaBrowserCompat.ConnectionCallback(){
+    private MediaBrowserCompat.ConnectionCallback connectionCallback = new MediaBrowserCompat.ConnectionCallback() {
 
         @Override
         public void onConnected() {
 
             try {
 
-                mediaController = new MediaControllerCompat(MediaSessionPlayActivity.this,mediaBrowser.getSessionToken());
+                mediaController = new MediaControllerCompat(MediaSessionPlayActivity.this, mediaBrowser.getSessionToken());
 
                 mediaController.registerCallback(controllerCallback);
 
-                if (mediaController.getPlaybackState() != null && mediaController.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING){
+                if (mediaController.getPlaybackState() != null && mediaController.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
                     controllerCallback.onMetadataChanged(mediaController.getMetadata());
                     controllerCallback.onPlaybackStateChanged(mediaController.getPlaybackState());
                 }
 
-            }catch (RemoteException ex){
+            } catch (RemoteException ex) {
                 ex.printStackTrace();
                 Toast.makeText(MediaSessionPlayActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
             }
-            mediaBrowser.subscribe(mediaBrowser.getRoot(),subscriptionCallback);
+            mediaBrowser.subscribe(mediaBrowser.getRoot(), subscriptionCallback);
 
         }
     };
@@ -132,7 +134,7 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
     private MediaBrowserCompat.SubscriptionCallback subscriptionCallback = new MediaBrowserCompat.SubscriptionCallback() {
         @Override
         public void onChildrenLoaded(@NonNull String parentId, @NonNull List<MediaBrowserCompat.MediaItem> children) {
-            if (mediaController.getPlaybackState() == null){
+            if (mediaController.getPlaybackState() == null) {
                 Play(children.get(0).getMediaId());
             }
         }
@@ -153,7 +155,7 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
         @Override
         public void onPlaybackStateChanged(PlaybackStateCompat state) {
 
-            if (state.getState() == PlaybackStateCompat.STATE_PLAYING){
+            if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
                 playButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -162,7 +164,7 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
                 });
 
                 playButton.setImageResource(R.drawable.pause);
-            }else {
+            } else {
                 playButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -179,26 +181,29 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
         }
     };
 
-    private void Play(String id){
-        mediaController.getTransportControls().playFromMediaId(id,null);
+    private void Play(String id) {
+        mediaController.getTransportControls().playFromMediaId(id, null);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mediaBrowser.disconnect();
-        if (mediaController.getPlaybackState().getState() != PlaybackStateCompat.STATE_PLAYING ){
+        if (mediaController.getPlaybackState().getState() != PlaybackStateCompat.STATE_PLAYING) {
 //            TODO stopService
         }
     }
 
+    // 頭が小文字のキャメルケースで書こうぜ
     private String Long2TimeString(long src) {
-        String mm = String.valueOf(src / 1000 / 60);
-        String ss = String.valueOf((src / 1000) % 60);
 
 
-        if (ss.length() == 1) ss = "0" + ss;
+        long dm = src / 60000;
+        long ds = (src - (dm * 60000)) / 1000;
 
-        return mm + ":" + ss;
+
+        return String.format("%d:%02d", dm, ds);
+
+
     }
 }

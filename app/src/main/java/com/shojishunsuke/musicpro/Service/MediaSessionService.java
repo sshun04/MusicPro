@@ -47,6 +47,8 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
     MediaSessionCompat mediaSession;
     AudioManager audioManager;
 
+    MusicLibrary musicLibrary;
+
     int index = 0;
 
     ExoPlayer exoPlayer;
@@ -79,20 +81,22 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
         mediaSession.getController().registerCallback(new MediaControllerCompat.Callback() {
             @Override
             public void onPlaybackStateChanged(PlaybackStateCompat state) {
-                CreateNotification();
+//                CreateNotification();
 
             }
 
             @Override
             public void onMetadataChanged(MediaMetadataCompat metadata) {
-                CreateNotification();
+//                CreateNotification();
             }
         });
 
 //        キューにアイテムを追加
+        musicLibrary = new MusicLibrary(this);
 
         int i = 0;
-        for (MediaBrowserCompat.MediaItem mediaItem : MusicLibrary.getMediaItems()) {
+
+        for (MediaBrowserCompat.MediaItem mediaItem : musicLibrary.getMediaItems()) {
             queueItems.add(new MediaSessionCompat.QueueItem(mediaItem.getDescription(), i));
         }
         mediaSession.setQueue(queueItems);
@@ -132,7 +136,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
                                @NonNull Result<List<MediaBrowserCompat.MediaItem>> result) {
 
         if (parentId.equals(ROOT_ID)) {
-            result.sendResult(MusicLibrary.getMediaItems());
+            result.sendResult(musicLibrary.getMediaItems());
         } else {
             result.sendResult(new ArrayList<MediaBrowserCompat.MediaItem>());
         }
@@ -155,7 +159,8 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
             com.google.android.exoplayer2.upstream.DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getApplicationContext(),
                     Util.getUserAgent(getApplicationContext(), "MusicPro"));
-            MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse("file:///android_asset/" + MusicLibrary.getMusicFileNames(mediaId)));
+//            MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse("file:///android_asset/" + MusicLibrary.getMusicFileNames(mediaId)));
+            MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(musicLibrary.getMusicFileNames(mediaId));
 
             for (MediaSessionCompat.QueueItem item : queueItems) {
                 if (item.getDescription().getMediaId().equals(mediaId)) {
@@ -169,7 +174,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
             onPlay();
 
-            mediaSession.setMetadata(MusicLibrary.getMetaData(getApplicationContext(), mediaId));
+            mediaSession.setMetadata(musicLibrary.getMetaData(getApplicationContext(), mediaId));
 
 
         }
