@@ -1,8 +1,12 @@
 package com.shojishunsuke.musicpro.Service;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,6 +44,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
     final String TAG = MediaSessionService.class.getSimpleName();
     final String ROOT_ID = "root";
+    private Context context;
 
     private Handler handler;
 
@@ -80,13 +85,13 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
         mediaSession.getController().registerCallback(new MediaControllerCompat.Callback() {
             @Override
             public void onPlaybackStateChanged(PlaybackStateCompat state) {
-//                CreateNotification();
+                CreateNotification();
 
             }
 
             @Override
             public void onMetadataChanged(MediaMetadataCompat metadata) {
-//                CreateNotification();
+                CreateNotification();
             }
         });
 
@@ -305,9 +310,22 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
         MediaDescriptionCompat description = mediaMetadata.getDescription();
 
-        android.support.v4.app.NotificationCompat.Builder builder = new android.support.v4.app.NotificationCompat.Builder(getApplicationContext());
+        String NOTIFICATION_CHANNEL_ID = "com.shojishunsuke.musicpro";
+        String channelName = "My Background Service";
 
-        builder.setContentTitle(description.getTitle())
+        NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName,
+                NotificationManager.IMPORTANCE_NONE);
+
+        channel.setLightColor(Color.BLUE);
+        channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        assert notificationManager != null;
+        notificationManager.createNotificationChannel(channel);
+
+
+        android.support.v4.app.NotificationCompat.Builder builder = new android.support.v4.app.NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+        builder.setOngoing(true)
+                .setContentTitle(description.getTitle())
                 .setContentText(description.getSubtitle())
                 .setSubText(description.getDescription())
                 .setLargeIcon(description.getIconBitmap())
