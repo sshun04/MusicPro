@@ -4,7 +4,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -98,6 +97,8 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
         for (MediaBrowserCompat.MediaItem mediaItem : musicLibrary.getMediaItems()) {
             queueItems.add(new MediaSessionCompat.QueueItem(mediaItem.getDescription(), i));
+
+            i++;
         }
         mediaSession.setQueue(queueItems);
 
@@ -210,7 +211,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
         @Override
         public void onSkipToNext() {
             index++;
-            if (index >= queueItems.size())
+            if (index >= musicLibrary.getMediaItems().size())
                 index = 0;
 
             onPlayFromMediaId(queueItems.get(index).getDescription().getMediaId(), null);

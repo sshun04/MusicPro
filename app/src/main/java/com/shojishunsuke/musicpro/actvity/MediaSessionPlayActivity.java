@@ -60,6 +60,9 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
         artImageView = (ImageView) findViewById(R.id.trackart);
         seekBar = (SeekBar) findViewById(R.id.seekBar);
 
+        button_next.setImageResource(R.drawable.skipnext);
+        button_plev.setImageResource(R.drawable.skipprev);
+
         button_plev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,9 +148,8 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
         public void onMetadataChanged(MediaMetadataCompat metadata) {
 
             textView_title.setText(metadata.getDescription().getTitle());
-//            textView_artist.setText(metadata.getDescription().getSubtitle());
             artImageView.setImageBitmap(metadata.getDescription().getIconBitmap());
-            textView_duration.setText(Long2TimeString(metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION)));
+            textView_duration.setText(long2TimeString(metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION)));
             seekBar.setMax((int) metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION));
 
         }
@@ -176,7 +178,7 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
                 playButton.setImageResource(R.drawable.playarrow);
             }
 
-            textView_position.setText(Long2TimeString(state.getPosition()));
+            textView_position.setText(long2TimeString(state.getPosition()));
             seekBar.setProgress((int) state.getPosition());
         }
     };
@@ -194,8 +196,8 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
         }
     }
 
-    // 頭が小文字のキャメルケースで書こうぜ
-    private String Long2TimeString(long src) {
+
+    private String long2TimeString(long src) {
 
 
         long dm = src / 60000;

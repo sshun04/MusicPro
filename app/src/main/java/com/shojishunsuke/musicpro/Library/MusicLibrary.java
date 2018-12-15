@@ -64,9 +64,8 @@ public class MusicLibrary {
                     cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)),
                     "pops",
                     cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)),
-//                    TimeUnit.SECONDS,
                     ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id),
-                    R.drawable.back,
+                    R.drawable.track_icon,
                     "album_jazz_blues"
             );
 
@@ -90,6 +89,8 @@ public class MusicLibrary {
     public Uri getMusicFileNames(String mediaId) {
         return musicFileName.containsKey(mediaId) ? musicFileName.get(mediaId) : null;
     }
+
+
 
     private int getAlbumRes(String mediaId) {
         return albumRes.containsKey(mediaId) ? albumRes.get(mediaId) : 0;
@@ -147,7 +148,6 @@ public class MusicLibrary {
             String album,
             String genre,
             long duration,
-//            TimeUnit durationUnit,
             Uri uri,
             int albumArtResId,
             String albumArtResName) {
