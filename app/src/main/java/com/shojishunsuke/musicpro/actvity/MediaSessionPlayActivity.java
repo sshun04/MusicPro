@@ -25,20 +25,19 @@ import java.util.List;
 
 public class MediaSessionPlayActivity extends AppCompatActivity {
 
-    MediaBrowserCompat mediaBrowser;
-    MediaControllerCompat mediaController;
+    private MediaBrowserCompat mediaBrowser;
+    private MediaControllerCompat mediaController;
 
-    TextView textView_title;
-    TextView textView_artist;
-    TextView textView_position;
-    TextView textView_duration;
-    FloatingActionButton button_plev;
-    FloatingActionButton button_next;
-    FloatingActionButton playButton;
-    ImageView artImageView;
-    SeekBar seekBar;
+    private TextView textView_title;
+    private TextView textView_artist;
+    private TextView textView_position;
+    private TextView textView_duration;
+    private FloatingActionButton button_plev;
+    private FloatingActionButton button_next;
+    private FloatingActionButton playButton;
+    private ImageView artImageView;
+    private SeekBar seekBar;
 
-    MediaMetadataCompat metadataCompat;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, MediaSessionPlayActivity.class);
@@ -51,7 +50,7 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_media_session_play);
 
         textView_title = (TextView) findViewById(R.id.title);
-        textView_artist = (TextView) findViewById(R.id.artist);
+        textView_artist = (TextView) findViewById(R.id.artistName);
         textView_position = (TextView) findViewById(R.id.duration_left);
         textView_duration = (TextView) findViewById(R.id.duration_right);
         button_plev = (FloatingActionButton) findViewById(R.id.button_prev);
@@ -149,6 +148,7 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
 
             textView_title.setText(metadata.getDescription().getTitle());
             artImageView.setImageBitmap(metadata.getDescription().getIconBitmap());
+            textView_artist.setText(metadata.getDescription().getSubtitle());
             textView_duration.setText(long2TimeString(metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION)));
             seekBar.setMax((int) metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION));
 
@@ -192,7 +192,7 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
         super.onDestroy();
         mediaBrowser.disconnect();
         if (mediaController.getPlaybackState().getState() != PlaybackStateCompat.STATE_PLAYING) {
-//            TODO stopService
+
         }
     }
 

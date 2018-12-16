@@ -6,8 +6,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -42,22 +42,21 @@ import java.util.List;
 
 public class MediaSessionService extends MediaBrowserServiceCompat {
 
-    final String TAG = MediaSessionService.class.getSimpleName();
-    final String ROOT_ID = "root";
-    private Context context;
+    private final String TAG = MediaSessionService.class.getSimpleName();
+    private final String ROOT_ID = "root";
 
     private Handler handler;
 
-    MediaSessionCompat mediaSession;
-    AudioManager audioManager;
+    private MediaSessionCompat mediaSession;
+    private AudioManager audioManager;
 
-    MusicLibrary musicLibrary;
+    private MusicLibrary musicLibrary;
 
-    int index = 0;
+    private int index = 0;
 
-    ExoPlayer exoPlayer;
+    private ExoPlayer exoPlayer;
 
-    List<MediaSessionCompat.QueueItem> queueItems = new ArrayList<>();
+    private List<MediaSessionCompat.QueueItem> queueItems = new ArrayList<>();
 
     public static void start(Context context) {
         Intent intent = new Intent(context, MediaSessionService.class);
@@ -310,59 +309,119 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
         MediaDescriptionCompat description = mediaMetadata.getDescription();
 
-        String NOTIFICATION_CHANNEL_ID = "com.shojishunsuke.musicpro";
-        String channelName = "My Background Service";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-        NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName,
-                NotificationManager.IMPORTANCE_NONE);
+            String NOTIFICATION_CHANNEL_ID = "com.shojishunsuke.musicpro";
+            String channelName = "My Background Service";
 
-        channel.setLightColor(Color.BLUE);
-        channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        assert notificationManager != null;
-        notificationManager.createNotificationChannel(channel);
+            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName,
+                    NotificationManager.IMPORTANCE_NONE);
+
+            channel.setLightColor(R.color.colorPrimary);
+            channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            assert notificationManager != null;
+            notificationManager.createNotificationChannel(channel);
 
 
-        android.support.v4.app.NotificationCompat.Builder builder = new android.support.v4.app.NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
-        builder.setOngoing(true)
-                .setContentTitle(description.getTitle())
-                .setContentText(description.getSubtitle())
-                .setSubText(description.getDescription())
-                .setLargeIcon(description.getIconBitmap())
+            android.support.v4.app.NotificationCompat.Builder builder = new android.support.v4.app.NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+            builder.setOngoing(true)
+                    .setContentTitle(description.getTitle())
+                    .setContentText(description.getSubtitle())
+                    .setSubText(description.getDescription())
+                    .setLargeIcon(description.getIconBitmap())
 
-                .setContentIntent(createContentIntent())
-                .setDeleteIntent(MediaButtonReceiver.buildMediaButtonPendingIntent(this,
-                        PlaybackStateCompat.ACTION_STOP))
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                    .setContentIntent(createContentIntent())
+                    .setDeleteIntent(MediaButtonReceiver.buildMediaButtonPendingIntent(this,
+                            PlaybackStateCompat.ACTION_STOP))
+                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
 
-                .setColor(ContextCompat.getColor(this, R.color.colorAccent))
-                .setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
-                        .setMediaSession(mediaSession.getSessionToken())
-                        .setShowActionsInCompactView(1));
+                    .setSmallIcon(R.drawable.ic_launcher_small_icon)
 
-        if (mediaController.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
+                    .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                    .setStyle(new android.support.v4.media.app.NotificationCompat.DecoratedMediaCustomViewStyle()
+                            .setMediaSession(mediaSession.getSessionToken())
+                            .setShowActionsInCompactView(1));
+
             builder.addAction(new NotificationCompat.Action(
-                    R.drawable.pause, "pause",
+                    R.drawable.baseline_skip_previous_white_24dp, "prev",
                     MediaButtonReceiver.buildMediaButtonPendingIntent(this,
-                            PlaybackStateCompat.ACTION_PAUSE)
-            ));
+                            PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)));
+
+
+            if (mediaController.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
+                builder.addAction(new NotificationCompat.Action(
+                        R.drawable.baseline_pause_white_24dp, "pause",
+                        MediaButtonReceiver.buildMediaButtonPendingIntent(this,
+                                PlaybackStateCompat.ACTION_PAUSE)
+                ));
+            } else {
+                builder.addAction(new NotificationCompat.Action(
+                        R.drawable.baseline_play_arrow_white_24dp, "play",
+                        MediaButtonReceiver.buildMediaButtonPendingIntent(this,
+                                PlaybackStateCompat.ACTION_PLAY)
+                ));
+            }
+
+            builder.addAction(new NotificationCompat.Action(
+                    R.drawable.baseline_skip_next_white_24dp, "next",
+                    MediaButtonReceiver.buildMediaButtonPendingIntent(this,
+                            PlaybackStateCompat.ACTION_SKIP_TO_NEXT)));
+
+            startForeground(1, builder.build());
+
         } else {
+
+            android.support.v4.app.NotificationCompat.Builder builder = new android.support.v4.app.NotificationCompat.Builder(getApplicationContext());
+            builder.setContentTitle(description.getTitle())
+                    .setContentText(description.getSubtitle())
+                    .setSubText(description.getDescription())
+                    .setLargeIcon(description.getIconBitmap())
+
+                    .setContentIntent(createContentIntent())
+                    .setDeleteIntent(MediaButtonReceiver.buildMediaButtonPendingIntent(this,
+                            PlaybackStateCompat.ACTION_STOP))
+                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+
+                    .setSmallIcon(R.drawable.ic_launcher_small_icon)
+
+                    .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                    .setStyle(new android.support.v4.media.app.NotificationCompat.DecoratedMediaCustomViewStyle()
+                            .setMediaSession(mediaSession.getSessionToken())
+                            .setShowActionsInCompactView(1));
+
             builder.addAction(new NotificationCompat.Action(
-                    R.drawable.playarrow, "play",
+                    R.drawable.baseline_skip_previous_white_24dp, "prev",
                     MediaButtonReceiver.buildMediaButtonPendingIntent(this,
-                            PlaybackStateCompat.ACTION_PLAY)
-            ));
+                            PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)));
+
+
+            if (mediaController.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
+                builder.addAction(new NotificationCompat.Action(
+                        R.drawable.baseline_pause_white_24dp, "pause",
+                        MediaButtonReceiver.buildMediaButtonPendingIntent(this,
+                                PlaybackStateCompat.ACTION_PAUSE)
+                ));
+            } else {
+                builder.addAction(new NotificationCompat.Action(
+                        R.drawable.baseline_play_arrow_white_24dp, "play",
+                        MediaButtonReceiver.buildMediaButtonPendingIntent(this,
+                                PlaybackStateCompat.ACTION_PLAY)
+                ));
+            }
+
+            builder.addAction(new NotificationCompat.Action(
+                    R.drawable.baseline_skip_next_white_24dp, "next",
+                    MediaButtonReceiver.buildMediaButtonPendingIntent(this,
+                            PlaybackStateCompat.ACTION_SKIP_TO_NEXT)));
+
+            startForeground(1, builder.build());
+
         }
-
-        builder.addAction(new NotificationCompat.Action(
-                R.drawable.skipnext, "next",
-                MediaButtonReceiver.buildMediaButtonPendingIntent(this,
-                        PlaybackStateCompat.ACTION_SKIP_TO_NEXT)));
-
-        startForeground(1, builder.build());
-
         if (mediaController.getPlaybackState().getState() != PlaybackStateCompat.STATE_PLAYING)
             stopForeground(false);
+
+
     }
 
     private PendingIntent createContentIntent() {

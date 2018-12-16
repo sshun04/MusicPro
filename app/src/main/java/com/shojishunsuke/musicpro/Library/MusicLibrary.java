@@ -25,7 +25,6 @@ public class MusicLibrary {
     private final TreeMap<String, MediaMetadataCompat> music = new TreeMap<>();
     private final HashMap<String, Integer> albumRes = new HashMap<>();
     private final HashMap<String, Uri> musicFileName = new HashMap<>();
-    private Cursor cursor;
 
     public static final String[] COLUMNS = {
             MediaStore.Audio.Media._ID,
