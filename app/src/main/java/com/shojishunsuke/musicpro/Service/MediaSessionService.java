@@ -192,16 +192,20 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
             }
         }
 
+
         @Override
         public void onPause() {
             exoPlayer.setPlayWhenReady(false);
             audioManager.abandonAudioFocus(audioFocusChangeListener);
+//
         }
 
         @Override
         public void onStop() {
             onPause();
             mediaSession.setActive(false);
+
+
 
             audioManager.abandonAudioFocus(audioFocusChangeListener);
         }
@@ -230,6 +234,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
             onPlayFromMediaId(queueItems.get(index).getDescription().getMediaId(), null);
         }
+
 
         @Override
         public void onSkipToQueueItem(long id) {
@@ -273,15 +278,16 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
                 }
                 break;
             case Player.STATE_ENDED:
-                state = PlaybackStateCompat.STATE_STOPPED;
+                state = PlaybackStateCompat.STATE_SKIPPING_TO_NEXT;
                 break;
+
 
         }
 
 
         mediaSession.setPlaybackState(new PlaybackStateCompat.Builder()
                 .setActions(PlaybackStateCompat.ACTION_PLAY | PlaybackStateCompat.ACTION_PAUSE | PlaybackStateCompat.ACTION_SKIP_TO_NEXT |
-                        PlaybackStateCompat.ACTION_STOP).setState(state, exoPlayer.getCurrentPosition(), exoPlayer.getPlaybackParameters().speed)
+                        PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS|PlaybackStateCompat.ACTION_STOP).setState(state, exoPlayer.getCurrentPosition(), exoPlayer.getPlaybackParameters().speed)
                 .build());
     }
 

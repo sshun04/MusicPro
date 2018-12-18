@@ -36,6 +36,7 @@ public class MusicLibrary {
             MediaStore.Audio.Media.ARTIST_ID,
             MediaStore.Audio.Media.DURATION,
             MediaStore.Audio.Media.TRACK,
+
     };
 
     public MusicLibrary(Context context) {
