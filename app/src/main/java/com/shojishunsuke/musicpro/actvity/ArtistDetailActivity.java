@@ -61,7 +61,7 @@ public class ArtistDetailActivity extends AppCompatActivity {
         List<Track> tracks = Track.getItemsByAlbum(this, artist.albumId);
 
         ListView listView = (ListView) findViewById(R.id.list);
-        ListTrackAdapter adapter = new ListTrackAdapter(this, tracks);
+        ListTrackAdapter adapter = new ListTrackAdapter(this);
         listView.setAdapter(adapter);
     }
 

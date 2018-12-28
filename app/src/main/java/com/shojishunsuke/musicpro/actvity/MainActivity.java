@@ -2,23 +2,31 @@ package com.shojishunsuke.musicpro.actvity;
 
 import android.Manifest;
 import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.media.MediaBrowserCompat;
+import android.support.v4.media.session.MediaControllerCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
 import com.shojishunsuke.musicpro.R;
+import com.shojishunsuke.musicpro.Service.MediaSessionService;
 import com.shojishunsuke.musicpro.Service.TrackService;
 import com.shojishunsuke.musicpro.adapter.PagerAdapter;
 import com.shojishunsuke.musicpro.utils.CheckServiceUtils;
 import com.shojishunsuke.musicpro.utils.RuntimePermissionUtils;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
 
     private boolean isStartService = false;
+
+    MediaControllerCompat mediaController;
+    MediaBrowserCompat mediaBrowser;
 
     private FloatingActionButton playButton;
 
@@ -45,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         viewPager = (ViewPager) findViewById(R.id.pager);
+
+//        MediaSessionService.start(this);
+        mediaBrowser =  new MediaBrowserCompat(this,new ComponentName(this,MediaSessionService.class),connectionCallback,null);
+        mediaBrowser.connect();
 
         if (RuntimePermissionUtils.hasSelfPermissions(MainActivity.this, READ_EXTERNAL_STORAGE)) {
 
@@ -108,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 
     @Override
@@ -140,4 +156,23 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    private MediaBrowserCompat.ConnectionCallback connectionCallback = new MediaBrowserCompat.ConnectionCallback() {
+
+        @Override
+        public void onConnected() {
+
+            try {
+
+                mediaController = new MediaControllerCompat(MainActivity.this, mediaBrowser.getSessionToken());
+
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+                Toast.makeText(MainActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+            }
+
+        }
+    };
+
+
 }
