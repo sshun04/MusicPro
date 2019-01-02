@@ -128,6 +128,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
     }
 
+
     @Override
     public BrowserRoot onGetRoot(@Nullable String clientPackageName,
                                  int clientUid,
@@ -164,7 +165,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
             com.google.android.exoplayer2.upstream.DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getApplicationContext(),
                     Util.getUserAgent(getApplicationContext(), "MusicPro"));
-//            MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse("file:///android_asset/" + MusicLibrary.getMusicFileNames(mediaId)));
+
             MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(musicLibrary.getMusicFileNames(mediaId));
 
             for (MediaSessionCompat.QueueItem item : queueItems) {
