@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.shojishunsuke.musicpro.Interface.MediaBrowserProvider;
+import com.shojishunsuke.musicpro.Interface.MediaFragmentListener;
 import com.shojishunsuke.musicpro.R;
 import com.shojishunsuke.musicpro.adapter.ListTrackAdapter;
 
@@ -36,6 +37,8 @@ public class TrackTabFragment extends Fragment {
     private ListTrackAdapter mBrowserAdapter;
     private String mMediaId;
     private MediaFragmentListener mediaFragmentListener;
+    private List<MediaBrowserCompat.MediaItem> songList;
+
 
 
     private MediaControllerCompat.Callback mediaControllerCallback = new MediaControllerCompat.Callback() {
@@ -60,7 +63,7 @@ public class TrackTabFragment extends Fragment {
                 public void onChildrenLoaded(@NonNull String parentId, @NonNull List<MediaBrowserCompat.MediaItem> children) {
                     try {
                             for (MediaBrowserCompat.MediaItem item : children) {
-                                mBrowserAdapter.add(item);
+                               songList.add(item);
                             }
                         } catch (Exception e) {
 
@@ -75,19 +78,15 @@ public class TrackTabFragment extends Fragment {
                 }
             };
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
 
-        mediaFragmentListener = (MediaFragmentListener) context;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_track_tab, container, false);
 
-        mBrowserAdapter = new ListTrackAdapter(getActivity());
+
+        mBrowserAdapter = new ListTrackAdapter(getActivity(),songList);
 
         ListView trackList = (ListView) view.findViewById(R.id.listTrack);
         trackList.setAdapter(mBrowserAdapter);
@@ -116,11 +115,11 @@ public class TrackTabFragment extends Fragment {
         }
     }
 
-    public void setMediaId(String mediaId) {
-        Bundle args = new Bundle(1);
-        args.putString(TrackTabFragment.ARG_MEDIA_ID, mediaId);
-        setArguments(args);
-    }
+//    public void setMediaId(String mediaId) {
+//        Bundle args = new Bundle(1);
+//        args.putString(TrackTabFragment.ARG_MEDIA_ID, mediaId);
+//        setArguments(args);
+//    }
 
     public String getMediaId() {
         Bundle args = getArguments();
@@ -158,11 +157,6 @@ public class TrackTabFragment extends Fragment {
     }
 
 
-    public static interface MediaFragmentListener extends MediaBrowserProvider {
-
-        void onMediaItemSelcted(MediaBrowserCompat.MediaItem item);
-        void setToolbarTitle(CharSequence title);
-    }
 }
 
 

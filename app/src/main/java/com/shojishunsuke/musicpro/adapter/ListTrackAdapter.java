@@ -26,12 +26,12 @@ import java.util.List;
 public class ListTrackAdapter extends ArrayAdapter<MediaBrowserCompat.MediaItem> {
 
     private LayoutInflater mInflater;
-    private Context context;
+    private  Context context;
 
 
 
-    public ListTrackAdapter(Context context) {
-        super(context, 0, new ArrayList<MediaBrowserCompat.MediaItem>());
+    public ListTrackAdapter(Context context,List<MediaBrowserCompat.MediaItem> items) {
+        super(context, 0, items);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.context = context;
 
@@ -45,7 +45,7 @@ public class ListTrackAdapter extends ArrayAdapter<MediaBrowserCompat.MediaItem>
         final ViewHolder holder;
         MediaBrowserCompat.MediaItem mediaItem = getItem(position);
 
-        MediaController mediaController = ((Activity)getContext()).getMediaController();
+//        MediaController mediaController = ((Activity)getContext()).getMediaController();
 
         if (convertView == null) {
 
@@ -79,4 +79,5 @@ public class ListTrackAdapter extends ArrayAdapter<MediaBrowserCompat.MediaItem>
         TextView durationTextView;
 
     }
+
 }

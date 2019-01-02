@@ -102,8 +102,8 @@ public class AlbumDetailActivity extends AppCompatActivity {
         List<Track> tracks = Track.getItemsByAlbum(this, album.albumId);
 
         ListView trackList = (ListView) findViewById(R.id.list);
-        ListTrackAdapter adapter = new ListTrackAdapter(this);
-        trackList.setAdapter(adapter);
+//        ListTrackAdapter adapter = new ListTrackAdapter(this);
+//        trackList.setAdapter(adapter);
 
         ActivityManager activityManager = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
         if (activityManager != null) {

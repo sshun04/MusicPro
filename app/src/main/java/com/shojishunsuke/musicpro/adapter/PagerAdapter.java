@@ -3,6 +3,7 @@ package com.shojishunsuke.musicpro.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
 
 import com.shojishunsuke.musicpro.fragment.AlbumTabFragment;
 import com.shojishunsuke.musicpro.fragment.TrackTabFragment;
@@ -44,6 +45,15 @@ public class PagerAdapter extends FragmentPagerAdapter {
                 return "ALBUM";
             default:
                 return null;
+        }
+    }
+
+    @Override
+    public void finishUpdate(ViewGroup container) {
+        try{
+            super.finishUpdate(container);
+        } catch (NullPointerException nullPointerException){
+            System.out.println("Catch the NullPointerException in FragmentPagerAdapter.finishUpdate");
         }
     }
 }

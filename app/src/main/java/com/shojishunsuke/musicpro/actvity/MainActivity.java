@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     MediaControllerCompat mediaController;
     MediaBrowserCompat mediaBrowser;
 
+
     private FloatingActionButton playButton;
 
     private final static String[] READ_EXTERNAL_STORAGE = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
@@ -157,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private MediaBrowserCompat.ConnectionCallback connectionCallback = new MediaBrowserCompat.ConnectionCallback() {
+   private MediaBrowserCompat.ConnectionCallback connectionCallback = new MediaBrowserCompat.ConnectionCallback() {
 
         @Override
         public void onConnected() {
