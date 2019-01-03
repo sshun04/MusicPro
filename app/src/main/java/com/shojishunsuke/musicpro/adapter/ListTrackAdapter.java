@@ -45,8 +45,6 @@ public class ListTrackAdapter extends ArrayAdapter<MediaBrowserCompat.MediaItem>
         final ViewHolder holder;
         MediaBrowserCompat.MediaItem mediaItem = getItem(position);
 
-//        MediaController mediaController = ((Activity)getContext()).getMediaController();
-
         if (convertView == null) {
 
             convertView = mInflater.inflate(R.layout.item_track, null);

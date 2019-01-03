@@ -58,9 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager = (ViewPager) findViewById(R.id.pager);
 
-//        MediaSessionService.start(this);
-        mediaBrowser =  new MediaBrowserCompat(this,new ComponentName(this,MediaSessionService.class),connectionCallback,null);
-        mediaBrowser.connect();
+        MediaSessionService.start(this);
+
 
         if (RuntimePermissionUtils.hasSelfPermissions(MainActivity.this, READ_EXTERNAL_STORAGE)) {
 
