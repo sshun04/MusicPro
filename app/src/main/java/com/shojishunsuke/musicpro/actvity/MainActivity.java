@@ -23,6 +23,7 @@ import com.shojishunsuke.musicpro.R;
 import com.shojishunsuke.musicpro.Service.MediaSessionService;
 import com.shojishunsuke.musicpro.Service.TrackService;
 import com.shojishunsuke.musicpro.adapter.PagerAdapter;
+import com.shojishunsuke.musicpro.fragment.TrackTabFragment;
 import com.shojishunsuke.musicpro.utils.CheckServiceUtils;
 import com.shojishunsuke.musicpro.utils.RuntimePermissionUtils;
 
@@ -58,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager = (ViewPager) findViewById(R.id.pager);
 
-        MediaSessionService.start(this);
 
 
         if (RuntimePermissionUtils.hasSelfPermissions(MainActivity.this, READ_EXTERNAL_STORAGE)) {

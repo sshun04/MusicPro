@@ -14,11 +14,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.shojishunsuke.musicpro.R;
 import com.shojishunsuke.musicpro.Service.MediaSessionService;
+import com.shojishunsuke.musicpro.actvity.MainActivity;
 import com.shojishunsuke.musicpro.adapter.ListTrackAdapter;
 
 import java.util.List;
@@ -56,31 +57,32 @@ public class TrackTabFragment extends Fragment {
         }
     };
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
 
+        MediaSessionService.start(context);
+        mediaBrowser = new MediaBrowserCompat(context, new ComponentName(context, MediaSessionService.class), connectionCallback, null);
+        mediaBrowser.connect();
 
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_track_tab, container, false);
 
+        MainActivity activity = (MainActivity) getActivity();
+
 
         ListView trackList = (ListView) view.findViewById(R.id.listTrack);
-        mBrowserAdapter = new ListTrackAdapter(getActivity(),songList);
+        mBrowserAdapter = new ListTrackAdapter(activity, songList);
         trackList.setAdapter(mBrowserAdapter);
 
         // Inflate the layout for this fragment
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        mediaBrowser = new MediaBrowserCompat(context, new ComponentName(context, MediaSessionService.class), connectionCallback, null);
-        mediaBrowser.connect();
-
-    }
 
     private MediaBrowserCompat.ConnectionCallback connectionCallback = new MediaBrowserCompat.ConnectionCallback() {
         @Override
@@ -91,9 +93,10 @@ public class TrackTabFragment extends Fragment {
                 mediaController.registerCallback(mediaControllerCallback);
             } catch (RemoteException ex) {
                 ex.printStackTrace();
+                Toast.makeText(context,ex.getMessage(),Toast.LENGTH_SHORT).show();
             }
 
-            mediaBrowser.subscribe(mediaBrowser.getRoot(),subscriptionCallback);
+            mediaBrowser.subscribe(mediaBrowser.getRoot(), subscriptionCallback);
         }
     };
 
@@ -108,11 +111,12 @@ public class TrackTabFragment extends Fragment {
                         for (MediaBrowserCompat.MediaItem item : children) {
                             songList.add(item);
                         }
-                    } catch (Exception e) {
-                        e.fillInStackTrace();
 
+
+                    } catch (IllegalStateException ex) {
+                        ex.printStackTrace();
+                        Toast.makeText(context, ex.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-
                 }
 
                 @Override
@@ -121,7 +125,6 @@ public class TrackTabFragment extends Fragment {
 
                 }
             };
-
 
 
 }

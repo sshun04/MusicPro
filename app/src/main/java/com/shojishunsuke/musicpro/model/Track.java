@@ -50,7 +50,6 @@ public class Track implements Serializable {
         artistId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
         duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
         trackNo = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.TRACK));
-//        albumArt = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
         uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);
 //
 

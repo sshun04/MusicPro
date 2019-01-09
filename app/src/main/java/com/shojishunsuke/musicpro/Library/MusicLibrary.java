@@ -74,15 +74,7 @@ public class MusicLibrary {
 
 
     }
-    public static List getItems(Context activity){
-       List trackList =  new ArrayList();
 
-
-
-
-       return trackList;
-
-    }
 
 
     public String getRoot() {
