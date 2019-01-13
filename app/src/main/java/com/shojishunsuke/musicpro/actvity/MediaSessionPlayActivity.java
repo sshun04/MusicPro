@@ -37,10 +37,14 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
     private FloatingActionButton playButton;
     private ImageView artImageView;
     private SeekBar seekBar;
+    private int songPosition = 0;
+
+    private static String POSITION_KEY = "key_position";
 
 
-    public static void start(Context context) {
+    public static void start(Context context, int position) {
         Intent intent = new Intent(context, MediaSessionPlayActivity.class);
+        intent.putExtra(POSITION_KEY, position);
         context.startActivity(intent);
     }
 
@@ -48,6 +52,9 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media_session_play);
+
+        Intent intent = getIntent();
+        songPosition = intent.getIntExtra(POSITION_KEY, -1);
 
         textView_title = (TextView) findViewById(R.id.title);
         textView_artist = (TextView) findViewById(R.id.artistName);
@@ -98,13 +105,12 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
             }
         });
 
-        MediaSessionService.start(this);
-
 
         mediaBrowser = new MediaBrowserCompat(this, new ComponentName(this, MediaSessionService.class), connectionCallback, null);
 
 
         mediaBrowser.connect();
+
 
     }
 
@@ -136,10 +142,12 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
     private MediaBrowserCompat.SubscriptionCallback subscriptionCallback = new MediaBrowserCompat.SubscriptionCallback() {
         @Override
         public void onChildrenLoaded(@NonNull String parentId, @NonNull List<MediaBrowserCompat.MediaItem> children) {
-            if (mediaController.getPlaybackState() == null) {
-                Play(children.get(0).getMediaId());
-            }
+
+            play(children.get(songPosition).getMediaId());
+
         }
+
+
     };
 
     private MediaControllerCompat.Callback controllerCallback = new MediaControllerCompat.Callback() {
@@ -153,6 +161,7 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
             seekBar.setMax((int) metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION));
 
         }
+
 
         @Override
         public void onPlaybackStateChanged(PlaybackStateCompat state) {
@@ -181,16 +190,17 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
             textView_position.setText(long2TimeString(state.getPosition()));
             seekBar.setProgress((int) state.getPosition());
         }
+
     };
 
-    private void Play(String id) {
+    private void play(String id) {
         mediaController.getTransportControls().playFromMediaId(id, null);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mediaBrowser.disconnect();
+
         if (mediaController.getPlaybackState().getState() != PlaybackStateCompat.STATE_PLAYING) {
 
         }

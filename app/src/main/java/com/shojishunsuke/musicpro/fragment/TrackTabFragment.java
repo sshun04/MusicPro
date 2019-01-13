@@ -22,6 +22,7 @@ import com.shojishunsuke.musicpro.Service.MediaSessionService;
 import com.shojishunsuke.musicpro.actvity.MainActivity;
 import com.shojishunsuke.musicpro.adapter.ListTrackAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.support.constraint.Constraints.TAG;
@@ -37,9 +38,8 @@ public class TrackTabFragment extends Fragment {
 
     private ListTrackAdapter mBrowserAdapter;
     private MediaBrowserCompat mediaBrowser;
-    private Context context;
     private MediaControllerCompat mediaController;
-    private List<MediaBrowserCompat.MediaItem> songList;
+    private List<MediaBrowserCompat.MediaItem> songList = new ArrayList<>();
 
     private MediaControllerCompat.Callback mediaControllerCallback = new MediaControllerCompat.Callback() {
         @Override
@@ -76,7 +76,7 @@ public class TrackTabFragment extends Fragment {
 
 
         ListView trackList = (ListView) view.findViewById(R.id.listTrack);
-        mBrowserAdapter = new ListTrackAdapter(activity, songList);
+        mBrowserAdapter = new ListTrackAdapter(activity);
         trackList.setAdapter(mBrowserAdapter);
 
         // Inflate the layout for this fragment
@@ -88,12 +88,12 @@ public class TrackTabFragment extends Fragment {
         @Override
         public void onConnected() {
             try {
-                mediaController = new MediaControllerCompat(context, mediaBrowser.getSessionToken());
+                mediaController = new MediaControllerCompat(getContext(), mediaBrowser.getSessionToken());
 
                 mediaController.registerCallback(mediaControllerCallback);
             } catch (RemoteException ex) {
                 ex.printStackTrace();
-                Toast.makeText(context,ex.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),ex.getMessage(),Toast.LENGTH_SHORT).show();
             }
 
             mediaBrowser.subscribe(mediaBrowser.getRoot(), subscriptionCallback);
@@ -108,14 +108,13 @@ public class TrackTabFragment extends Fragment {
                 public void onChildrenLoaded(@NonNull String parentId, @NonNull List<MediaBrowserCompat.MediaItem> children) {
                     try {
 
-                        for (MediaBrowserCompat.MediaItem item : children) {
-                            songList.add(item);
-                        }
+                            mBrowserAdapter.addAll(children);
+
 
 
                     } catch (IllegalStateException ex) {
                         ex.printStackTrace();
-                        Toast.makeText(context, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
 

@@ -47,13 +47,13 @@ public class PagerAdapter extends FragmentPagerAdapter {
                 return null;
         }
     }
-
-    @Override
-    public void finishUpdate(ViewGroup container) {
-        try{
-            super.finishUpdate(container);
-        } catch (NullPointerException nullPointerException){
-            System.out.println("Catch the NullPointerException in FragmentPagerAdapter.finishUpdate");
-        }
-    }
+//
+//    @Override
+//    public void finishUpdate(ViewGroup container) {
+//        try{
+//            super.finishUpdate(container);
+//        } catch (NullPointerException nullPointerException){
+//            System.out.println("Catch the NullPointerException in FragmentPagerAdapter.finishUpdate");
+//        }
+//    }
 }

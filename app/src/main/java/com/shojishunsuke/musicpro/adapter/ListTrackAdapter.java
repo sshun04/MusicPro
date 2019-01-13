@@ -30,8 +30,8 @@ public class ListTrackAdapter extends ArrayAdapter<MediaBrowserCompat.MediaItem>
 
 
 
-    public ListTrackAdapter(Context context,List<MediaBrowserCompat.MediaItem> items) {
-        super(context, 0, items);
+    public ListTrackAdapter(Context context) {
+        super(context, 0);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.context = context;
 
@@ -62,6 +62,14 @@ public class ListTrackAdapter extends ArrayAdapter<MediaBrowserCompat.MediaItem>
             holder.trackTextView.setText(mediaItem.getDescription().getTitle());
             holder.artistTextView.setText(mediaItem.getDescription().getSubtitle());
         }
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                MediaSessionPlayActivity.start(context,position);
+
+            }
+        });
 
         return convertView;
     }
