@@ -13,6 +13,7 @@ import android.support.v4.media.MediaMetadataCompat;
 
 import com.shojishunsuke.musicpro.BuildConfig;
 import com.shojishunsuke.musicpro.R;
+import com.shojishunsuke.musicpro.model.Track;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,6 +72,30 @@ public class MusicLibrary {
         }
 
         cursor.close();
+
+
+    }
+
+    public static List<Track> getItemsByAlbum(Context context, long albumId) {
+
+        ArrayList tracks = new ArrayList();
+        ContentResolver resolver = context.getContentResolver();
+        String[] SELECTION_ARG = {""};
+        SELECTION_ARG[0] = String.valueOf(albumId);
+        Cursor cursor = resolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                Track.COLUMNS,
+                MediaStore.Audio.Media.ALBUM_ID + "=?",
+                SELECTION_ARG, null);
+
+        while (cursor.moveToNext()) {
+            if (cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)) < 3000) {
+                continue;
+            }
+            tracks.add(new Track(cursor));
+
+        }
+        cursor.close();
+        return tracks;
 
 
     }
@@ -142,7 +167,7 @@ public class MusicLibrary {
 
 
     private void createMetaDateCompat(
-            String mediaid,
+            String mediaId,
             String title,
             String artist,
             String album,
@@ -153,9 +178,9 @@ public class MusicLibrary {
             String albumArtResName) {
 
         music.put(
-                mediaid,
+                mediaId,
                 new MediaMetadataCompat.Builder()
-                        .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, mediaid)
+                        .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, mediaId)
                         .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, album)
                         .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, artist)
                         .putLong(MediaMetadataCompat.METADATA_KEY_DURATION,
@@ -168,8 +193,8 @@ public class MusicLibrary {
                         .putString(MediaMetadataCompat.METADATA_KEY_TITLE, title)
                         .build());
 
-        albumRes.put(mediaid, albumArtResId);
-        musicFileName.put(mediaid, uri);
+        albumRes.put(mediaId, albumArtResId);
+        musicFileName.put(mediaId, uri);
 
     }
 }

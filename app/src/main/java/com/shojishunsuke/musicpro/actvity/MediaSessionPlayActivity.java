@@ -11,12 +11,14 @@ import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.shojishunsuke.musicpro.R;
 import com.shojishunsuke.musicpro.Service.MediaSessionService;
@@ -37,7 +39,9 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
     private FloatingActionButton playButton;
     private ImageView artImageView;
     private SeekBar seekBar;
-    private int songPosition = 0;
+    private android.support.v7.widget.Toolbar toolbar;
+    private ActionBar actionBar;
+    private int songPosition = -1;
 
     private static String POSITION_KEY = "key_position";
 
@@ -55,6 +59,15 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         songPosition = intent.getIntExtra(POSITION_KEY, -1);
+
+        toolbar = findViewById(R.id.mtoolbar);
+        setSupportActionBar(toolbar);
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+
+
 
         textView_title = (TextView) findViewById(R.id.title);
         textView_artist = (TextView) findViewById(R.id.artistName);
@@ -159,6 +172,9 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
             textView_artist.setText(metadata.getDescription().getSubtitle());
             textView_duration.setText(long2TimeString(metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION)));
             seekBar.setMax((int) metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION));
+
+
+            actionBar.setTitle(metadata.getDescription().getTitle());
 
         }
 

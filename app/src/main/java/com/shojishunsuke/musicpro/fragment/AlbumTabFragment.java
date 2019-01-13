@@ -36,8 +36,6 @@ public class AlbumTabFragment extends Fragment {
         ListAlbumAdapter adapter = new ListAlbumAdapter(activity, albums);
         albumlist.setAdapter(adapter);
 
-//        albumlist.setOnItemClickListener(activity.AlbumClickListener);
-//        albumlist.setOnItemLongClickListener(activity.AlbumLongClickListener);
 
         // Inflate the layout for this fragment
         return rootView;
