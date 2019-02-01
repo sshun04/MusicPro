@@ -23,8 +23,8 @@ public class ListAlbumAdapter extends ArrayAdapter<Album> {
     private Context context;
     private LayoutInflater mInflater;
 
-    public ListAlbumAdapter(Context context, List<Album> item) {
-        super(context, 0, item);
+    public ListAlbumAdapter(Context context,List<Album> item) {
+        super(context, 0,item);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.context = context;
 

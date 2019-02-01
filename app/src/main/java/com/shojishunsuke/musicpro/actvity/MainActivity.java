@@ -1,65 +1,67 @@
 package com.shojishunsuke.musicpro.actvity;
 
 import android.Manifest;
-import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.media.MediaBrowserCompat;
-import android.support.v4.media.session.MediaControllerCompat;
+import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.shojishunsuke.musicpro.R;
 import com.shojishunsuke.musicpro.Service.MediaSessionService;
-import com.shojishunsuke.musicpro.Service.TrackService;
 import com.shojishunsuke.musicpro.adapter.PagerAdapter;
-import com.shojishunsuke.musicpro.fragment.TrackTabFragment;
-import com.shojishunsuke.musicpro.utils.CheckServiceUtils;
+import com.shojishunsuke.musicpro.utils.MusicPlayer;
 import com.shojishunsuke.musicpro.utils.RuntimePermissionUtils;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MusicPlayer.UiCallback {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
-
-    private boolean isStartService = false;
-
-    MediaControllerCompat mediaController;
-    MediaBrowserCompat mediaBrowser;
+    private android.support.v7.widget.Toolbar toolbar;
+    private ActionBar actionBar;
+    private MusicPlayer hoge;
 
 
-    private FloatingActionButton playButton;
+    private ImageView playButton;
 
     private final static String[] READ_EXTERNAL_STORAGE = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
     private final static int PERMISSION_REQUEST_CODE = 1;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        actionBar = getSupportActionBar();
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+
         tabLayout = (TabLayout) findViewById(R.id.tablayout);
-        playButton = (FloatingActionButton) findViewById(R.id.mainPlay);
+        playButton = (ImageView) findViewById(R.id.mainPlay);
+
 
         tabLayout.addTab(tabLayout.newTab().setText("Tracks"));
         tabLayout.addTab(tabLayout.newTab().setText("Album"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         viewPager = (ViewPager) findViewById(R.id.pager);
-
-
 
         if (RuntimePermissionUtils.hasSelfPermissions(MainActivity.this, READ_EXTERNAL_STORAGE)) {
 
@@ -96,33 +98,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        playButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                ActivityManager activityManager = (ActivityManager) MainActivity.this.getSystemService(ACTIVITY_SERVICE);
-                if (activityManager != null) {
-                    isStartService = CheckServiceUtils.checkAudioService(activityManager);
-                }
-
-                AudioManager audioManager = (AudioManager) MainActivity.this.getSystemService(Context.AUDIO_SERVICE);
-
-                if (audioManager.isMusicActive() && isStartService) {
-
-                    playButton.setImageResource(R.drawable.playarrow);
-                    startService(new Intent(MainActivity.this, TrackService.class));
 
 
-                } else if (isStartService) {
-                    playButton.setImageResource(R.drawable.pause);
-                    startService(new Intent(MainActivity.this, TrackService.class));
 
-                } else {
-
-                    Toast.makeText(MainActivity.this, "Choose Track", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+//        mediaBrowser = new MediaBrowserCompat(this, new ComponentName(this, MainActivity.class), connectionCallback, null);
+//        mediaBrowser.connect();
+//        hoge = MusicPlayer.getInstance();
+//        hoge.setUiCallback(this);
 
     }
 
@@ -131,15 +113,8 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         AudioManager audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
-        if (audioManager != null) {
-            if (audioManager.isMusicActive()) {
-                playButton.setImageResource(R.drawable.pause);
-            } else {
-                playButton.setImageResource(R.drawable.playarrow);
-            }
-        } else {
-            playButton.setImageResource(R.drawable.playarrow);
-        }
+
+
     }
 
     @Override
@@ -157,22 +132,38 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-   private MediaBrowserCompat.ConnectionCallback connectionCallback = new MediaBrowserCompat.ConnectionCallback() {
 
-        @Override
-        public void onConnected() {
+    @Override
+    public void onPlaybackStateChanged(final PlaybackStateCompat state) {
 
-            try {
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
+                   hoge.pause();
+                    playButton.setImageResource(R.drawable.pause);
+                } else {
+                   hoge.play();
+                    playButton.setImageResource(R.drawable.playarrow);
+                }
 
-                mediaController = new MediaControllerCompat(MainActivity.this, mediaBrowser.getSessionToken());
-
-            } catch (RemoteException ex) {
-                ex.printStackTrace();
-                Toast.makeText(MainActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
             }
+        });
+    }
 
-        }
-    };
+    @Override
+    public void onChildrenLoaded(@NonNull String parentId, @NonNull List<MediaBrowserCompat.MediaItem> children) {
 
+    }
+
+    @Override
+    public void onMetadataChanged(MediaMetadataCompat metadata) {
+
+        actionBar.setTitle(metadata.getDescription().getTitle());
+        actionBar.setSubtitle(metadata.getDescription().getSubtitle());
+
+        actionBar.setIcon(R.drawable.ic_launcher_small_icon);
+
+    }
 
 }

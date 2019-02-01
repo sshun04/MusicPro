@@ -1,10 +1,8 @@
 package com.shojishunsuke.musicpro.actvity;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.media.MediaBrowserCompat;
@@ -13,19 +11,18 @@ import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.shojishunsuke.musicpro.R;
-import com.shojishunsuke.musicpro.Service.MediaSessionService;
+import com.shojishunsuke.musicpro.utils.MusicPlayer;
 
 import java.util.List;
 
-public class MediaSessionPlayActivity extends AppCompatActivity {
+public class MediaSessionPlayActivity extends AppCompatActivity implements MusicPlayer.UiCallback {
 
     private MediaBrowserCompat mediaBrowser;
     private MediaControllerCompat mediaController;
@@ -41,9 +38,15 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
     private SeekBar seekBar;
     private android.support.v7.widget.Toolbar toolbar;
     private ActionBar actionBar;
+    private ImageView repeatButton;
     private int songPosition = -1;
 
+    private boolean isRepeat = false;
+
     private static String POSITION_KEY = "key_position";
+
+    private MusicPlayer hoge;
+    private MusicPlayer.UiCallback uiCallback = null;
 
 
     public static void start(Context context, int position) {
@@ -67,6 +70,8 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setHomeButtonEnabled(true);
 
+        hoge = MusicPlayer.getInstance();
+        hoge.setUiCallback(this);
 
 
         textView_title = (TextView) findViewById(R.id.title);
@@ -78,16 +83,31 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
         playButton = (FloatingActionButton) findViewById(R.id.button_play);
         artImageView = (ImageView) findViewById(R.id.trackart);
         seekBar = (SeekBar) findViewById(R.id.seekBar);
+        repeatButton = (ImageView) findViewById(R.id.repeatButton);
 
         button_next.setImageResource(R.drawable.skipnext);
         button_plev.setImageResource(R.drawable.skipprev);
+        repeatButton.setImageResource(R.drawable.baseline_repeat_white_24dp);
+
+        repeatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (hoge.getRepeatMode() == PlaybackStateCompat.REPEAT_MODE_NONE) {
+                    hoge.setRepeatMode(PlaybackStateCompat.REPEAT_MODE_ONE);
+                    repeatButton.setImageResource(R.drawable.baseline_repeat_blue);
+                } else {
+                    hoge.setRepeatMode(PlaybackStateCompat.REPEAT_MODE_NONE);
+                    repeatButton.setImageResource(R.drawable.baseline_repeat_white_24dp);
+                }
+            }
+        });
+
 
         button_plev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                mediaController.getTransportControls().skipToPrevious();
-
+                hoge.skipToPrevious();
             }
         });
 
@@ -95,7 +115,7 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                mediaController.getTransportControls().skipToNext();
+                hoge.skipToNext();
             }
         });
 
@@ -113,101 +133,165 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
-                mediaController.getTransportControls().seekTo(seekBar.getProgress());
-
+                hoge.seekTo(seekBar.getProgress());
             }
         });
 
 
-        mediaBrowser = new MediaBrowserCompat(this, new ComponentName(this, MediaSessionService.class), connectionCallback, null);
-
-
-        mediaBrowser.connect();
+//        mediaBrowser = new MediaBrowserCompat(this, new ComponentName(this, MediaSessionService.class), connectionCallback, null);
+//        mediaBrowser.connect();
 
 
     }
 
-    private MediaBrowserCompat.ConnectionCallback connectionCallback = new MediaBrowserCompat.ConnectionCallback() {
+//    private MediaBrowserCompat.ConnectionCallback connectionCallback = new MediaBrowserCompat.ConnectionCallback() {
+//
+//        @Override
+//        public void onConnected() {
+//
+//            try {
+//
+//                mediaController = new MediaControllerCompat(MediaSessionPlayActivity.this, mediaBrowser.getSessionToken());
+//
+//                mediaController.registerCallback(controllerCallback);
+//
+//                if (mediaController.getPlaybackState() != null && mediaController.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
+//                    controllerCallback.onMetadataChanged(mediaController.getMetadata());
+//                    controllerCallback.onPlaybackStateChanged(mediaController.getPlaybackState());
+//                }
+//
+//            } catch (RemoteException ex) {
+//                ex.printStackTrace();
+//                Toast.makeText(MediaSessionPlayActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+//            }
+//            mediaBrowser.subscribe(mediaBrowser.getRoot(), subscriptionCallback);
+//
+//        }
+//    };
 
-        @Override
-        public void onConnected() {
+//    private MediaBrowserCompat.SubscriptionCallback subscriptionCallback = new MediaBrowserCompat.SubscriptionCallback() {
+//        @Override
+//        public void onChildrenLoaded(@NonNull String parentId, @NonNull List<MediaBrowserCompat.MediaItem> children) {
+//
+//            play(children.get(songPosition).getMediaId());
+//
+//        }
+//
+//
+//    };
 
-            try {
+//    private MediaControllerCompat.Callback controllerCallback = new MediaControllerCompat.Callback() {
+//        @Override
+////        public void onMetadataChanged(MediaMetadataCompat metadata) {
+////
+////            textView_title.setText(metadata.getDescription().getTitle());
+////            artImageView.setImageBitmap(metadata.getDescription().getIconBitmap());
+////            textView_artist.setText(metadata.getDescription().getSubtitle());
+////            textView_duration.setText(long2TimeString(metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION)));
+////            seekBar.setMax((int) metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION));
+////
+////
+////            actionBar.setTitle(metadata.getDescription().getTitle());
+////
+////        }
 
-                mediaController = new MediaControllerCompat(MediaSessionPlayActivity.this, mediaBrowser.getSessionToken());
 
-                mediaController.registerCallback(controllerCallback);
+//        @Override
+//        public void onPlaybackStateChanged(PlaybackStateCompat state) {
+//
+//            if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
+//                playButton.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        mediaController.getTransportControls().pause();
+//                    }
+//                });
+//
+//                playButton.setImageResource(R.drawable.pause);
+//            } else {
+//                playButton.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        mediaController.getTransportControls().play();
+//                    }
+//                });
+//
+//
+//                playButton.setImageResource(R.drawable.playarrow);
+//            }
+//
+//            textView_position.setText(long2TimeString(state.getPosition()));
+//            seekBar.setProgress((int) state.getPosition());
+//        }
 
-                if (mediaController.getPlaybackState() != null && mediaController.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
-                    controllerCallback.onMetadataChanged(mediaController.getMetadata());
-                    controllerCallback.onPlaybackStateChanged(mediaController.getPlaybackState());
+//        @Override
+//        public void onRepeatModeChanged(int repeatMode) {
+//
+//            if (repeatMode == PlaybackStateCompat.REPEAT_MODE_NONE) {
+//                repeatButton.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        mediaController.getTransportControls().setRepeatMode(PlaybackStateCompat.REPEAT_MODE_ONE);
+//                    }
+//                });
+//
+//                repeatButton.setImageResource(R.drawable.baseline_repeat_blue);
+//
+//            } else {
+//                repeatButton.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        mediaController.getTransportControls().setRepeatMode(PlaybackStateCompat.REPEAT_MODE_NONE);
+//                    }
+//                });
+//
+//                repeatButton.setImageResource(R.drawable.baseline_repeat_white_24dp);
+//            }
+//
+//        }
+//    };
+
+    @Override
+    public void onPlaybackStateChanged(final PlaybackStateCompat state) {
+
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
+                    hoge.pause();
+                    playButton.setImageResource(R.drawable.pause);
+                } else {
+                    hoge.play();
+                    playButton.setImageResource(R.drawable.playarrow);
                 }
 
-            } catch (RemoteException ex) {
-                ex.printStackTrace();
-                Toast.makeText(MediaSessionPlayActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
             }
-            mediaBrowser.subscribe(mediaBrowser.getRoot(), subscriptionCallback);
+        });
 
-        }
-    };
+        textView_position.setText(long2TimeString(state.getPosition()));
+        seekBar.setProgress((int) state.getPosition());
 
-    private MediaBrowserCompat.SubscriptionCallback subscriptionCallback = new MediaBrowserCompat.SubscriptionCallback() {
-        @Override
-        public void onChildrenLoaded(@NonNull String parentId, @NonNull List<MediaBrowserCompat.MediaItem> children) {
+    }
 
-            play(children.get(songPosition).getMediaId());
+    @Override
+    public void onChildrenLoaded(@NonNull String parentId, @NonNull List<MediaBrowserCompat.MediaItem> children) {
+        play(children.get(songPosition).getMediaId());
+    }
 
-        }
-
-
-    };
-
-    private MediaControllerCompat.Callback controllerCallback = new MediaControllerCompat.Callback() {
-        @Override
-        public void onMetadataChanged(MediaMetadataCompat metadata) {
-
-            textView_title.setText(metadata.getDescription().getTitle());
-            artImageView.setImageBitmap(metadata.getDescription().getIconBitmap());
-            textView_artist.setText(metadata.getDescription().getSubtitle());
-            textView_duration.setText(long2TimeString(metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION)));
-            seekBar.setMax((int) metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION));
+    @Override
+    public void onMetadataChanged(MediaMetadataCompat metadata) {
 
 
-            actionBar.setTitle(metadata.getDescription().getTitle());
-
-        }
-
-
-        @Override
-        public void onPlaybackStateChanged(PlaybackStateCompat state) {
-
-            if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
-                playButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mediaController.getTransportControls().pause();
-                    }
-                });
-
-                playButton.setImageResource(R.drawable.pause);
-            } else {
-                playButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mediaController.getTransportControls().play();
-                    }
-                });
+        textView_title.setText(metadata.getDescription().getTitle());
+        artImageView.setImageBitmap(metadata.getDescription().getIconBitmap());
+        textView_artist.setText(metadata.getDescription().getSubtitle());
+        textView_duration.setText(long2TimeString(metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION)));
+        seekBar.setMax((int) metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION));
 
 
-                playButton.setImageResource(R.drawable.playarrow);
-            }
+        actionBar.setTitle(metadata.getDescription().getTitle());
 
-            textView_position.setText(long2TimeString(state.getPosition()));
-            seekBar.setProgress((int) state.getPosition());
-        }
-
-    };
+    }
 
     private void play(String id) {
         mediaController.getTransportControls().playFromMediaId(id, null);
@@ -233,5 +317,15 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
         return String.format("%d:%02d", dm, ds);
 
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return false;
     }
 }

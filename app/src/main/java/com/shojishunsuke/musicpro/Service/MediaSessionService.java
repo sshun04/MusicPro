@@ -44,6 +44,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
     private final String TAG = MediaSessionService.class.getSimpleName();
     private final String ROOT_ID = "root";
+    private final String ALBUM_ID = "album";
 
     private Handler handler;
 
@@ -90,6 +91,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
             @Override
             public void onMetadataChanged(MediaMetadataCompat metadata) {
+
                 CreateNotification();
             }
         });
@@ -118,7 +120,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
             @Override
             public void run() {
                 if (exoPlayer.getPlaybackState() == Player.STATE_READY && exoPlayer.getPlayWhenReady()) {
-                    UpdatePlayBackState();
+                    updatePlayBackState();
                 }
 
                 handler.postDelayed(this, 500);
@@ -135,6 +137,8 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
         Log.d(TAG, "connected from package:" + clientPackageName + "Uid:" + clientUid);
         return new BrowserRoot(ROOT_ID, null);
     }
+
+
 
     @Override
     public void onLoadChildren(@NonNull String parentId,
@@ -164,7 +168,6 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
             com.google.android.exoplayer2.upstream.DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getApplicationContext(),
                     Util.getUserAgent(getApplicationContext(), "MusicPro"));
-//            MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse("file:///android_asset/" + MusicLibrary.getMusicFileNames(mediaId)));
             MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(musicLibrary.getMusicFileNames(mediaId));
 
             for (MediaSessionCompat.QueueItem item : queueItems) {
@@ -178,6 +181,8 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
             mediaSession.setActive(true);
 
             onPlay();
+
+
 
             mediaSession.setMetadata(musicLibrary.getMetaData(getApplicationContext(), mediaId));
 
@@ -202,7 +207,6 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
         public void onStop() {
             onPause();
             mediaSession.setActive(false);
-
             audioManager.abandonAudioFocus(audioFocusChangeListener);
         }
 
@@ -245,17 +249,41 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
             Log.d(TAG, String.valueOf(keyEvent.getKeyCode()));
             return super.onMediaButtonEvent(mediaButtonEvent);
         }
+
+        @Override
+        public void onSetRepeatMode(int repeatMode) {
+            updateRepeatMode(repeatMode);
+        }
     };
 
     private Player.EventListener eventListener = new Player.DefaultEventListener() {
         @Override
         public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-            UpdatePlayBackState();
+            updatePlayBackState();
+        }
+
+        @Override
+        public void onRepeatModeChanged(int repeatMode) {
+
+            updateRepeatMode(repeatMode);
+
         }
     };
 
+    private void updateRepeatMode(int repeatState){
 
-    private void UpdatePlayBackState() {
+
+        if (repeatState == Player.REPEAT_MODE_OFF){
+            exoPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
+        }else if (repeatState == Player.REPEAT_MODE_ONE){
+            exoPlayer.setRepeatMode(Player.REPEAT_MODE_ONE);
+        }else if (repeatState == Player.REPEAT_MODE_ALL){
+            exoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
+        }
+    }
+
+
+    private void updatePlayBackState() {
         int state = PlaybackStateCompat.STATE_NONE;
 
         switch (exoPlayer.getPlaybackState()) {

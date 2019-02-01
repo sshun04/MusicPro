@@ -41,7 +41,6 @@ public class ListTrackAdapter extends ArrayAdapter<MediaBrowserCompat.MediaItem>
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-
         final ViewHolder holder;
         MediaBrowserCompat.MediaItem mediaItem = getItem(position);
 

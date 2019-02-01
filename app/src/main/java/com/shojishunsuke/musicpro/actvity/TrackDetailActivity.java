@@ -144,10 +144,10 @@ public class TrackDetailActivity extends AppCompatActivity {
     public void checkService() {
 
         ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
-        List<ActivityManager.RunningServiceInfo> listSeriviceInfo = am.getRunningServices(Integer.MAX_VALUE);
+        List<ActivityManager.RunningServiceInfo> listServiceInfo = am.getRunningServices(Integer.MAX_VALUE);
 
 
-        for (ActivityManager.RunningServiceInfo curr : listSeriviceInfo) {
+        for (ActivityManager.RunningServiceInfo curr : listServiceInfo) {
             if (curr.service.getClassName().equals(TrackService.class.getName())) {
                 isStartService = true;
                 break;

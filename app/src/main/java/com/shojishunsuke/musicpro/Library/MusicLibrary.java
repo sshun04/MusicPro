@@ -83,7 +83,7 @@ public class MusicLibrary {
         String[] SELECTION_ARG = {""};
         SELECTION_ARG[0] = String.valueOf(albumId);
         Cursor cursor = resolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                Track.COLUMNS,
+                MusicLibrary.COLUMNS,
                 MediaStore.Audio.Media.ALBUM_ID + "=?",
                 SELECTION_ARG, null);
 
