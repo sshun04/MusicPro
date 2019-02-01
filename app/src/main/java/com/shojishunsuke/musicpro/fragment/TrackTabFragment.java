@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
+import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,7 +60,6 @@ public class TrackTabFragment extends Fragment implements MusicPlayer.UiCallback
 
         super.onAttach(context);
 
-        MediaSessionService.start(getContext());
 
 //        mediaBrowser = new MediaBrowserCompat(context, new ComponentName(context, MediaSessionService.class), connectionCallback, null);
 //        mediaBrowser.connect();

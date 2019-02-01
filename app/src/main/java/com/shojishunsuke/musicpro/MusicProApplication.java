@@ -3,6 +3,7 @@ package com.shojishunsuke.musicpro;
 import android.app.Application;
 import android.content.ComponentName;
 
+import com.shojishunsuke.musicpro.Service.MediaSessionService;
 import com.shojishunsuke.musicpro.utils.MusicPlayer;
 
 public class MusicProApplication extends Application {
@@ -12,5 +13,7 @@ public class MusicProApplication extends Application {
 
         MusicPlayer musicPlayer = MusicPlayer.getInstance();
         musicPlayer.init(this, new ComponentName(this, MusicProApplication.class));
+
+        MediaSessionService.start(this);
     }
 }
