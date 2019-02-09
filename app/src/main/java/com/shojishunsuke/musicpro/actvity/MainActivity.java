@@ -1,38 +1,29 @@
 package com.shojishunsuke.musicpro.actvity;
 
 import android.Manifest;
-import android.content.ComponentName;
 import android.content.Context;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
-import android.support.v4.media.MediaBrowserCompat;
-import android.support.v4.media.MediaMetadataCompat;
-import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.shojishunsuke.musicpro.R;
-import com.shojishunsuke.musicpro.Service.MediaSessionService;
 import com.shojishunsuke.musicpro.adapter.PagerAdapter;
-import com.shojishunsuke.musicpro.utils.MusicPlayer;
 import com.shojishunsuke.musicpro.utils.RuntimePermissionUtils;
 
-import java.util.List;
-
-public class MainActivity extends AppCompatActivity implements MusicPlayer.UiCallback {
+public class MainActivity extends AppCompatActivity  {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private android.support.v7.widget.Toolbar toolbar;
+//    private android.support.v7.widget.Toolbar toolbar;
     private ActionBar actionBar;
-    private MusicPlayer hoge;
 
 
     private ImageView playButton;
@@ -46,12 +37,10 @@ public class MainActivity extends AppCompatActivity implements MusicPlayer.UiCal
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        actionBar = getSupportActionBar();
+//        toolbar = (Toolbar) findViewById(R.id.background);
 //        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+//        actionBar.setDisplayShowHomeEnabled(true);
+//        actionBar.setHomeButtonEnabled(true);
 
         tabLayout = (TabLayout) findViewById(R.id.tablayout);
         playButton = (ImageView) findViewById(R.id.mainPlay);
@@ -101,11 +90,6 @@ public class MainActivity extends AppCompatActivity implements MusicPlayer.UiCal
 
 
 
-//        mediaBrowser = new MediaBrowserCompat(this, new ComponentName(this, MainActivity.class), connectionCallback, null);
-//        mediaBrowser.connect();
-//        hoge = MusicPlayer.getInstance();
-//        hoge.setUiCallback(this);
-
     }
 
     @Override
@@ -133,37 +117,5 @@ public class MainActivity extends AppCompatActivity implements MusicPlayer.UiCal
     }
 
 
-    @Override
-    public void onPlaybackStateChanged(final PlaybackStateCompat state) {
-
-        playButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
-                   hoge.pause();
-                    playButton.setImageResource(R.drawable.pause);
-                } else {
-                   hoge.play();
-                    playButton.setImageResource(R.drawable.playarrow);
-                }
-
-            }
-        });
-    }
-
-    @Override
-    public void onChildrenLoaded(@NonNull String parentId, @NonNull List<MediaBrowserCompat.MediaItem> children) {
-
-    }
-
-    @Override
-    public void onMetadataChanged(MediaMetadataCompat metadata) {
-
-        actionBar.setTitle(metadata.getDescription().getTitle());
-        actionBar.setSubtitle(metadata.getDescription().getSubtitle());
-
-        actionBar.setIcon(R.drawable.ic_launcher_small_icon);
-
-    }
 
 }

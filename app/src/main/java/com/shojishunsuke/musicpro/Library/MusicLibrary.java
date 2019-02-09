@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
-import java.util.concurrent.TimeUnit;
 
 public class MusicLibrary {
 
@@ -36,7 +35,7 @@ public class MusicLibrary {
             MediaStore.Audio.Media.ALBUM_ID,
             MediaStore.Audio.Media.ARTIST_ID,
             MediaStore.Audio.Media.DURATION,
-            MediaStore.Audio.Media.TRACK,
+            MediaStore.Audio.Media.TRACK
     };
 
     public MusicLibrary(Context context) {
@@ -101,7 +100,6 @@ public class MusicLibrary {
     }
 
 
-
     public String getRoot() {
         return "root";
     }
@@ -109,12 +107,12 @@ public class MusicLibrary {
     private String getAlbumArtUri(String albumArtResName) {
         return ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
                 BuildConfig.APPLICATION_ID + "/drawable/" + albumArtResName;
+
     }
 
     public Uri getMusicFileNames(String mediaId) {
         return musicFileName.containsKey(mediaId) ? musicFileName.get(mediaId) : null;
     }
-
 
 
     private int getAlbumRes(String mediaId) {

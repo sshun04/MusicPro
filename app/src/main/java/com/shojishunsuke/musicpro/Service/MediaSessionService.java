@@ -39,6 +39,7 @@ import com.shojishunsuke.musicpro.actvity.MediaSessionPlayActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MediaSessionService extends MediaBrowserServiceCompat {
 
@@ -139,7 +140,6 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
     }
 
 
-
     @Override
     public void onLoadChildren(@NonNull String parentId,
                                @NonNull Result<List<MediaBrowserCompat.MediaItem>> result) {
@@ -151,6 +151,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
         }
 
     }
+
 
     @Override
     public void onDestroy() {
@@ -183,8 +184,9 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
             onPlay();
 
 
-
             mediaSession.setMetadata(musicLibrary.getMetaData(getApplicationContext(), mediaId));
+
+
 
 
         }
@@ -252,35 +254,60 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
         @Override
         public void onSetRepeatMode(int repeatMode) {
-            updateRepeatMode(repeatMode);
+
+            setRepeatMode(repeatMode);
+
         }
     };
 
     private Player.EventListener eventListener = new Player.DefaultEventListener() {
         @Override
         public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+
             updatePlayBackState();
+
         }
 
         @Override
         public void onRepeatModeChanged(int repeatMode) {
 
-            updateRepeatMode(repeatMode);
+           mediaSession.setRepeatMode(repeatMode);
 
         }
     };
 
-    private void updateRepeatMode(int repeatState){
+    private void setRepeatMode(int repeatMode) {
 
-
-        if (repeatState == Player.REPEAT_MODE_OFF){
+        if (repeatMode == Player.REPEAT_MODE_OFF) {
             exoPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
-        }else if (repeatState == Player.REPEAT_MODE_ONE){
+        } else if (repeatMode == Player.REPEAT_MODE_ONE) {
             exoPlayer.setRepeatMode(Player.REPEAT_MODE_ONE);
-        }else if (repeatState == Player.REPEAT_MODE_ALL){
+        } else if (repeatMode == Player.REPEAT_MODE_ALL) {
             exoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
         }
+
+
+
     }
+
+//    private void updateRepeatState() {
+////        int repeatState = PlaybackStateCompat.REPEAT_MODE_NONE;
+////
+////        switch (exoPlayer.getRepeatMode()) {
+////            case Player.REPEAT_MODE_OFF:
+////                repeatState = PlaybackStateCompat.REPEAT_MODE_NONE;
+////                break;
+////
+////            case Player.REPEAT_MODE_ONE:
+////                repeatState = PlaybackStateCompat.REPEAT_MODE_ONE;
+////                break;
+////            case Player.REPEAT_MODE_ALL:
+////                repeatState = PlaybackStateCompat.REPEAT_MODE_ALL;
+////                break;
+////
+////        }
+////        mediaSession.setRepeatMode(repeatState);
+////    }
 
 
     private void updatePlayBackState() {

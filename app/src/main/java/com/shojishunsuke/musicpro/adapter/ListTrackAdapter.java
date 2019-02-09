@@ -6,6 +6,7 @@ import android.content.Context;
 import android.media.session.MediaController;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaDescriptionCompat;
+import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +44,7 @@ public class ListTrackAdapter extends ArrayAdapter<MediaBrowserCompat.MediaItem>
 
         final ViewHolder holder;
         MediaBrowserCompat.MediaItem mediaItem = getItem(position);
+//        MediaMetadataCompat mediaItem = getItem(position);
 
         if (convertView == null) {
 
@@ -50,17 +52,17 @@ public class ListTrackAdapter extends ArrayAdapter<MediaBrowserCompat.MediaItem>
             holder = new ViewHolder();
             holder.trackTextView = (TextView) convertView.findViewById(R.id.title);
             holder.artistTextView = (TextView) convertView.findViewById(R.id.artist);
-            holder.durationTextView = (TextView) convertView.findViewById(R.id.duration);
+
 
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if (mediaItem.isPlayable()){
+
             holder.trackTextView.setText(mediaItem.getDescription().getTitle());
             holder.artistTextView.setText(mediaItem.getDescription().getSubtitle());
-        }
+
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,6 +76,19 @@ public class ListTrackAdapter extends ArrayAdapter<MediaBrowserCompat.MediaItem>
     }
 
 
+    private String long2TimeString(long src) {
+
+
+        long dm = src / 60000;
+        long ds = (src - (dm * 60000)) / 1000;
+
+
+        return String.format("%d:%02d", dm, ds);
+
+
+    }
+
+
 
 
 
@@ -81,7 +96,6 @@ public class ListTrackAdapter extends ArrayAdapter<MediaBrowserCompat.MediaItem>
 
         TextView trackTextView;
         TextView artistTextView;
-        TextView durationTextView;
 
     }
 

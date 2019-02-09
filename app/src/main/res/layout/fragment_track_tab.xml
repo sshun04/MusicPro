@@ -9,7 +9,9 @@
     <ListView
         android:id="@+id/listTrack"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:background="@drawable/bg_gradation"
+        android:divider="@null">
 
     </ListView>
 

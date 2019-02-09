@@ -48,7 +48,7 @@ public class TrackDetailActivity extends AppCompatActivity {
 
         track = (Track) intent.getSerializableExtra(KEY_TRACK);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.background);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -63,7 +63,7 @@ public class TrackDetailActivity extends AppCompatActivity {
         TextView artistTextView = (TextView) findViewById(R.id.artist);
         TextView positionTextView = (TextView) findViewById(R.id.textView_position);
         TextView durationTextView = (TextView) findViewById(R.id.textView_duration);
-        ImageView artImageView = (ImageView) findViewById(R.id.trackart);
+        ImageView artImageView = (ImageView) findViewById(R.id.track_art);
         SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar);
         FloatingActionButton prevButton = (FloatingActionButton) findViewById(R.id.button_prev);
         final FloatingActionButton playButton = (FloatingActionButton) findViewById(R.id.button_play);

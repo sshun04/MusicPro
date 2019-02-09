@@ -1,60 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp">
 
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:orientation="vertical"
-        android:layout_marginLeft="8dp"
         android:layout_gravity="center"
+        android:layout_marginLeft="8dp"
         android:gravity="center_vertical"
-        >
-
+        android:orientation="vertical"
+        android:divider="@null">
 
 
         <TextView
             android:id="@+id/title"
-            android:text="TrackTitle"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:textSize="16dp"
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="2dp"/>
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="2dp"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:singleLine="true"
+            android:text="TrackTitle"
+            android:textColor="@android:color/white"
+            android:textSize="16dp"
+            android:textStyle="bold" />
 
-        <LinearLayout
+
+        <TextView
+            android:id="@+id/artist"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginRight="30dp"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:singleLine="true"
+            android:text="artist"
+            android:textColor="@android:color/white"
+            android:textSize="14dp" />
+
+
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="5dp">
+            android:layout_height="1dp"
+            android:background="@android:color/white">
 
-            <TextView
-                android:id="@+id/artist"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_weight="1"
-                android:text="artist"
-                android:textSize="14dp" />
+        </View>
 
-            <TextView
-                android:id="@+id/duration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0:00"
-                android:textSize="13dp"
-                android:layout_marginRight="6dp"
-                android:layout_marginLeft="15dp"/>
 
-        </LinearLayout>
     </LinearLayout>
-
 
 
 </RelativeLayout>
