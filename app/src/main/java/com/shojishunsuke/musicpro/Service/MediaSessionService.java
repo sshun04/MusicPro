@@ -39,7 +39,6 @@ import com.shojishunsuke.musicpro.actvity.MediaSessionPlayActivity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class MediaSessionService extends MediaBrowserServiceCompat {
 
@@ -139,7 +138,6 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
         return new BrowserRoot(ROOT_ID, null);
     }
 
-
     @Override
     public void onLoadChildren(@NonNull String parentId,
                                @NonNull Result<List<MediaBrowserCompat.MediaItem>> result) {
@@ -185,8 +183,6 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
 
             mediaSession.setMetadata(musicLibrary.getMetaData(getApplicationContext(), mediaId));
-
-
 
 
         }
@@ -252,10 +248,11 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
             return super.onMediaButtonEvent(mediaButtonEvent);
         }
 
+
         @Override
         public void onSetRepeatMode(int repeatMode) {
 
-            setRepeatMode(repeatMode);
+           exoPlayer.setRepeatMode(repeatMode);
 
         }
     };
@@ -271,24 +268,11 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
         @Override
         public void onRepeatModeChanged(int repeatMode) {
 
-           mediaSession.setRepeatMode(repeatMode);
+            mediaSession.setRepeatMode(repeatMode);
 
         }
     };
 
-    private void setRepeatMode(int repeatMode) {
-
-        if (repeatMode == Player.REPEAT_MODE_OFF) {
-            exoPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
-        } else if (repeatMode == Player.REPEAT_MODE_ONE) {
-            exoPlayer.setRepeatMode(Player.REPEAT_MODE_ONE);
-        } else if (repeatMode == Player.REPEAT_MODE_ALL) {
-            exoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
-        }
-
-
-
-    }
 
 //    private void updateRepeatState() {
 ////        int repeatState = PlaybackStateCompat.REPEAT_MODE_NONE;

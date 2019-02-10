@@ -91,10 +91,33 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (mediaController.getRepeatMode()) {
                     case PlaybackStateCompat.REPEAT_MODE_NONE:
+                        mediaController.getTransportControls().setRepeatMode(Player.REPEAT_MODE_ALL);
+                        break;
+                    case PlaybackStateCompat.REPEAT_MODE_ALL:
                         mediaController.getTransportControls().setRepeatMode(Player.REPEAT_MODE_ONE);
                         break;
-                    case PlaybackStateCompat.REPEAT_MODE_ONE :
+                    case PlaybackStateCompat.REPEAT_MODE_ONE:
                         mediaController.getTransportControls().setRepeatMode(Player.REPEAT_MODE_OFF);
+                        break;
+
+
+                }
+            }
+        });
+
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (mediaController.getPlaybackState().getState()){
+
+                    case PlaybackStateCompat.STATE_PLAYING:
+                        mediaController.getTransportControls().pause();
+                        break;
+                    case PlaybackStateCompat.STATE_STOPPED:
+                        mediaController.getTransportControls().play();
+                        break;
+                    case PlaybackStateCompat.STATE_PAUSED:
+                        mediaController.getTransportControls().play();
                         break;
                 }
             }
@@ -182,6 +205,7 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
         }
 
 
+
     };
 
     private MediaControllerCompat.Callback controllerCallback = new MediaControllerCompat.Callback() {
@@ -193,8 +217,6 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
             textView_artist.setText(metadata.getDescription().getSubtitle());
             textView_duration.setText(long2TimeString(metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION)));
             seekBar.setMax((int) metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION));
-
-
             actionBar.setTitle(metadata.getDescription().getTitle());
 
 
@@ -204,27 +226,16 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
         @Override
         public void onPlaybackStateChanged(PlaybackStateCompat state) {
 
-            if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
-                playButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mediaController.getTransportControls().pause();
-                    }
-                });
-
-                playButton.setImageResource(R.drawable.pause);
-            } else {
-                playButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mediaController.getTransportControls().play();
-                    }
-                });
-
-//
-
-
-                playButton.setImageResource(R.drawable.playarrow);
+            switch (state.getState()){
+                case PlaybackStateCompat.STATE_PLAYING:
+                   playButton.setImageResource(R.drawable.pause);
+                    break;
+                case PlaybackStateCompat.STATE_STOPPED:
+                    playButton.setImageResource(R.drawable.playarrow);
+                    break;
+                case PlaybackStateCompat.STATE_PAUSED:
+                    playButton.setImageResource(R.drawable.playarrow);
+                    break;
             }
 
             textView_position.setText(long2TimeString(state.getPosition()));
@@ -234,18 +245,20 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
         @Override
         public void onRepeatModeChanged(int repeatMode) {
 
-            switch (repeatMode){
+            switch (repeatMode) {
                 case Player.REPEAT_MODE_OFF:
                     repeatButton.setImageResource(R.drawable.baseline_repeat_white_24dp);
                     break;
                 case Player.REPEAT_MODE_ONE:
+                    repeatButton.setImageResource(R.drawable.repeat_one);
+                    break;
+                case Player.REPEAT_MODE_ALL:
                     repeatButton.setImageResource(R.drawable.baseline_repeat_blue);
                     break;
             }
 
         }
     };
-
 
     private void play(String id) {
         mediaController.getTransportControls().playFromMediaId(id, null);
@@ -263,13 +276,10 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
 
     private String long2TimeString(long src) {
 
-
         long dm = src / 60000;
         long ds = (src - (dm * 60000)) / 1000;
 
-
         return String.format("%d:%02d", dm, ds);
-
 
     }
 

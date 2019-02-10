@@ -9,22 +9,23 @@
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="8dp"
+        android:divider="@null"
         android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:divider="@null">
+        android:orientation="vertical">
 
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="20dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="3dp"
             android:layout_marginRight="30dp"
             android:layout_marginBottom="2dp"
             android:layout_weight="1"
             android:ellipsize="marquee"
             android:focusable="true"
+            android:gravity="bottom"
             android:singleLine="true"
             android:text="TrackTitle"
             android:textColor="@android:color/white"
@@ -36,6 +37,7 @@
             android:id="@+id/artist"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginRight="30dp"
             android:layout_weight="1"
             android:ellipsize="marquee"
@@ -47,6 +49,7 @@
 
 
         <View
+            android:layout_marginHorizontal="4dp"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/white">
