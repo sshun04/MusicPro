@@ -208,6 +208,8 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
 
     };
 
+
+
     private MediaControllerCompat.Callback controllerCallback = new MediaControllerCompat.Callback() {
         @Override
         public void onMetadataChanged(MediaMetadataCompat metadata) {
@@ -221,6 +223,8 @@ public class MediaSessionPlayActivity extends AppCompatActivity {
 
 
         }
+
+
 
 
         @Override

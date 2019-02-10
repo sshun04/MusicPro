@@ -13,7 +13,6 @@ import android.support.v4.media.MediaMetadataCompat;
 
 import com.shojishunsuke.musicpro.BuildConfig;
 import com.shojishunsuke.musicpro.R;
-import com.shojishunsuke.musicpro.model.Track;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +22,8 @@ import java.util.TreeMap;
 public class MusicLibrary {
 
     private final TreeMap<String, MediaMetadataCompat> music = new TreeMap<>();
-    private final TreeMap<String,MediaMetadataCompat> albums = new TreeMap<>();
+    private final TreeMap<String, MediaMetadataCompat> albums = new TreeMap<>();
+    private final HashMap<String, Integer> numbersOfSongs = new HashMap<>();
     private final HashMap<String, Integer> albumRes = new HashMap<>();
     private final HashMap<String, Uri> musicFileName = new HashMap<>();
 
@@ -50,8 +50,8 @@ public class MusicLibrary {
 
     public MusicLibrary(Context context) {
 
-        ContentResolver resolver = context.getContentResolver();
-        Cursor cursor = resolver.query(
+        ContentResolver trackResolver = context.getContentResolver();
+        Cursor trackCursor = trackResolver.query(
                 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 MusicLibrary.COLUMNS,
                 null,
@@ -59,34 +59,56 @@ public class MusicLibrary {
                 null
         );
 
-        while (cursor.moveToNext()) {
-            if (cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)) < 3000) {
+        while (trackCursor.moveToNext()) {
+            if (trackCursor.getLong(trackCursor.getColumnIndex(MediaStore.Audio.Media.DURATION)) < 3000) {
                 continue;
             }
 
-            Long id = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
+            Long id = trackCursor.getLong(trackCursor.getColumnIndex(MediaStore.Audio.Media._ID));
 
             createMetaDateCompat(
-                    cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)),
-                    cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)),
-                    cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)),
-                    cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)),
+                    trackCursor.getString(trackCursor.getColumnIndex(MediaStore.Audio.Media.TITLE)),
+                    trackCursor.getString(trackCursor.getColumnIndex(MediaStore.Audio.Media.TITLE)),
+                    trackCursor.getString(trackCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)),
+                    trackCursor.getString(trackCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)),
                     "pops",
-                    cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)),
+                    trackCursor.getLong(trackCursor.getColumnIndex(MediaStore.Audio.Media.DURATION)),
                     ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id),
                     R.drawable.track_icon,
                     "album_jazz_blues"
             );
 
+
+        }
+        trackCursor.close();
+
+        ContentResolver albumResolver = context.getContentResolver();
+        Cursor albumCursor = albumResolver.query(
+                MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+                MusicLibrary.FILLED_PROJECTION,
+                null,
+                null,
+                "ALBUM_ASC"
+        );
+
+        while (albumCursor.moveToNext()) {
+
+            createAlbumMetadataCompat(
+                    albumCursor.getString(albumCursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ID)),
+                    albumCursor.getString(albumCursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM)),
+                    albumCursor.getString(albumCursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART)),
+                    albumCursor.getString(albumCursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_KEY)),
+                    albumCursor.getString(albumCursor.getColumnIndex(MediaStore.Audio.Albums.ARTIST)),
+                    albumCursor.getInt(albumCursor.getColumnIndex(MediaStore.Audio.Albums.NUMBER_OF_SONGS))
+            );
         }
 
-        cursor.close();
+        albumCursor.close();
+
+//
 
 
     }
-
-
-
 
 
     public String getRoot() {
@@ -127,9 +149,9 @@ public class MusicLibrary {
         return result;
     }
 
-    public List<MediaBrowserCompat.MediaItem>getAlbumMediaItems(){
+    public List<MediaBrowserCompat.MediaItem> getAlbumMediaItems() {
         List<MediaBrowserCompat.MediaItem> albumResult = new ArrayList<>();
-        for (MediaMetadataCompat metadata:albums.values()){
+        for (MediaMetadataCompat metadata : albums.values()) {
             albumResult.add(
                     new MediaBrowserCompat.MediaItem(
                             metadata.getDescription(),
@@ -196,6 +218,30 @@ public class MusicLibrary {
 
         albumRes.put(mediaId, albumArtResId);
         musicFileName.put(mediaId, uri);
+
+    }
+
+    private void createAlbumMetadataCompat(
+            String mediaId,
+            String album,
+            String album_art,
+            String album_key,
+            String artist,
+            int numberOfSong
+
+    ) {
+
+
+        albums.put(mediaId,
+                new MediaMetadataCompat.Builder()
+                        .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, mediaId)
+                        .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, album)
+                        .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, album_art)
+                        .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, album_key)
+                        .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, artist)
+                        .build());
+        numbersOfSongs.put(mediaId, numberOfSong);
+
 
     }
 
