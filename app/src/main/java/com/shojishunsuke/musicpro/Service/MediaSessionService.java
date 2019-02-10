@@ -10,6 +10,7 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -94,6 +95,8 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
                 CreateNotification();
             }
+
+
         });
 
 //        キューにアイテムを追加
@@ -188,6 +191,24 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
         }
 
         @Override
+        public void onPrepareFromMediaId(String mediaId, Bundle extras) {
+            com.google.android.exoplayer2.upstream.DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getApplicationContext(),
+                    Util.getUserAgent(getApplicationContext(), "MusicPro"));
+            MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(musicLibrary.getMusicFileNames(mediaId));
+
+            exoPlayer.prepare(mediaSource);
+
+            onPause();
+
+
+        }
+
+        @Override
+        public void onPrepare() {
+            onPrepareFromMediaId(queueItems.get(index).getDescription().getMediaId(),null);
+        }
+
+        @Override
         public void onPlay() {
             if (audioManager.requestAudioFocus(audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
                 mediaSession.setActive(true);
@@ -206,7 +227,10 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
             onPause();
             mediaSession.setActive(false);
             audioManager.abandonAudioFocus(audioFocusChangeListener);
+
+
         }
+
 
         @Override
         public void onSeekTo(long pos) {
@@ -252,10 +276,26 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
         @Override
         public void onSetRepeatMode(int repeatMode) {
 
-           exoPlayer.setRepeatMode(repeatMode);
+           setRepeatMode(repeatMode);
 
         }
+
+
     };
+
+    private void setRepeatMode(int repeatMode) {
+        switch (repeatMode){
+            case Player.REPEAT_MODE_ALL:
+                exoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
+                break;
+            case Player.REPEAT_MODE_ONE:
+                exoPlayer.setRepeatMode(Player.REPEAT_MODE_ONE);
+                break;
+            case Player.REPEAT_MODE_OFF:
+                exoPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
+                break;
+        }
+    }
 
     private Player.EventListener eventListener = new Player.DefaultEventListener() {
         @Override
@@ -274,24 +314,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
     };
 
 
-//    private void updateRepeatState() {
-////        int repeatState = PlaybackStateCompat.REPEAT_MODE_NONE;
-////
-////        switch (exoPlayer.getRepeatMode()) {
-////            case Player.REPEAT_MODE_OFF:
-////                repeatState = PlaybackStateCompat.REPEAT_MODE_NONE;
-////                break;
-////
-////            case Player.REPEAT_MODE_ONE:
-////                repeatState = PlaybackStateCompat.REPEAT_MODE_ONE;
-////                break;
-////            case Player.REPEAT_MODE_ALL:
-////                repeatState = PlaybackStateCompat.REPEAT_MODE_ALL;
-////                break;
-////
-////        }
-////        mediaSession.setRepeatMode(repeatState);
-////    }
+
 
 
     private void updatePlayBackState() {
@@ -313,6 +336,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
                 break;
             case Player.STATE_ENDED:
                 state = PlaybackStateCompat.STATE_STOPPED;
+                mediaSession.getController().getTransportControls().prepare();
                 break;
 
         }
