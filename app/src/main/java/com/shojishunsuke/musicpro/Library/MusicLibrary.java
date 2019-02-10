@@ -23,6 +23,7 @@ import java.util.TreeMap;
 public class MusicLibrary {
 
     private final TreeMap<String, MediaMetadataCompat> music = new TreeMap<>();
+    private final TreeMap<String,MediaMetadataCompat> albums = new TreeMap<>();
     private final HashMap<String, Integer> albumRes = new HashMap<>();
     private final HashMap<String, Uri> musicFileName = new HashMap<>();
 
@@ -36,6 +37,15 @@ public class MusicLibrary {
             MediaStore.Audio.Media.ARTIST_ID,
             MediaStore.Audio.Media.DURATION,
             MediaStore.Audio.Media.TRACK
+    };
+
+    public static final String[] FILLED_PROJECTION = {
+            MediaStore.Audio.Albums._ID,
+            MediaStore.Audio.Albums.ALBUM,
+            MediaStore.Audio.Albums.ALBUM_ART,
+            MediaStore.Audio.Albums.ALBUM_KEY,
+            MediaStore.Audio.Albums.ARTIST,
+            MediaStore.Audio.Albums.NUMBER_OF_SONGS,
     };
 
     public MusicLibrary(Context context) {
@@ -75,29 +85,8 @@ public class MusicLibrary {
 
     }
 
-    public static List<Track> getItemsByAlbum(Context context, long albumId) {
-
-        ArrayList tracks = new ArrayList();
-        ContentResolver resolver = context.getContentResolver();
-        String[] SELECTION_ARG = {""};
-        SELECTION_ARG[0] = String.valueOf(albumId);
-        Cursor cursor = resolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                MusicLibrary.COLUMNS,
-                MediaStore.Audio.Media.ALBUM_ID + "=?",
-                SELECTION_ARG, null);
-
-        while (cursor.moveToNext()) {
-            if (cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)) < 3000) {
-                continue;
-            }
-            tracks.add(new Track(cursor));
-
-        }
-        cursor.close();
-        return tracks;
 
 
-    }
 
 
     public String getRoot() {
@@ -136,6 +125,20 @@ public class MusicLibrary {
         }
 
         return result;
+    }
+
+    public List<MediaBrowserCompat.MediaItem>getAlbumMediaItems(){
+        List<MediaBrowserCompat.MediaItem> albumResult = new ArrayList<>();
+        for (MediaMetadataCompat metadata:albums.values()){
+            albumResult.add(
+                    new MediaBrowserCompat.MediaItem(
+                            metadata.getDescription(),
+                            MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
+                    )
+            );
+        }
+        return albumResult;
+
     }
 
     public MediaMetadataCompat getMetaData(Context context, String mediaId) {
@@ -195,4 +198,5 @@ public class MusicLibrary {
         musicFileName.put(mediaId, uri);
 
     }
+
 }
