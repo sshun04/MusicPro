@@ -105,7 +105,6 @@ public class MusicLibrary {
 
         albumCursor.close();
 
-//
 
 
     }

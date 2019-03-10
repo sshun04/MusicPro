@@ -3,7 +3,9 @@ package com.shojishunsuke.musicpro.fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.media.MediaBrowserCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,9 @@ public class AlbumTabFragment extends Fragment {
         AlbumTabFragment fragment = new AlbumTabFragment();
         return fragment;
     }
+
+    private ListAlbumAdapter albumAdapter;
+    private MediaBrowserCompat mediaBrowserCompat;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
