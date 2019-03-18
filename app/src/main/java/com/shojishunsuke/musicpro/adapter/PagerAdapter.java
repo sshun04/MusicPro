@@ -24,8 +24,8 @@ public class PagerAdapter extends FragmentPagerAdapter {
 
             case 0:
                 return TrackTabFragment.newInstance();
-            case 1:
-                return AlbumTabFragment.newInstance();
+//            case 1:
+//                return AlbumTabFragment.newInstance();
             default:
                 return null;
         }
@@ -41,8 +41,8 @@ public class PagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
                 return "TRACK";
-            case 1:
-                return "ALBUM";
+//            case 1:
+//                return "ALBUM";
             default:
                 return null;
         }

@@ -406,10 +406,15 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
                             .setMediaSession(mediaSession.getSessionToken())
                             .setShowActionsInCompactView(1));
 
+//            builder.addAction(new NotificationCompat.Action(
+//                    R.drawable.baseline_skip_previous_white_24dp, "prev",
+//                    MediaButtonReceiver.buildMediaButtonPendingIntent(this,
+//                            PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)));
+
             builder.addAction(new NotificationCompat.Action(
-                    R.drawable.baseline_skip_previous_white_24dp, "prev",
+                    R.drawable.baseline_skip_next_white_24dp, "next",
                     MediaButtonReceiver.buildMediaButtonPendingIntent(this,
-                            PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)));
+                            PlaybackStateCompat.ACTION_SKIP_TO_NEXT)));
 
 
             if (mediaController.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
@@ -425,11 +430,6 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
                                 PlaybackStateCompat.ACTION_PLAY)
                 ));
             }
-
-            builder.addAction(new NotificationCompat.Action(
-                    R.drawable.baseline_skip_next_white_24dp, "next",
-                    MediaButtonReceiver.buildMediaButtonPendingIntent(this,
-                            PlaybackStateCompat.ACTION_SKIP_TO_NEXT)));
 
             startForeground(1, builder.build());
 
@@ -453,11 +453,11 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
                             .setMediaSession(mediaSession.getSessionToken())
                             .setShowActionsInCompactView(1));
 
-            builder.addAction(new NotificationCompat.Action(
-                    R.drawable.baseline_skip_previous_white_24dp, "prev",
-                    MediaButtonReceiver.buildMediaButtonPendingIntent(this,
-                            PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)));
 
+            builder.addAction(new NotificationCompat.Action(
+                    R.drawable.baseline_skip_next_white_24dp, "next",
+                    MediaButtonReceiver.buildMediaButtonPendingIntent(this,
+                            PlaybackStateCompat.ACTION_SKIP_TO_NEXT)));
 
             if (mediaController.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
                 builder.addAction(new NotificationCompat.Action(
@@ -473,10 +473,12 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
                 ));
             }
 
-            builder.addAction(new NotificationCompat.Action(
-                    R.drawable.baseline_skip_next_white_24dp, "next",
-                    MediaButtonReceiver.buildMediaButtonPendingIntent(this,
-                            PlaybackStateCompat.ACTION_SKIP_TO_NEXT)));
+
+
+//            builder.addAction(new NotificationCompat.Action(
+//                    R.drawable.baseline_skip_previous_white_24dp, "prev",
+//                    MediaButtonReceiver.buildMediaButtonPendingIntent(this,
+//                            PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)));
 
             startForeground(1, builder.build());
 

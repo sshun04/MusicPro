@@ -14,6 +14,6 @@ public class MusicProApplication extends Application {
 //        MusicPlayer musicPlayer = MusicPlayer.getInstance();
 //        musicPlayer.init(this, new ComponentName(this, MusicProApplication.class));
 
-        MediaSessionService.start(this);
+
     }
 }

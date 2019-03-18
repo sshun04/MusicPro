@@ -15,14 +15,15 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.shojishunsuke.musicpro.R;
+import com.shojishunsuke.musicpro.Service.MediaSessionService;
 import com.shojishunsuke.musicpro.adapter.PagerAdapter;
 import com.shojishunsuke.musicpro.utils.RuntimePermissionUtils;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
-//    private android.support.v7.widget.Toolbar toolbar;
+    private android.support.v7.widget.Toolbar toolbar;
     private ActionBar actionBar;
 
 
@@ -37,17 +38,18 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        toolbar = (Toolbar) findViewById(R.id.background);
-//        actionBar.setDisplayHomeAsUpEnabled(true);
-//        actionBar.setDisplayShowHomeEnabled(true);
-//        actionBar.setHomeButtonEnabled(true);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(Color.WHITE);
+
+        setSupportActionBar(toolbar);
+
 
         tabLayout = (TabLayout) findViewById(R.id.tablayout);
         playButton = (ImageView) findViewById(R.id.mainPlay);
 
 
         tabLayout.addTab(tabLayout.newTab().setText("Tracks"));
-        tabLayout.addTab(tabLayout.newTab().setText("Album"));
+//        tabLayout.addTab(tabLayout.newTab().setText("Album"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         viewPager = (ViewPager) findViewById(R.id.pager);
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity  {
 
             final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
             viewPager.setAdapter(adapter);
+            MediaSessionService.start(this);
 
         } else {
             Toast.makeText(this, "許可を選ぶと曲リストが表示されます", Toast.LENGTH_LONG).show();
@@ -112,6 +115,7 @@ public class MainActivity extends AppCompatActivity  {
                 final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
                 viewPager.setAdapter(adapter);
                 tabLayout.setupWithViewPager(viewPager);
+                MediaSessionService.start(this);
             }
         }
     }
