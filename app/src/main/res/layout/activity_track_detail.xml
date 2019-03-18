@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/colorPrimary"
@@ -17,7 +17,7 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <ImageView
-        android:id="@+id/trackart"
+        android:id="@+id/track_art"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="12dp"
@@ -58,15 +58,19 @@
                 android:text="0:00" />
         </LinearLayout>
 
+
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:layout_weight="1"
             android:gravity="center"
             android:text="TextView"
             android:textSize="18sp"
             android:textStyle="bold" />
+
 
         <TextView
             android:id="@+id/artist"

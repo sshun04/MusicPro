@@ -15,7 +15,7 @@ import com.shojishunsuke.musicpro.model.Artist;
 import java.util.List;
 
 
-public class ArtistTabFragment extends Fragment {
+public class ArtistTabFragment extends Fragment  {
 
     public static ArtistTabFragment newInstance() {
         ArtistTabFragment fragment = new ArtistTabFragment();
@@ -33,6 +33,7 @@ public class ArtistTabFragment extends Fragment {
         ListView artistList = (ListView) rootView.findViewById(R.id.listArtist);
         ListArtistAdapter adapter = new ListArtistAdapter(activity, artists);
         artistList.setAdapter(adapter);
+
 
         // Inflate the layout for this fragment
         return rootView;

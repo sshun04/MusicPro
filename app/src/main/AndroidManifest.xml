@@ -4,9 +4,10 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
+        android:name=".MusicProApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -14,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.shojishunsuke.musicpro.actvity.MainActivity"
+            android:name=".actvity.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,18 +23,49 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".actvity.MediaSessionPlayActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+
+        </activity>
+
+        <service android:name=".Service.MediaSessionService">
+
+            <intent-filter>
+
+                <action android:name="android.media.browse.MediaBrowserService" />
+
+
+            </intent-filter>
+        </service>
+
+        <receiver android:name="android.support.v4.media.session.MediaButtonReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
+
+
         <activity
-            android:name="com.shojishunsuke.musicpro.actvity.AlbumDetailActivity"
+            android:name=".actvity.AlbumDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.shojishunsuke.musicpro.actvity.ArtistDetailActivity"
+            android:name=".actvity.ArtistDetailActivity"
             android:screenOrientation="portrait" />
 
-        <service android:name="com.shojishunsuke.musicpro.Service.TrackService" />
+        <service android:name=".Service.TrackService" />
+
 
         <activity
-            android:name="com.shojishunsuke.musicpro.actvity.TrackDetailActivity"
+            android:name=".actvity.TrackDetailActivity"
             android:screenOrientation="portrait" />
+
 
     </application>
 

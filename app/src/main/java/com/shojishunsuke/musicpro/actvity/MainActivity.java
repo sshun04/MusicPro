@@ -1,47 +1,55 @@
 package com.shojishunsuke.musicpro.actvity;
 
 import android.Manifest;
-import android.app.ActivityManager;
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
+import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.shojishunsuke.musicpro.R;
-import com.shojishunsuke.musicpro.Service.TrackService;
+import com.shojishunsuke.musicpro.Service.MediaSessionService;
 import com.shojishunsuke.musicpro.adapter.PagerAdapter;
-import com.shojishunsuke.musicpro.utils.CheckServiceUtils;
 import com.shojishunsuke.musicpro.utils.RuntimePermissionUtils;
 
 public class MainActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private android.support.v7.widget.Toolbar toolbar;
+    private ActionBar actionBar;
 
-    private boolean isStartService = false;
 
-    private FloatingActionButton playButton;
+    private ImageView playButton;
 
     private final static String[] READ_EXTERNAL_STORAGE = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
     private final static int PERMISSION_REQUEST_CODE = 1;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(Color.WHITE);
+
+        setSupportActionBar(toolbar);
+
+
         tabLayout = (TabLayout) findViewById(R.id.tablayout);
-        playButton = (FloatingActionButton) findViewById(R.id.mainPlay);
+        playButton = (ImageView) findViewById(R.id.mainPlay);
+
 
         tabLayout.addTab(tabLayout.newTab().setText("Tracks"));
-        tabLayout.addTab(tabLayout.newTab().setText("Album"));
+//        tabLayout.addTab(tabLayout.newTab().setText("Album"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         viewPager = (ViewPager) findViewById(R.id.pager);
@@ -50,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
             final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
             viewPager.setAdapter(adapter);
+            MediaSessionService.start(this);
 
         } else {
             Toast.makeText(this, "許可を選ぶと曲リストが表示されます", Toast.LENGTH_LONG).show();
@@ -81,33 +90,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        playButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                ActivityManager activityManager = (ActivityManager) MainActivity.this.getSystemService(ACTIVITY_SERVICE);
-                if (activityManager != null) {
-                    isStartService = CheckServiceUtils.checkAudioService(activityManager);
-                }
-
-                AudioManager audioManager = (AudioManager) MainActivity.this.getSystemService(Context.AUDIO_SERVICE);
-
-                if (audioManager.isMusicActive() && isStartService) {
-
-                    playButton.setImageResource(R.drawable.playarrow);
-                    startService(new Intent(MainActivity.this, TrackService.class));
 
 
-                } else if (isStartService) {
-                    playButton.setImageResource(R.drawable.pause);
-                    startService(new Intent(MainActivity.this, TrackService.class));
 
-                } else {
-
-                    Toast.makeText(MainActivity.this, "Choose Track", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
 
     @Override
@@ -115,15 +100,8 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         AudioManager audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
-        if (audioManager != null) {
-            if (audioManager.isMusicActive()) {
-                playButton.setImageResource(R.drawable.pause);
-            } else {
-                playButton.setImageResource(R.drawable.playarrow);
-            }
-        } else {
-            playButton.setImageResource(R.drawable.playarrow);
-        }
+
+
     }
 
     @Override
@@ -137,7 +115,11 @@ public class MainActivity extends AppCompatActivity {
                 final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
                 viewPager.setAdapter(adapter);
                 tabLayout.setupWithViewPager(viewPager);
+                MediaSessionService.start(this);
             }
         }
     }
+
+
+
 }

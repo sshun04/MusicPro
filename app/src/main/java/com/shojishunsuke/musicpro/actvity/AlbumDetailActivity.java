@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.shojishunsuke.musicpro.ImageGetTask;
 import com.shojishunsuke.musicpro.R;
 import com.shojishunsuke.musicpro.Service.TrackService;
-import com.shojishunsuke.musicpro.adapter.ListTrackAdapter;
 import com.shojishunsuke.musicpro.model.Album;
 import com.shojishunsuke.musicpro.model.Track;
 import com.shojishunsuke.musicpro.utils.CheckServiceUtils;
@@ -49,7 +48,7 @@ public class AlbumDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Album album = (Album) intent.getSerializableExtra(KEY_ALBUM);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.background);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -102,8 +101,8 @@ public class AlbumDetailActivity extends AppCompatActivity {
         List<Track> tracks = Track.getItemsByAlbum(this, album.albumId);
 
         ListView trackList = (ListView) findViewById(R.id.list);
-        ListTrackAdapter adapter = new ListTrackAdapter(this, tracks);
-        trackList.setAdapter(adapter);
+//        ListTrackAdapter adapter = new ListTrackAdapter(this);
+//        trackList.setAdapter(adapter);
 
         ActivityManager activityManager = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
         if (activityManager != null) {

@@ -12,7 +12,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.shojishunsuke.musicpro.R;
-import com.shojishunsuke.musicpro.adapter.ListTrackAdapter;
 import com.shojishunsuke.musicpro.model.Artist;
 import com.shojishunsuke.musicpro.model.Track;
 
@@ -37,7 +36,7 @@ public class ArtistDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Artist artist = (Artist) intent.getSerializableExtra(KEY_ARTIST);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.background);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -61,8 +60,8 @@ public class ArtistDetailActivity extends AppCompatActivity {
         List<Track> tracks = Track.getItemsByAlbum(this, artist.albumId);
 
         ListView listView = (ListView) findViewById(R.id.list);
-        ListTrackAdapter adapter = new ListTrackAdapter(this, tracks);
-        listView.setAdapter(adapter);
+//        ListTrackAdapter adapter = new ListTrackAdapter(this);
+//        listView.setAdapter(adapter);
     }
 
     @Override
