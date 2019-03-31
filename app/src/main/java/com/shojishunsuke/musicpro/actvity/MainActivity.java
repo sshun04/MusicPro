@@ -7,6 +7,7 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -17,12 +18,12 @@ import android.widget.Toast;
 import com.shojishunsuke.musicpro.R;
 import com.shojishunsuke.musicpro.Service.MediaSessionService;
 import com.shojishunsuke.musicpro.adapter.PagerAdapter;
+import com.shojishunsuke.musicpro.fragment.TrackTabFragment;
 import com.shojishunsuke.musicpro.utils.RuntimePermissionUtils;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
+
     private android.support.v7.widget.Toolbar toolbar;
     private ActionBar actionBar;
 
@@ -43,21 +44,13 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-
-        tabLayout = (TabLayout) findViewById(R.id.tablayout);
         playButton = (ImageView) findViewById(R.id.mainPlay);
 
 
-        tabLayout.addTab(tabLayout.newTab().setText("Tracks"));
-//        tabLayout.addTab(tabLayout.newTab().setText("Album"));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
-        viewPager = (ViewPager) findViewById(R.id.pager);
-
         if (RuntimePermissionUtils.hasSelfPermissions(MainActivity.this, READ_EXTERNAL_STORAGE)) {
 
-            final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-            viewPager.setAdapter(adapter);
+
+            replaceWithTrackTab();
             MediaSessionService.start(this);
 
         } else {
@@ -66,29 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        tabLayout.setupWithViewPager(viewPager);
-
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-                viewPager.setCurrentItem(tab.getPosition());
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-                viewPager.setCurrentItem(tab.getPosition());
-
-            }
-        });
 
 
 
@@ -104,6 +74,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void replaceWithTrackTab(){
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.replace(R.id.mainBackground, TrackTabFragment.newInstance());
+        fragmentTransaction.commit();
+
+
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
@@ -112,9 +91,9 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == PERMISSION_REQUEST_CODE && grantResults.length > 0) {
 
             if (RuntimePermissionUtils.checkGrantResults(grantResults)) {
-                final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-                viewPager.setAdapter(adapter);
-                tabLayout.setupWithViewPager(viewPager);
+
+                replaceWithTrackTab();
+
                 MediaSessionService.start(this);
             }
         }

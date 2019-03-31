@@ -29,7 +29,7 @@ import java.util.List;
 import static android.support.constraint.Constraints.TAG;
 
 
-public class TrackTabFragment extends Fragment  {
+public class TrackTabFragment extends Fragment {
 
     public static TrackTabFragment newInstance() {
         TrackTabFragment fragment = new TrackTabFragment();
@@ -81,7 +81,7 @@ public class TrackTabFragment extends Fragment  {
 
 
         ListView trackList = (ListView) view.findViewById(R.id.listTrack);
-        mBrowserAdapter = new ListTrackAdapter(activity);
+        mBrowserAdapter = new ListTrackAdapter(activity,getFragmentManager());
         trackList.setAdapter(mBrowserAdapter);
 
         // Inflate the layout for this fragment

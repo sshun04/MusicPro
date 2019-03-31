@@ -8,6 +8,7 @@ import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.Log;
 
 import java.util.List;
 
@@ -38,16 +39,18 @@ public class MusicPlayer {
         controllerCallback = new MediaControllerCompat.Callback() {
             @Override
             public void onPlaybackStateChanged(PlaybackStateCompat state) {
-//                        if (uiCallback != null) {
+                        if (uiCallback != null) {
                 uiCallback.onPlaybackStateChanged(state);
-//                        }
+                        }else {
+                            Log.d("MusicPlayer","uiCallbackがnull");
+                        }
             }
 
             @Override
             public void onMetadataChanged(MediaMetadataCompat metadata) {
-//                        if (uiCallback != null) {
+                        if (uiCallback != null) {
                 uiCallback.onMetadataChanged(metadata);
-//                        }
+                        }
             }
         };
 
@@ -84,13 +87,16 @@ public class MusicPlayer {
     public void setUiCallback(UiCallback uiCallback) {
         this.uiCallback = uiCallback;
     }
+    public void play(){
+        mediaControllerCompat.getTransportControls().play();
+    }
 
     public void pause() {
         mediaControllerCompat.getTransportControls().pause();
     }
 
-    public void play() {
-        mediaControllerCompat.getTransportControls().play();
+    public void playFromId(String id) {
+        mediaControllerCompat.getTransportControls().playFromMediaId(id,null);
     }
 
     public int getRepeatMode() {
@@ -103,6 +109,9 @@ public class MusicPlayer {
 
     public void skipToNext() {
         mediaControllerCompat.getTransportControls().skipToNext();
+    }
+    public int getState(){
+        return mediaControllerCompat.getPlaybackState().getState();
     }
 
     public void skipToPrevious() {
