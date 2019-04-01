@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.shojishunsuke.musicpro.Interface.SongEndListener;
 import com.shojishunsuke.musicpro.R;
 import com.shojishunsuke.musicpro.Service.MediaSessionService;
 import com.shojishunsuke.musicpro.utils.MusicPlayer;
@@ -67,6 +68,8 @@ public class PlayFragment extends Fragment implements MusicPlayer.UiCallback {
         button_next.setImageResource(R.drawable.skipnext);
         button_plev.setImageResource(R.drawable.skipprev);
         repeatButton.setImageResource(R.drawable.baseline_repeat_white_24dp);
+
+
 
 
 
@@ -129,8 +132,9 @@ public class PlayFragment extends Fragment implements MusicPlayer.UiCallback {
 
         musicPlayer = MusicPlayer.getInstance();
         musicPlayer.setUiCallback(this);
-        musicPlayer.init(getContext(),new ComponentName(getContext(),MediaSessionService.class));
-        musicPlayer.connectMediaBrowser();
+//        musicPlayer.init(getContext(),new ComponentName(getContext(),MediaSessionService.class));
+        MediaBrowserCompat.MediaItem song = musicPlayer.getChildren().get(songPosition);
+        musicPlayer.playFromId(song.getMediaId());
 
 
 
@@ -160,11 +164,9 @@ public class PlayFragment extends Fragment implements MusicPlayer.UiCallback {
 
     }
 
+
     @Override
     public void onChildrenLoaded(@NonNull String parentId, @NonNull List<MediaBrowserCompat.MediaItem> children) {
-
-        musicPlayer.playFromId(children.get(songPosition).getMediaId());
-
 
 
     }
@@ -184,8 +186,6 @@ public class PlayFragment extends Fragment implements MusicPlayer.UiCallback {
 
 
     }
-
-
 
 
     private String long2TimeString(long src) {

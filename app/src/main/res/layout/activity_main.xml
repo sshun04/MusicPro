@@ -37,6 +37,20 @@
     </RelativeLayout>
 
 
+    <TextView
+        android:id="@+id/footer"
+
+        android:textSize="32dp"
+        android:text="dddddd"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/colorAccent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="53dp" />
+
+
 
 
 

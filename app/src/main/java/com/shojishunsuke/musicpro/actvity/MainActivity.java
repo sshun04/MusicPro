@@ -12,9 +12,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.shojishunsuke.musicpro.DisplayManager;
 import com.shojishunsuke.musicpro.R;
 import com.shojishunsuke.musicpro.Service.MediaSessionService;
 import com.shojishunsuke.musicpro.adapter.PagerAdapter;
@@ -26,9 +30,11 @@ public class MainActivity extends AppCompatActivity {
 
     private android.support.v7.widget.Toolbar toolbar;
     private ActionBar actionBar;
+    private DisplayManager displayManager;
 
 
     private ImageView playButton;
+    private TextView footer;
 
     private final static String[] READ_EXTERNAL_STORAGE = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
     private final static int PERMISSION_REQUEST_CODE = 1;
@@ -41,16 +47,29 @@ public class MainActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
-
         setSupportActionBar(toolbar);
+        footer =findViewById(R.id.footer);
+        footer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayManager.showPlay();
+            }
+        });
+
+        displayManager = DisplayManager.getInstance();
+        displayManager.setFragmentManager(getSupportFragmentManager());
+
+
+
 
         playButton = (ImageView) findViewById(R.id.mainPlay);
 
 
         if (RuntimePermissionUtils.hasSelfPermissions(MainActivity.this, READ_EXTERNAL_STORAGE)) {
 
+            if (savedInstanceState == null)
+            displayManager.replaceWithTrackTab();
 
-            replaceWithTrackTab();
             MediaSessionService.start(this);
 
         } else {
@@ -92,13 +111,21 @@ public class MainActivity extends AppCompatActivity {
 
             if (RuntimePermissionUtils.checkGrantResults(grantResults)) {
 
-                replaceWithTrackTab();
+                displayManager.replaceWithTrackTab();
 
                 MediaSessionService.start(this);
             }
         }
     }
-
-
-
+//
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK){
+            displayManager.hidePlay();
+            displayManager.showList();
+            return true;
+        }else {
+            return false;
+        }
+    }
 }

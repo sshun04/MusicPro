@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.shojishunsuke.musicpro.DisplayManager;
 import com.shojishunsuke.musicpro.Library.MusicLibrary;
 import com.shojishunsuke.musicpro.R;
 import com.shojishunsuke.musicpro.Service.MediaSessionService;
@@ -51,7 +52,6 @@ public class ListTrackAdapter extends ArrayAdapter<MediaBrowserCompat.MediaItem>
 
         final ViewHolder holder;
         MediaBrowserCompat.MediaItem mediaItem = getItem(position);
-//        MediaMetadataCompat mediaItem = getItem(position);
 
 
         if (convertView == null) {
@@ -75,17 +75,17 @@ public class ListTrackAdapter extends ArrayAdapter<MediaBrowserCompat.MediaItem>
             @Override
             public void onClick(View v) {
 
-                PlayFragment playFragment = new PlayFragment();
+
                 Bundle bundle = new Bundle();
                 bundle.putInt("songPosition",position);
 
-                playFragment.setArguments(bundle);
 
 
-                FragmentTransaction  fragmentTransaction= fragmentManager.beginTransaction();
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.replace(R.id.mainBackground,playFragment);
-                fragmentTransaction.commit();
+
+                DisplayManager displayManager = DisplayManager.getInstance();
+                displayManager.hideList();
+                displayManager.replaceWithNewPlayTab(bundle);
+
             }
         });
 

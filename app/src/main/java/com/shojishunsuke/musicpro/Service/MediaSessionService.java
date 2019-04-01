@@ -34,6 +34,7 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.shojishunsuke.musicpro.Interface.SongEndListener;
 import com.shojishunsuke.musicpro.Library.MusicLibrary;
 import com.shojishunsuke.musicpro.R;
 import com.shojishunsuke.musicpro.actvity.MediaSessionPlayActivity;
@@ -46,6 +47,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
     private final String TAG = MediaSessionService.class.getSimpleName();
     private final String ROOT_ID = "root";
     private final String ALBUM_ID = "album";
+//    private SongEndListener songEndListener;
 
     private Handler handler;
 
@@ -317,6 +319,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
 
 
+
     private void updatePlayBackState() {
         int state = PlaybackStateCompat.STATE_NONE;
 
@@ -336,7 +339,6 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
                 break;
             case Player.STATE_ENDED:
                 state = PlaybackStateCompat.STATE_STOPPED;
-                mediaSession.getController().getTransportControls().prepare();
                 break;
 
         }

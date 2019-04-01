@@ -19,6 +19,7 @@ public class MusicPlayer {
     private MediaControllerCompat mediaControllerCompat;
 
     private UiCallback uiCallback = null;
+    private  List<MediaBrowserCompat.MediaItem> children;
 
     private MediaControllerCompat.Callback controllerCallback;
     private MediaBrowserCompat.SubscriptionCallback subscriptionCallback;
@@ -82,6 +83,17 @@ public class MusicPlayer {
 
         mediaBrowserCompat = new MediaBrowserCompat(context, componentName, connectionCallback, null);
 
+    }
+    public void onConnected(){
+
+    }
+    public void setChildren( List<MediaBrowserCompat.MediaItem> children){
+        this.children = children;
+
+    }
+
+    public  List<MediaBrowserCompat.MediaItem> getChildren(){
+        return children;
     }
 
     public void setUiCallback(UiCallback uiCallback) {

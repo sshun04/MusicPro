@@ -29,33 +29,19 @@ import java.util.List;
 import static android.support.constraint.Constraints.TAG;
 
 
-public class TrackTabFragment extends Fragment {
+public class TrackTabFragment extends Fragment implements MusicPlayer.UiCallback {
 
     public static TrackTabFragment newInstance() {
         TrackTabFragment fragment = new TrackTabFragment();
         return fragment;
     }
 
+    private MusicPlayer musicPlayer;
+
 
     private ListTrackAdapter mBrowserAdapter;
-    private MediaBrowserCompat mediaBrowser;
-    private MediaControllerCompat mediaController;
-    private List<MediaBrowserCompat.MediaItem> songList = new ArrayList<>();
 
-    private MediaControllerCompat.Callback mediaControllerCallback = new MediaControllerCompat.Callback() {
-        @Override
-        public void onMetadataChanged(MediaMetadataCompat metadata) {
-            if (metadata == null) {
-                return;
-            }
 
-        }
-
-        @Override
-        public void onPlaybackStateChanged(PlaybackStateCompat state) {
-            super.onPlaybackStateChanged(state);
-        }
-    };
 
     @Override
     public void onAttach(Context context) {
@@ -63,14 +49,23 @@ public class TrackTabFragment extends Fragment {
 
         super.onAttach(context);
 
+        musicPlayer = MusicPlayer.getInstance();
+        musicPlayer.setUiCallback(this);
+        musicPlayer.init(context,new ComponentName(context,MediaSessionService.class));
+        musicPlayer.connectMediaBrowser();
+        Log.d("TrackTab","onAttach");
 
-        mediaBrowser = new MediaBrowserCompat(context, new ComponentName(context, MediaSessionService.class), connectionCallback, null);
-        mediaBrowser.connect();
 
 
 
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -89,47 +84,28 @@ public class TrackTabFragment extends Fragment {
     }
 
 
-    private MediaBrowserCompat.ConnectionCallback connectionCallback = new MediaBrowserCompat.ConnectionCallback() {
-        @Override
-        public void onConnected() {
-            try {
-                mediaController = new MediaControllerCompat(getContext(), mediaBrowser.getSessionToken());
-
-                mediaController.registerCallback(mediaControllerCallback);
-            } catch (RemoteException ex) {
-                ex.printStackTrace();
-                Toast.makeText(getContext(),ex.getMessage(),Toast.LENGTH_SHORT).show();
-            }
-
-            mediaBrowser.subscribe(mediaBrowser.getRoot(), subscriptionCallback);
-        }
-    };
-
-    private MediaBrowserCompat.SubscriptionCallback subscriptionCallback =
-            new MediaBrowserCompat.SubscriptionCallback() {
-
-
-                @Override
-                public void onChildrenLoaded(@NonNull String parentId, @NonNull List<MediaBrowserCompat.MediaItem> children) {
-                    try {
-
-                            mBrowserAdapter.addAll(children);
 
 
 
-                    } catch (IllegalStateException ex) {
-                        ex.printStackTrace();
-                        Toast.makeText(getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
 
-                @Override
-                public void onError(@NonNull String parentId) {
-                    Log.d(TAG, "Error");
+    @Override
+    public void onPlaybackStateChanged(PlaybackStateCompat state) {
 
-                }
-            };
 
+    }
+
+    @Override
+    public void onChildrenLoaded(@NonNull String parentId, @NonNull List<MediaBrowserCompat.MediaItem> children) {
+
+        mBrowserAdapter.addAll(children);
+        musicPlayer.setChildren(children);
+
+    }
+
+    @Override
+    public void onMetadataChanged(MediaMetadataCompat metadata) {
+
+    }
 }
 
 
