@@ -12,7 +12,7 @@ public class DisplayManager  {
     private  static DisplayManager displayManager = new DisplayManager();
     private android.support.v4.app.FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
-    private PlayFragment playFragment = new PlayFragment();
+    private PlayFragment playFragment;
     private TrackTabFragment trackTabFragment = TrackTabFragment.newInstance();
 
 
@@ -40,32 +40,30 @@ public class DisplayManager  {
 
     public void replaceWithNewPlayTab(Bundle args){
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        playFragment = new PlayFragment();
         playFragment.setArguments(args);
         fragmentTransaction.add(R.id.mainBackground,playFragment);
         fragmentTransaction.commit();
     }
 
-    public void hidePlay(){
+    public void hidePlayTab(){
         FragmentTransaction  fragmentTransaction= fragmentManager.beginTransaction();
         fragmentTransaction.hide(playFragment);
         fragmentTransaction.commit();
     }
 
     public void hideList(){
-
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.hide(trackTabFragment);
         fragmentTransaction.commit();
-
     }
-
     public void showList(){
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.show(trackTabFragment);
         fragmentTransaction.commit();
     }
 
-    public void showPlay(){
+    public void showPlayTab(){
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.show(playFragment);
         fragmentTransaction.commit();

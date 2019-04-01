@@ -23,6 +23,7 @@ import com.shojishunsuke.musicpro.R;
 import com.shojishunsuke.musicpro.Service.MediaSessionService;
 import com.shojishunsuke.musicpro.adapter.PagerAdapter;
 import com.shojishunsuke.musicpro.fragment.TrackTabFragment;
+import com.shojishunsuke.musicpro.utils.MusicPlayer;
 import com.shojishunsuke.musicpro.utils.RuntimePermissionUtils;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,10 +32,6 @@ public class MainActivity extends AppCompatActivity {
     private android.support.v7.widget.Toolbar toolbar;
     private ActionBar actionBar;
     private DisplayManager displayManager;
-
-
-    private ImageView playButton;
-    private TextView footer;
 
     private final static String[] READ_EXTERNAL_STORAGE = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
     private final static int PERMISSION_REQUEST_CODE = 1;
@@ -48,13 +45,6 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
-        footer =findViewById(R.id.footer);
-        footer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displayManager.showPlay();
-            }
-        });
 
         displayManager = DisplayManager.getInstance();
         displayManager.setFragmentManager(getSupportFragmentManager());
@@ -62,14 +52,13 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        playButton = (ImageView) findViewById(R.id.mainPlay);
 
 
         if (RuntimePermissionUtils.hasSelfPermissions(MainActivity.this, READ_EXTERNAL_STORAGE)) {
 
             if (savedInstanceState == null)
-            displayManager.replaceWithTrackTab();
 
+            displayManager.replaceWithTrackTab();
             MediaSessionService.start(this);
 
         } else {
@@ -93,15 +82,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void replaceWithTrackTab(){
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.replace(R.id.mainBackground, TrackTabFragment.newInstance());
-        fragmentTransaction.commit();
-
-
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
@@ -121,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getKeyCode() == KeyEvent.KEYCODE_BACK){
-            displayManager.hidePlay();
+            displayManager.hidePlayTab();
             displayManager.showList();
             return true;
         }else {

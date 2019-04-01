@@ -25,6 +25,8 @@ public class MusicPlayer {
     private MediaBrowserCompat.SubscriptionCallback subscriptionCallback;
     MediaBrowserCompat.ConnectionCallback connectionCallback;
 
+    private int playingSongPosition = -1;
+
     private String TAG = "tag";
 
     private MusicPlayer() {
@@ -81,15 +83,25 @@ public class MusicPlayer {
             }
         };
 
-        mediaBrowserCompat = new MediaBrowserCompat(context, componentName, connectionCallback, null);
 
-    }
-    public void onConnected(){
+        mediaBrowserCompat = new MediaBrowserCompat(context, componentName, connectionCallback, null);
 
     }
     public void setChildren( List<MediaBrowserCompat.MediaItem> children){
         this.children = children;
 
+    }
+
+    public MediaMetadataCompat getMetaData(){
+        return mediaControllerCompat.getMetadata();
+    }
+
+    public void setPlayingSongPosition(int playingSongPosition) {
+        this.playingSongPosition = playingSongPosition;
+    }
+
+    public int getPlayingSongPosition() {
+        return playingSongPosition;
     }
 
     public  List<MediaBrowserCompat.MediaItem> getChildren(){

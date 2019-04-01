@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
@@ -14,9 +15,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.shojishunsuke.musicpro.DisplayManager;
 import com.shojishunsuke.musicpro.R;
 import com.shojishunsuke.musicpro.Service.MediaSessionService;
 import com.shojishunsuke.musicpro.actvity.MainActivity;
@@ -41,6 +46,12 @@ public class TrackTabFragment extends Fragment implements MusicPlayer.UiCallback
 
     private ListTrackAdapter mBrowserAdapter;
 
+    private ConstraintLayout songBox;
+    private ImageButton playButton;
+    private ImageView icon;
+    private TextView titleTextView;
+    private TextView artistTextView;
+
 
 
     @Override
@@ -54,8 +65,6 @@ public class TrackTabFragment extends Fragment implements MusicPlayer.UiCallback
         musicPlayer.init(context,new ComponentName(context,MediaSessionService.class));
         musicPlayer.connectMediaBrowser();
         Log.d("TrackTab","onAttach");
-
-
 
 
     }
@@ -76,6 +85,44 @@ public class TrackTabFragment extends Fragment implements MusicPlayer.UiCallback
 
 
         ListView trackList = (ListView) view.findViewById(R.id.listTrack);
+        songBox = view.findViewById(R.id.footerTitleBox);
+        titleTextView = view.findViewById(R.id.footerTitleText);
+        artistTextView = view.findViewById(R.id.footerArtistTextView);
+        icon = view.findViewById(R.id.footerIcon);
+        playButton = view.findViewById(R.id.footerPlay);
+
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (musicPlayer.getState()){
+                    case PlaybackStateCompat.STATE_PLAYING:
+                        musicPlayer.pause();
+                        break;
+                    case PlaybackStateCompat.STATE_STOPPED:
+                        musicPlayer.play();
+                        break;
+
+                    case PlaybackStateCompat.STATE_PAUSED:
+                        musicPlayer.play();
+                        break;
+                }
+
+            }
+        });
+
+
+        songBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DisplayManager displayManager = DisplayManager.getInstance();
+                displayManager.showPlayTab();
+                displayManager.hideList();
+            }
+        });
+
+
+
+
         mBrowserAdapter = new ListTrackAdapter(activity,getFragmentManager());
         trackList.setAdapter(mBrowserAdapter);
 
@@ -85,11 +132,19 @@ public class TrackTabFragment extends Fragment implements MusicPlayer.UiCallback
 
 
 
-
-
-
     @Override
     public void onPlaybackStateChanged(PlaybackStateCompat state) {
+        switch (state.getState()){
+            case PlaybackStateCompat.STATE_PLAYING:
+                playButton.setImageResource(R.drawable.pause);
+                break;
+            case PlaybackStateCompat.STATE_STOPPED:
+                playButton.setImageResource(R.drawable.playarrow);
+                break;
+            case PlaybackStateCompat.STATE_PAUSED:
+                playButton.setImageResource(R.drawable.playarrow);
+                break;
+        }
 
 
     }
@@ -104,6 +159,7 @@ public class TrackTabFragment extends Fragment implements MusicPlayer.UiCallback
 
     @Override
     public void onMetadataChanged(MediaMetadataCompat metadata) {
+
 
     }
 }
