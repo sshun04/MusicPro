@@ -34,7 +34,7 @@ import java.util.List;
 import static android.support.constraint.Constraints.TAG;
 
 
-public class TrackTabFragment extends Fragment implements MusicPlayer.UiCallback {
+public class TrackTabFragment extends Fragment implements MusicPlayer.ListUiCallback {
 
     public static TrackTabFragment newInstance() {
         TrackTabFragment fragment = new TrackTabFragment();
@@ -47,7 +47,7 @@ public class TrackTabFragment extends Fragment implements MusicPlayer.UiCallback
     private ListTrackAdapter mBrowserAdapter;
 
     private ConstraintLayout songBox;
-    private ImageButton playButton;
+    private ImageView playButton;
     private ImageView icon;
     private TextView titleTextView;
     private TextView artistTextView;
@@ -61,7 +61,7 @@ public class TrackTabFragment extends Fragment implements MusicPlayer.UiCallback
         super.onAttach(context);
 
         musicPlayer = MusicPlayer.getInstance();
-        musicPlayer.setUiCallback(this);
+        musicPlayer.setListUiCallback(this);
         musicPlayer.init(context,new ComponentName(context,MediaSessionService.class));
         musicPlayer.connectMediaBrowser();
         Log.d("TrackTab","onAttach");
@@ -136,13 +136,13 @@ public class TrackTabFragment extends Fragment implements MusicPlayer.UiCallback
     public void onPlaybackStateChanged(PlaybackStateCompat state) {
         switch (state.getState()){
             case PlaybackStateCompat.STATE_PLAYING:
-                playButton.setImageResource(R.drawable.pause);
+                playButton.setImageResource(R.drawable.baseline_pause_white_24dp);
                 break;
             case PlaybackStateCompat.STATE_STOPPED:
-                playButton.setImageResource(R.drawable.playarrow);
+                playButton.setImageResource(R.drawable.baseline_play_arrow_white_36dp);
                 break;
             case PlaybackStateCompat.STATE_PAUSED:
-                playButton.setImageResource(R.drawable.playarrow);
+                playButton.setImageResource(R.drawable.baseline_play_arrow_white_36dp);
                 break;
         }
 
@@ -159,6 +159,9 @@ public class TrackTabFragment extends Fragment implements MusicPlayer.UiCallback
 
     @Override
     public void onMetadataChanged(MediaMetadataCompat metadata) {
+        titleTextView.setText(metadata.getDescription().getTitle());
+        artistTextView.setText(metadata.getDescription().getSubtitle());
+        icon.setImageBitmap(metadata.getDescription().getIconBitmap());
 
 
     }

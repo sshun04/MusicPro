@@ -64,6 +64,9 @@ public class PlayFragment extends Fragment implements MusicPlayer.UiCallback {
         seekBar =mView.findViewById(R.id.seekBar);
         repeatButton = mView.findViewById(R.id.repeatButton);
 
+        textView_title.setFocusable(true);
+        textView_title.setHorizontallyScrolling(true);
+
 
         button_next.setImageResource(R.drawable.skipnext);
         button_plev.setImageResource(R.drawable.skipprev);

@@ -19,7 +19,8 @@ public class MusicPlayer {
     private MediaControllerCompat mediaControllerCompat;
 
     private UiCallback uiCallback = null;
-    private  List<MediaBrowserCompat.MediaItem> children;
+    private ListUiCallback listUiCallback = null;
+    private List<MediaBrowserCompat.MediaItem> children;
 
     private MediaControllerCompat.Callback controllerCallback;
     private MediaBrowserCompat.SubscriptionCallback subscriptionCallback;
@@ -42,27 +43,37 @@ public class MusicPlayer {
         controllerCallback = new MediaControllerCompat.Callback() {
             @Override
             public void onPlaybackStateChanged(PlaybackStateCompat state) {
-                        if (uiCallback != null) {
-                uiCallback.onPlaybackStateChanged(state);
-                        }else {
-                            Log.d("MusicPlayer","uiCallbackがnull");
-                        }
+                if (uiCallback != null) {
+                    uiCallback.onPlaybackStateChanged(state);
+                } else {
+                    Log.d("MusicPlayer", "uiCallbackがnull");
+                }
+                if (listUiCallback!= null){
+                    listUiCallback.onPlaybackStateChanged(state);
+                }
             }
 
             @Override
             public void onMetadataChanged(MediaMetadataCompat metadata) {
-                        if (uiCallback != null) {
-                uiCallback.onMetadataChanged(metadata);
-                        }
+                if (uiCallback != null) {
+                    uiCallback.onMetadataChanged(metadata);
+                }
+                if (listUiCallback != null){
+                    listUiCallback.onMetadataChanged(metadata);
+                }
             }
         };
 
         subscriptionCallback = new MediaBrowserCompat.SubscriptionCallback() {
             @Override
             public void onChildrenLoaded(@NonNull String parentId, @NonNull List<MediaBrowserCompat.MediaItem> children) {
-//                        if (uiCallback != null) {
-                uiCallback.onChildrenLoaded(parentId, children);
-//                        }
+                if (uiCallback != null) {
+                    uiCallback.onChildrenLoaded(parentId, children);
+                }
+
+                if (listUiCallback != null) {
+                    listUiCallback.onChildrenLoaded(parentId, children);
+                }
             }
         };
 
@@ -87,12 +98,13 @@ public class MusicPlayer {
         mediaBrowserCompat = new MediaBrowserCompat(context, componentName, connectionCallback, null);
 
     }
-    public void setChildren( List<MediaBrowserCompat.MediaItem> children){
+
+    public void setChildren(List<MediaBrowserCompat.MediaItem> children) {
         this.children = children;
 
     }
 
-    public MediaMetadataCompat getMetaData(){
+    public MediaMetadataCompat getMetaData() {
         return mediaControllerCompat.getMetadata();
     }
 
@@ -104,14 +116,19 @@ public class MusicPlayer {
         return playingSongPosition;
     }
 
-    public  List<MediaBrowserCompat.MediaItem> getChildren(){
+    public List<MediaBrowserCompat.MediaItem> getChildren() {
         return children;
     }
 
     public void setUiCallback(UiCallback uiCallback) {
         this.uiCallback = uiCallback;
     }
-    public void play(){
+
+    public void setListUiCallback(ListUiCallback uiCallback) {
+        this.listUiCallback = uiCallback;
+    }
+
+    public void play() {
         mediaControllerCompat.getTransportControls().play();
     }
 
@@ -120,7 +137,7 @@ public class MusicPlayer {
     }
 
     public void playFromId(String id) {
-        mediaControllerCompat.getTransportControls().playFromMediaId(id,null);
+        mediaControllerCompat.getTransportControls().playFromMediaId(id, null);
     }
 
     public int getRepeatMode() {
@@ -134,7 +151,8 @@ public class MusicPlayer {
     public void skipToNext() {
         mediaControllerCompat.getTransportControls().skipToNext();
     }
-    public int getState(){
+
+    public int getState() {
         return mediaControllerCompat.getPlaybackState().getState();
     }
 
@@ -145,12 +163,22 @@ public class MusicPlayer {
     public void seekTo(int progress) {
         mediaControllerCompat.getTransportControls().seekTo(progress);
     }
-    public void connectMediaBrowser(){
+
+    public void connectMediaBrowser() {
         mediaBrowserCompat.connect();
     }
 
 
     public interface UiCallback {
+        void onPlaybackStateChanged(PlaybackStateCompat state);
+
+        void onChildrenLoaded(@NonNull String parentId, @NonNull List<MediaBrowserCompat.MediaItem> children);
+
+        void onMetadataChanged(MediaMetadataCompat metadata);
+
+    }
+
+    public interface ListUiCallback {
         void onPlaybackStateChanged(PlaybackStateCompat state);
 
         void onChildrenLoaded(@NonNull String parentId, @NonNull List<MediaBrowserCompat.MediaItem> children);

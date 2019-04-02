@@ -76,6 +76,8 @@ public class ListTrackAdapter extends ArrayAdapter<MediaBrowserCompat.MediaItem>
 
 
 
+
+
     static class ViewHolder {
 
         TextView trackTextView;
