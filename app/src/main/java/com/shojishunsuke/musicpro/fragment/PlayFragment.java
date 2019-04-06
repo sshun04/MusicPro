@@ -1,9 +1,5 @@
 package com.shojishunsuke.musicpro.fragment;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.ComponentName;
-import android.media.session.MediaSession;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,9 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
-import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +15,8 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.shojishunsuke.musicpro.Interface.SongEndListener;
+import com.google.android.exoplayer2.Player;
 import com.shojishunsuke.musicpro.R;
-import com.shojishunsuke.musicpro.Service.MediaSessionService;
 import com.shojishunsuke.musicpro.utils.MusicPlayer;
 
 import java.util.List;
@@ -49,9 +42,9 @@ public class PlayFragment extends Fragment implements MusicPlayer.UiCallback {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View mView = inflater.inflate(R.layout.fragment_play,container,false);
+        View mView = inflater.inflate(R.layout.fragment_play, container, false);
         if (getArguments() != null)
-        songPosition = getArguments().getInt("songPosition");
+            songPosition = getArguments().getInt("songPosition");
 
         textView_title = mView.findViewById(R.id.title);
         textView_artist = mView.findViewById(R.id.artistName);
@@ -61,7 +54,7 @@ public class PlayFragment extends Fragment implements MusicPlayer.UiCallback {
         button_next = mView.findViewById(R.id.button_next);
         playButton = mView.findViewById(R.id.button_play);
         artImageView = mView.findViewById(R.id.track_art);
-        seekBar =mView.findViewById(R.id.seekBar);
+        seekBar = mView.findViewById(R.id.seekBar);
         repeatButton = mView.findViewById(R.id.repeatButton);
 
         textView_title.setFocusable(true);
@@ -73,14 +66,10 @@ public class PlayFragment extends Fragment implements MusicPlayer.UiCallback {
         repeatButton.setImageResource(R.drawable.baseline_repeat_white_24dp);
 
 
-
-
-
-
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (musicPlayer.getState()){
+                switch (musicPlayer.getState()) {
                     case PlaybackStateCompat.STATE_PLAYING:
                         musicPlayer.pause();
                         break;
@@ -93,6 +82,24 @@ public class PlayFragment extends Fragment implements MusicPlayer.UiCallback {
                         break;
                 }
 
+            }
+        });
+
+        repeatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (musicPlayer.getRepeatMode()) {
+                    case PlaybackStateCompat.REPEAT_MODE_NONE:
+                        musicPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
+                        break;
+                    case PlaybackStateCompat.REPEAT_MODE_ALL:
+                        musicPlayer.setRepeatMode(Player.REPEAT_MODE_ONE);
+                        break;
+
+                    case PlaybackStateCompat.REPEAT_MODE_ONE:
+                        musicPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
+                        break;
+                }
             }
         });
 
@@ -132,14 +139,11 @@ public class PlayFragment extends Fragment implements MusicPlayer.UiCallback {
         });
 
 
-
         musicPlayer = MusicPlayer.getInstance();
         musicPlayer.setUiCallback(this);
 //        musicPlayer.init(getContext(),new ComponentName(getContext(),MediaSessionService.class));
         MediaBrowserCompat.MediaItem song = musicPlayer.getChildren().get(songPosition);
         musicPlayer.playFromId(song.getMediaId());
-
-
 
 
         return mView;
@@ -148,7 +152,7 @@ public class PlayFragment extends Fragment implements MusicPlayer.UiCallback {
     @Override
     public void onPlaybackStateChanged(PlaybackStateCompat state) {
 
-        switch (state.getState()){
+        switch (state.getState()) {
             case PlaybackStateCompat.STATE_PLAYING:
                 playButton.setImageResource(R.drawable.pause);
                 break;
@@ -164,13 +168,11 @@ public class PlayFragment extends Fragment implements MusicPlayer.UiCallback {
         seekBar.setProgress((int) state.getPosition());
 
 
-
     }
 
 
     @Override
     public void onChildrenLoaded(@NonNull String parentId, @NonNull List<MediaBrowserCompat.MediaItem> children) {
-
 
     }
 
@@ -185,11 +187,24 @@ public class PlayFragment extends Fragment implements MusicPlayer.UiCallback {
         seekBar.setMax((int) metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION));
 
 
-
-
-
     }
 
+    @Override
+    public void onRepeatModeChanged(int repeatMode) {
+
+        switch (repeatMode) {
+            case Player.REPEAT_MODE_OFF:
+                repeatButton.setImageResource(R.drawable.baseline_repeat_white_24dp);
+                break;
+            case Player.REPEAT_MODE_ONE:
+                repeatButton.setImageResource(R.drawable.repeat_one);
+                break;
+            case Player.REPEAT_MODE_ALL:
+                repeatButton.setImageResource(R.drawable.baseline_repeat_blue);
+                break;
+        }
+
+    }
 
     private String long2TimeString(long src) {
 

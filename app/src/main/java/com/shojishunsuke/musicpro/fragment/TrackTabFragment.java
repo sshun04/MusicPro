@@ -51,6 +51,7 @@ public class TrackTabFragment extends Fragment implements MusicPlayer.ListUiCall
     private ImageView icon;
     private TextView titleTextView;
     private TextView artistTextView;
+    private  DisplayManager displayManager;
 
 
 
@@ -62,7 +63,6 @@ public class TrackTabFragment extends Fragment implements MusicPlayer.ListUiCall
 
         musicPlayer = MusicPlayer.getInstance();
         musicPlayer.setListUiCallback(this);
-        musicPlayer.init(context,new ComponentName(context,MediaSessionService.class));
         musicPlayer.connectMediaBrowser();
         Log.d("TrackTab","onAttach");
 
@@ -73,7 +73,6 @@ public class TrackTabFragment extends Fragment implements MusicPlayer.ListUiCall
     @Override
     public void onResume() {
         super.onResume();
-
     }
 
     @Override
@@ -110,13 +109,16 @@ public class TrackTabFragment extends Fragment implements MusicPlayer.ListUiCall
             }
         });
 
+        displayManager = DisplayManager.getInstance();
+
+
 
         songBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DisplayManager displayManager = DisplayManager.getInstance();
+                if (displayManager.isPlayed()){
                 displayManager.showPlayTab();
-                displayManager.hideList();
+                displayManager.hideList();}
             }
         });
 

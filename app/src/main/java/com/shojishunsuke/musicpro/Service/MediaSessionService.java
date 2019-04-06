@@ -10,7 +10,6 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -34,10 +33,9 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-import com.shojishunsuke.musicpro.Interface.SongEndListener;
 import com.shojishunsuke.musicpro.Library.MusicLibrary;
 import com.shojishunsuke.musicpro.R;
-import com.shojishunsuke.musicpro.actvity.MediaSessionPlayActivity;
+import com.shojishunsuke.musicpro.actvity.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,14 +86,14 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
         mediaSession.getController().registerCallback(new MediaControllerCompat.Callback() {
             @Override
             public void onPlaybackStateChanged(PlaybackStateCompat state) {
-                CreateNotification();
 
+                  createNotification();
             }
 
             @Override
             public void onMetadataChanged(MediaMetadataCompat metadata) {
 
-                CreateNotification();
+                createNotification();
             }
 
 
@@ -163,8 +161,10 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
         mediaSession.release();
         exoPlayer.stop();
         exoPlayer.release();
+        stopSelf();
 
     }
+
 
     private MediaSessionCompat.Callback callback = new MediaSessionCompat.Callback() {
         @Override
@@ -207,7 +207,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
         @Override
         public void onPrepare() {
-            onPrepareFromMediaId(queueItems.get(index).getDescription().getMediaId(),null);
+            onPrepareFromMediaId(queueItems.get(index).getDescription().getMediaId(), null);
         }
 
         @Override
@@ -228,6 +228,11 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
         public void onStop() {
             onPause();
             mediaSession.setActive(false);
+            mediaSession.release();
+            exoPlayer.stop();
+            exoPlayer.release();
+            stopSelf();
+
             audioManager.abandonAudioFocus(audioFocusChangeListener);
 
 
@@ -278,7 +283,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
         @Override
         public void onSetRepeatMode(int repeatMode) {
 
-           setRepeatMode(repeatMode);
+            setRepeatMode(repeatMode);
 
         }
 
@@ -286,7 +291,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
     };
 
     private void setRepeatMode(int repeatMode) {
-        switch (repeatMode){
+        switch (repeatMode) {
             case Player.REPEAT_MODE_ALL:
                 exoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
                 break;
@@ -316,10 +321,6 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
     };
 
 
-
-
-
-
     private void updatePlayBackState() {
         int state = PlaybackStateCompat.STATE_NONE;
 
@@ -339,6 +340,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
                 break;
             case Player.STATE_ENDED:
                 state = PlaybackStateCompat.STATE_STOPPED;
+                mediaSession.getController().getTransportControls().prepare();
                 break;
 
         }
@@ -354,19 +356,25 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
             new AudioManager.OnAudioFocusChangeListener() {
                 @Override
                 public void onAudioFocusChange(int focusChange) {
-                    if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
-                        mediaSession.getController().getTransportControls().pause();
-                    } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
-                        mediaSession.getController().getTransportControls().pause();
-                    } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
 
-                    } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-                        mediaSession.getController().getTransportControls().play();
+                    switch (focusChange) {
+                        case AudioManager.AUDIOFOCUS_LOSS:
+                            mediaSession.getController().getTransportControls().pause();
+                            break;
+                        case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                            mediaSession.getController().getTransportControls().pause();
+                            break;
+                        case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                            break;
+                        case AudioManager.AUDIOFOCUS_GAIN:
+                            mediaSession.getController().getTransportControls().play();
+                            break;
+
                     }
                 }
             };
 
-    private void CreateNotification() {
+    private void createNotification() {
         MediaControllerCompat mediaController = mediaSession.getController();
         MediaMetadataCompat mediaMetadata = mediaController.getMetadata();
 
@@ -476,7 +484,6 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
             }
 
 
-
 //            builder.addAction(new NotificationCompat.Action(
 //                    R.drawable.baseline_skip_previous_white_24dp, "prev",
 //                    MediaButtonReceiver.buildMediaButtonPendingIntent(this,
@@ -492,7 +499,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
     }
 
     private PendingIntent createContentIntent() {
-        Intent openUI = new Intent(this, MediaSessionPlayActivity.class);
+        Intent openUI = new Intent(this, MainActivity.class);
         openUI.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         return PendingIntent.getActivity(
                 this, 1, openUI, PendingIntent.FLAG_CANCEL_CURRENT

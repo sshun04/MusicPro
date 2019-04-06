@@ -62,6 +62,15 @@ public class MusicPlayer {
                     listUiCallback.onMetadataChanged(metadata);
                 }
             }
+
+            @Override
+            public void onRepeatModeChanged(int repeatMode) {
+                if (uiCallback != null){
+
+                    uiCallback.onRepeatModeChanged(repeatMode);
+
+                }
+            }
         };
 
         subscriptionCallback = new MediaBrowserCompat.SubscriptionCallback() {
@@ -175,6 +184,8 @@ public class MusicPlayer {
         void onChildrenLoaded(@NonNull String parentId, @NonNull List<MediaBrowserCompat.MediaItem> children);
 
         void onMetadataChanged(MediaMetadataCompat metadata);
+
+        void onRepeatModeChanged(int repeatMode);
 
     }
 

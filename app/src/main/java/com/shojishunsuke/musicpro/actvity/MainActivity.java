@@ -2,6 +2,7 @@ package com.shojishunsuke.musicpro.actvity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -81,6 +82,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    @Override
+    protected void onDestroy() {
+        Intent intent= new Intent(MainActivity.this,MediaSessionService.class);
+        stopService(intent);
+        super.onDestroy();
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

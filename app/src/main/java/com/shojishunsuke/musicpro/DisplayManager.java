@@ -12,7 +12,7 @@ public class DisplayManager  {
     private  static DisplayManager displayManager = new DisplayManager();
     private android.support.v4.app.FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
-    private PlayFragment playFragment;
+    private PlayFragment playFragment = null;
     private TrackTabFragment trackTabFragment = TrackTabFragment.newInstance();
 
 
@@ -36,6 +36,13 @@ public class DisplayManager  {
         fragmentTransaction.add(R.id.mainBackground,trackTabFragment);
         fragmentTransaction.commit();
 
+    }
+    public boolean isPlayed(){
+        if (playFragment == null){
+            return false;
+        }else {
+            return true;
+        }
     }
 
     public void replaceWithNewPlayTab(Bundle args){
