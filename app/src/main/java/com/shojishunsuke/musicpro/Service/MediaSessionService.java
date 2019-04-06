@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,7 +48,9 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
     private final String ALBUM_ID = "album";
 //    private SongEndListener songEndListener;
 
+    private NotificationCompat.Builder builder = null;
     private Handler handler;
+    private    NotificationManager notificationManager;
 
     private MediaSessionCompat mediaSession;
     private AudioManager audioManager;
@@ -87,7 +90,9 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
             @Override
             public void onPlaybackStateChanged(PlaybackStateCompat state) {
 
-                  createNotification();
+                 if (builder != null&& notificationManager != null){
+                     upDateNotification();
+                 }
             }
 
             @Override
@@ -132,6 +137,8 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
 
     }
+
+
 
     @Override
     public BrowserRoot onGetRoot(@Nullable String clientPackageName,
@@ -374,6 +381,62 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
                 }
             };
 
+    private void upDateNotification() {
+        MediaControllerCompat mediaController = mediaSession.getController();
+        MediaMetadataCompat mediaMetadata = mediaController.getMetadata();
+
+        if (mediaMetadata == null && !mediaSession.isActive()) return;
+
+        Log.d("Service","upNO");
+
+
+        MediaDescriptionCompat description = mediaMetadata.getDescription();
+//
+        builder.setOngoing(true)
+                .setContentTitle(description.getTitle())
+                .setContentText(description.getSubtitle())
+                .setSubText(description.getDescription())
+                .setLargeIcon(description.getIconBitmap())
+
+                .setContentIntent(createContentIntent())
+                .setDeleteIntent(MediaButtonReceiver.buildMediaButtonPendingIntent(this,
+                        PlaybackStateCompat.ACTION_STOP))
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+
+                .setSmallIcon(R.drawable.ic_launcher_small_icon)
+
+                .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                .setStyle(new android.support.v4.media.app.NotificationCompat.DecoratedMediaCustomViewStyle()
+                        .setMediaSession(mediaSession.getSessionToken())
+                        .setShowActionsInCompactView(1));
+
+
+//
+        builder.addAction(new NotificationCompat.Action(
+                R.drawable.baseline_skip_next_white_24dp, "next",
+                MediaButtonReceiver.buildMediaButtonPendingIntent(this,
+                        PlaybackStateCompat.ACTION_SKIP_TO_NEXT)));
+
+
+        if (mediaController.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
+            builder.addAction(new NotificationCompat.Action(
+                    R.drawable.baseline_pause_white_24dp, "pause",
+                    MediaButtonReceiver.buildMediaButtonPendingIntent(this,
+                            PlaybackStateCompat.ACTION_PAUSE)
+            ));
+        } else {
+            builder.addAction(new NotificationCompat.Action(
+                    R.drawable.baseline_play_arrow_white_24dp, "play",
+                    MediaButtonReceiver.buildMediaButtonPendingIntent(this,
+                            PlaybackStateCompat.ACTION_PLAY)
+            ));
+        }
+
+        notificationManager.notify(1,builder.build());
+
+
+    }
+
     private void createNotification() {
         MediaControllerCompat mediaController = mediaSession.getController();
         MediaMetadataCompat mediaMetadata = mediaController.getMetadata();
@@ -392,12 +455,12 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
             channel.setLightColor(R.color.colorPrimary);
             channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             assert notificationManager != null;
             notificationManager.createNotificationChannel(channel);
 
 
-            android.support.v4.app.NotificationCompat.Builder builder = new android.support.v4.app.NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+            builder = new android.support.v4.app.NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
             builder.setOngoing(true)
                     .setContentTitle(description.getTitle())
                     .setContentText(description.getSubtitle())
@@ -416,10 +479,6 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
                             .setMediaSession(mediaSession.getSessionToken())
                             .setShowActionsInCompactView(1));
 
-//            builder.addAction(new NotificationCompat.Action(
-//                    R.drawable.baseline_skip_previous_white_24dp, "prev",
-//                    MediaButtonReceiver.buildMediaButtonPendingIntent(this,
-//                            PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)));
 
             builder.addAction(new NotificationCompat.Action(
                     R.drawable.baseline_skip_next_white_24dp, "next",
@@ -445,7 +504,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
         } else {
 
-            android.support.v4.app.NotificationCompat.Builder builder = new android.support.v4.app.NotificationCompat.Builder(getApplicationContext());
+            builder = new android.support.v4.app.NotificationCompat.Builder(getApplicationContext());
             builder.setContentTitle(description.getTitle())
                     .setContentText(description.getSubtitle())
                     .setSubText(description.getDescription())
